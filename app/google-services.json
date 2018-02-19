@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "677474117467",
+    "firebase_url": "https://aramis-2is70.firebaseio.com",
+    "project_id": "aramis-2is70",
+    "storage_bucket": "aramis-2is70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677474117467:android:e98a23d3928540e4",
+        "android_client_info": {
+          "package_name": "com.vvahe.aramis2is70"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677474117467-uhk5f67075hrmm015lf862ldstl5t2a3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vvahe.aramis2is70",
+            "certificate_hash": "757d2340b9a5e6f7e835bf340a3fbdfbc4003e02"
+          }
+        },
+        {
+          "client_id": "677474117467-lgvj36d63173pcba4bcmnrs987g08udl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoXntrQjDYG-wVd0u5i_5GaApzt69FAW4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677474117467-lgvj36d63173pcba4bcmnrs987g08udl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

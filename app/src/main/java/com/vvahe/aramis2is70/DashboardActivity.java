@@ -14,5 +14,7 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         txtHome = (TextView) findViewById(R.id.txtHome);
+
+        //test commit
     }
 }

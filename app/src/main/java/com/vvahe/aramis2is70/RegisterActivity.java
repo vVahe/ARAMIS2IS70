@@ -1,5 +1,6 @@
 package com.vvahe.aramis2is70;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,8 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private void startRegister() {
@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
                         /** if registration was successful we can retrieve the unique user_id */
                         String user_id = mAuth.getCurrentUser().getUid();
 
-                        /** when using FirebaseAuthentication to register a user is added in the
+                        /** when using FirebaseAuthentication to register, an user is added in the
                          * authentication tab, but not yet to the database, so we also create a user
                          * in the data base while registering below*/
                         DatabaseReference current_user_db = mDatabase.child(user_id);
@@ -89,14 +89,22 @@ public class RegisterActivity extends AppCompatActivity {
                         current_user_db.child("name").setValue(name);
 
                         /** send user to dashboard after registration is complete*/
-                        Intent dashboardIntent = new Intent(RegisterActivity.this, DashboardActivity.class);
+                        Intent dashboardIntent = new Intent(RegisterActivity.this, DashboardFragment.class);
                         dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(dashboardIntent);
 
-                    } else {
+                    } else { /** if registration is not successful add give error */
 
                         Toast.makeText(RegisterActivity.this, "Something went wrong :/", Toast.LENGTH_LONG).show();
+
+                        /** TO-DO: -------------------
+                         *
+                         * if registration fails we can add some code to notify if the user why,
+                         * for example, match the "Name" filled in by the user to the user names already
+                         * present in the database add give "username taken" warning, same goes for email*/
+
                     }
+
 
                 }
             });

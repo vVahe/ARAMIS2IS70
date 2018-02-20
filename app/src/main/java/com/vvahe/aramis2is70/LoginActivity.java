@@ -1,5 +1,6 @@
 package com.vvahe.aramis2is70;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         btnRegisterL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /** send user from login page to registration page*/
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(registerIntent);
             }
@@ -61,24 +64,30 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkLogin() {
 
+        /** Retrieve text from input fields and pass to variables*/
         String email = loginFieldEmail.getText().toString().trim();
         String password = loginFieldPassword.getText().toString().trim();
 
+        /** check if user left any fields empty if so give Toast message*/
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
 
             Toast.makeText(LoginActivity.this, "Please fill in all fields", Toast.LENGTH_LONG).show();
 
-        } else {
+        } else { /** attempt sign in*/
 
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    /** task stores result whether sign in was successful*/
                     if (task.isSuccessful()) {
 
-                        /** check if user exists*/
+                        /** check if user exists, successful sign in is for authenticated users
+                         * we also check if the user is present in the database */
                         checkUserExist();
 
                     } else {
+
                         Toast.makeText(LoginActivity.this, "Login Error", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -89,18 +98,19 @@ public class LoginActivity extends AppCompatActivity {
     /** checks if user exists in database or not*/
     private void checkUserExist() {
 
+        /** user is signed in so get user_id */
         final String user_id = mAuth.getCurrentUser().getUid();
 
         /** check if user_id is already present in database*/
         mDatabase.addValueEventListener(new ValueEventListener() {
 
-            /** result is stored in dataSnapshot */
+            /** result is stored in dataSnapshot if user is data base, send user to dashboard*/
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.hasChild(user_id)) {
 
-                    Intent loginIntent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
 
                     /** prevents user from going back once logged in, they will have to use logout button*/
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -112,10 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
-
     }
 }

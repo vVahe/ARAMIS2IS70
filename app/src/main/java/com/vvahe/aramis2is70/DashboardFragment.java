@@ -1,13 +1,14 @@
 package com.vvahe.aramis2is70;
 
-import android.app.Activity;
+
 import android.content.Intent;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,46 +19,58 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class DashboardActivity extends AppCompatActivity {
 
-    private TextView txtHome;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class DashboardFragment extends Fragment {
+
     private TextView txtUser;
     private Button btnLogout;
     private String userName;
-
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+    public DashboardFragment() {
+        // Required empty public constructor
+    }
 
-        txtHome = (TextView) findViewById(R.id.txtHome);
-        btnLogout = (Button) findViewById(R.id.btnLogout);
-        txtUser = (TextView) findViewById(R.id.txtUser);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+    }
+
+    /** put code that should run on start up in onViewCreated */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        btnLogout = (Button) getView().findViewById(R.id.btnLogout);
+        txtUser = (TextView) getView().findViewById(R.id.txtName);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
+
         /** checks if user is logged in not*/
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-                /** firebaseAuth returns result whether logged in or not
-                 * if user is not logged in redirect to Register page using intent*/
+                /** FirebaseAuth returns result whether logged in or not
+                 * if user is not logged in redirect to login page using intent*/
                 if (firebaseAuth.getCurrentUser() == null) {
 
-                    Intent loginIntent = new Intent(DashboardActivity.this, LoginActivity.class);
+                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
 
                     /** prevents user from going back once logged in, they will have to use logout button*/
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                     startActivity(loginIntent);
 
-                } else {
+                } else { /** user is logged in so display username on screen */
 
                     getUserName();
 
@@ -99,9 +112,10 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
 
         mAuth.addAuthStateListener(mAuthListener);
     }
+
 }

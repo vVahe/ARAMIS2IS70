@@ -89,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
                         current_user_db.child("name").setValue(name);
 
                         /** send user to dashboard after registration is complete*/
-                        Intent dashboardIntent = new Intent(RegisterActivity.this, DashboardFragment.class);
+                        Intent dashboardIntent = new Intent(RegisterActivity.this, MainActivity.class);
                         dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(dashboardIntent);
 

@@ -49,6 +49,83 @@
         android:layout_weight="1"/>
 
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/toolbar">
+
+        <!-- First box, boxbg.xml -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/boxbg"
+            android:orientation="vertical"
+            android:padding="7dp">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Hey, how are you?"
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <!-- Second box, box2bg.xml -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/boxbg2"
+            android:orientation="vertical"
+            android:layout_gravity="right"
+            android:padding="7dp">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Good! How are you?"
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <!-- First box, boxbg.xml -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/boxbg"
+            android:orientation="vertical"
+            android:padding="7dp">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="This is a really long text that hopefully does not break the layout, if it does then we have some problems to fix"
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <!-- Second box, box2bg.xml -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/boxbg2"
+            android:orientation="vertical"
+            android:layout_gravity="right"
+            android:padding="7dp">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Hmm okay."
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
     <!--Text input field-->
@@ -62,14 +139,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"/>
 
-        <Button
-            android:id="@+id/sendMessageButton"
+        <ImageView
+            android:id="@+id/sendMessage"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:text="Send"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="6"
+            android:src="@drawable/ic_send_black_24dp" />
 
     </LinearLayout>
 

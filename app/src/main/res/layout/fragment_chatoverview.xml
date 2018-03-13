@@ -20,7 +20,7 @@
         android:maxEms="1"
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="F5F5F5"
+        android:textColor="#F5F5F5"
         android:textStyle="bold"
         tools:text="a" />
 

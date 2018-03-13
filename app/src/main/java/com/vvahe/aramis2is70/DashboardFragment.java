@@ -1,6 +1,7 @@
 package com.vvahe.aramis2is70;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -109,6 +110,13 @@ public class DashboardFragment extends Fragment {
     /** Logout user*/
     private void logout() {
         mAuth.signOut();
+
+//        Intent logoutIntent = new Intent(, LoginActivity.class);
+//
+//        /** prevents user from going back once logged in, they will have to use logout button*/
+//        logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//
+//        startActivity(logoutIntent);
     }
 
     @Override

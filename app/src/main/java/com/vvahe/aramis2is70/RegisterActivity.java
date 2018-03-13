@@ -99,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         /** TO-DO: -------------------
                          *
-                         * if registration fails we can add some code to notify if the user why,
+                         * if registration fails we can add some code to notify to the user why,
                          * for example, match the "Name" filled in by the user to the user names already
                          * present in the database add give "username taken" warning, same goes for email*/
 

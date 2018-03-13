@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.vvahe.aramis2is70.ChatFragment">
+    android:layout_height="match_parent">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
@@ -12,7 +11,36 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:theme="?attr/actionBarTheme">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/profilePic"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="8"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_action_back_arrow" />
+
+            <TextView
+                android:id="@+id/contactName"
+                android:text='Sandra Adams'
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textSize="25dp"
+                android:fontFamily="sans-serif"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+
+        </android.support.v7.widget.Toolbar>
 
     <ListView
         android:id="@+id/messageHistoryList"
@@ -20,6 +48,10 @@
         android:layout_height="0px"
         android:layout_weight="1"/>
 
+
+
+
+    <!--Text input field-->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

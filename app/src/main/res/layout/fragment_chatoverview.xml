@@ -8,8 +8,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="#607d8b">
+        android:background="?attr/colorPrimary">
 
+        <TextView
+            android:text='Chat'
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textSize="25dp"
+            android:fontFamily="sans-serif"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
     </android.support.v7.widget.Toolbar>
 
@@ -19,12 +28,13 @@
         android:layout_height="0px"
         android:layout_weight="1"/>
 
+    <!--One instance of the list-->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="100dp"
         android:layout_below="@id/toolbar">
 
-
+        <!--Profile picture -->
         <ImageView
             android:id="@+id/profilePic"
             android:layout_width="fill_parent"
@@ -43,7 +53,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp">
 
-
+                <!--Name and course-->
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
@@ -72,6 +82,7 @@
 
                 </LinearLayout>
 
+            <!--Last message-->
                 <TextView
                     android:id="@+id/lastMessage"
                     android:text='Do you know when the presentation is? It’s supposed to be on wednesday right?'

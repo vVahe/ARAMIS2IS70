@@ -1,12 +1,14 @@
 package com.vvahe.aramis2is70;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,7 +21,8 @@ public class SettingsFragment extends Fragment {
     private static SeekBar seekBar;
     private static TextView textView;
     private static Spinner spinner;
-
+    private static ImageButton profile;
+    private static ImageButton courses;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -36,10 +39,23 @@ public class SettingsFragment extends Fragment {
         seekBar = (SeekBar)view.findViewById(R.id.searchradius_seekBar);
         textView = (TextView)view.findViewById(R.id.seekbar_text);
         spinner = (Spinner)view.findViewById(R.id.map_filter_spinner);
-        // methods for data handeling of seekBar and Spinner
+        profile = (ImageButton)view.findViewById(R.id.profileSettingsButton);
+        courses = (ImageButton)view.findViewById(R.id.courseSettingsButton);
+
+        // methods for data handeling of seekBar, Spinner and buttons
         seekBar();
         spinner();
+        profileSettings();
         return view;
+    }
+
+    public void profileSettings(){
+        profile.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void spinner() { // sets the Array of strings from resources as options for spinner

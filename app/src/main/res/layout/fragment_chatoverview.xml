@@ -1,42 +1,95 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingBottom="8dp"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp"
-    android:paddingTop="8dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/text_view_user_alphabet"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="#607d8b">
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <ListView
+        android:id="@+id/contactHistory"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:maxEms="1"
-        android:textAllCaps="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#F5F5F5"
-        android:textStyle="bold"
-        tools:text="a" />
+        android:layout_height="0px"
+        android:layout_weight="1"/>
 
-    <android.support.v4.widget.Space
-        android:layout_width="16dp"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/text_view_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#616161"
-        tools:text="test@test.com" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/toolbar">
 
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/profilePic"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="7"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft='10dp'
+            android:src="@drawable/ic_action_profile" />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_weight="2"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp">
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/contactName"
+                        android:text='Sandra Adams'
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                        android:textSize="20dp"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/courseName"
+                        android:text='2IS70 - App Development'
+                        android:singleLine="true"
+                        android:textSize="20dp"
+                        android:textColor="#4285f4"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/lastMessage"
+                    android:text='Do you know when the presentation is? It’s supposed to be on wednesday right?'
+                    android:textSize="20dp"
+                    android:fontFamily="sans-serif"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:layout_weight="1"/>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

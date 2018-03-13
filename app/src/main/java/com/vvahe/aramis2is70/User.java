@@ -23,7 +23,7 @@ public class User {
     }
 
     // Get data from Firebase
-    public boolean getUserInfoFromID(Integer userID){
+    public boolean getUserInfo(){
 
 
         return true; //return true if succesful

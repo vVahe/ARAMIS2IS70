@@ -41,8 +41,6 @@ public class User {
         getFromDatabase();
     }
 
-    User user = new user();
-
     //for creating new user
     public User(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
         firebaseThisUser = firebaseUser.child(userID);

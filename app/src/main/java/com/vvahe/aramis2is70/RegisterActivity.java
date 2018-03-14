@@ -17,8 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.time.Year;
-
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText firstNameField;
@@ -40,8 +38,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        User user = new User();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -76,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String middleName = middleNameField.getText().toString().trim();
         final String lastName = lastNameField.getText().toString().trim();
         final String study = studyField.getText().toString().trim();
-        final String year = yearField.getText().toString().trim();
+        final Integer year = Integer.parseInt(yearField.getText().toString().trim());
         final String email = emailField.getText().toString().trim();
         final String emailRepeat = emailRepeatField.getText().toString().trim();
         final String password = passwordField.getText().toString().trim();
@@ -123,11 +119,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public boolean checkForEmptyInputFields(String firstName, String lastName, String study,
-                                            String year, String email, String emailRepeat,
+                                            Integer year, String email, String emailRepeat,
                                             String password, String passwordRepeat) {
 
         if (TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || TextUtils.isEmpty(study) ||
-                TextUtils.isEmpty(year) || TextUtils.isEmpty(email) || TextUtils.isEmpty(emailRepeat) ||
+                TextUtils.isEmpty(year.toString()) || TextUtils.isEmpty(email) || TextUtils.isEmpty(emailRepeat) ||
                 TextUtils.isEmpty(password) || TextUtils.isEmpty(passwordRepeat)) {
             return true;
         }

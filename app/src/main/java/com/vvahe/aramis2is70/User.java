@@ -10,8 +10,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.Year;
-
 public class User {
 
     public String userID;                       //User ID
@@ -20,7 +18,7 @@ public class User {
     public String middleName;                   //middlename from user
     public String lastName;                     //lastname from user
     public String study;                        //study from user
-    public Year year;
+    public Integer year;
     public Double locationX = 51.4472632;       //X location from user
     public Double locationY = 5.4845778;        //Y location from user
     public Integer radiusSetting = 1000;        //search radius from user
@@ -40,10 +38,13 @@ public class User {
     //get existing user
     public User(String userID) {
         firebaseThisUser = firebaseUser.child(userID);
+        getFromDatabase();
     }
 
+    User user = new user();
+
     //for creating new user
-    public User(String userID, String email, String firstName, String middleName, String lastName, String study, Year year){
+    public User(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
         firebaseThisUser = firebaseUser.child(userID);
         this.userID = userID;
         this.email = email;

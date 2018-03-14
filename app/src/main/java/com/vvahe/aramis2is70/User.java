@@ -10,6 +10,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.Year;
+
 public class User {
 
     public String userID;                       //User ID
@@ -18,6 +20,7 @@ public class User {
     public String middleName;                   //middlename from user
     public String lastName;                     //lastname from user
     public String study;                        //study from user
+    public Year year;
     public Double locationX = 51.4472632;       //X location from user
     public Double locationY = 5.4845778;        //Y location from user
     public Integer radiusSetting = 1000;        //search radius from user
@@ -40,7 +43,7 @@ public class User {
     }
 
     //for creating new user
-    public User(String userID, String email, String firstName, String middleName, String lastName, String study){
+    public User(String userID, String email, String firstName, String middleName, String lastName, String study, Year year){
         firebaseThisUser = firebaseUser.child(userID);
         this.userID = userID;
         this.email = email;
@@ -48,6 +51,7 @@ public class User {
         this.middleName = middleName;
         this.lastName = lastName;
         this.study = study;
+        this.year = year;
         addToDatabase();
     }
 
@@ -56,6 +60,8 @@ public class User {
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);
         firebaseThisUser.child("lastName").setValue(this.lastName);
+        firebaseThisUser.child("study").setValue(this.study);
+        firebaseThisUser.child("year").setValue(this.year);
         firebaseThisUser.child("locationX").setValue(this.locationX);
         firebaseThisUser.child("locationY").setValue(this.locationY);
         firebaseThisUser.child("radiusSetting").setValue(this.radiusSetting);

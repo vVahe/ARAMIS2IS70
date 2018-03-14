@@ -4,12 +4,12 @@ import java.sql.Time;
 
 public class Chat {
 
-    public Integer chatID;      //chat ID
+    public String chatID;      //chat ID
     public User user1;          //user 1
     public User user2;          //user 2
     public Time timeCreated;    //time chat was created
 
-    public Chat() {
+    public Chat(String chatID) {
 
     }
 

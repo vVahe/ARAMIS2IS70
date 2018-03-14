@@ -39,9 +39,8 @@ public class User {
     public User(String userID) {
         firebaseThisUser = firebaseUser.child(userID);
         getFromDatabase();
+        createChatObjectArray();
     }
-
-    User user = new user();
 
     //for creating new user
     public User(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
@@ -77,6 +76,13 @@ public class User {
     private void getFromDatabase(){
     }
 
+    private void createChatObjectArray(){
+        int x = 0;
+        for (String chatID : chatsIDs) {
+            chats[x]= new Chat(chatID);
+            x++;
+        }
+    }
 
     // Get data from Firebase
     public boolean getUserInfo(){

@@ -10,39 +10,41 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class User {
 
-    public String userID;                       //User ID
-    public String email;                        //email address from user
-    public String firstName;                    //firstname from user
-    public String middleName;                   //middlename from user
-    public String lastName;                     //lastname from user
-    public String study;                        //study from user
-    public Integer year;                        //studyyear from user
-    public Double locationX = 51.4472632;       //X location from user
-    public Double locationY = 5.4845778;        //Y location from user
-    public Integer radiusSetting = 1000;        //search radius from user
-    public Boolean locationShow = true;         //user shows location
-    public Boolean available = true;            //is user available
-    public Boolean chatNotifications = true;    //want to get chat notifications
-    public String[] enrolledInIDs = {};         //array with IDs from courses enrolled in (for firebase)
-    public Course[] enrolledIn = {};            //array with courses enrolled in
-    public String[] activeCoursesIDs = {};      //array with IDs from active courses (for firebase)
-    public Course[] activeCourses = {};         //array with active courses
-    public String[] chatsIDs = {};                 //array with IDS from chat from user (for firebase)
-    public Chat[] chats = {};                   //array with chats from user
+    public String userID;                                                   //User ID
+    public String email;                                                    //email address from user
+    public String firstName;                                                //firstname from user
+    public String middleName;                                               //middlename from user
+    public String lastName;                                                 //lastname from user
+    public String study;                                                    //study from user
+    public Integer year;                                                    //studyyear from user
+    public Double locationX = 51.4472632;                                   //X location from user
+    public Double locationY = 5.4845778;                                    //Y location from user
+    public Integer radiusSetting = 1000;                                    //search radius from user
+    public Boolean locationShow = true;                                     //user shows location
+    public Boolean available = true;                                        //is user available
+    public Boolean chatNotifications = true;                                //want to get chat notifications
+    public ArrayList<String> enrolledInIDs = new ArrayList<String>();       //array with IDs from courses enrolled in (for firebase)
+    public ArrayList<String> activeCoursesIDs = new ArrayList<String>();    //array with IDs from active courses (for firebase)
+    public ArrayList<String> chatsIDs = new ArrayList<String>();            //array with IDS from chat from user (for firebase)
 
     private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
     private DatabaseReference firebaseThisUser;
 
-    //get existing user
+    /*
+        creates a new user class and gets data from firebase about the user
+     */
     public User(String userID) {
         firebaseThisUser = firebaseUser.child(userID);
         getFromDatabase();
-        createChatObjectArray();
     }
 
-    //for creating new user
+    /*
+        creates a new user class and a new user in the database
+     */
     public User(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
         firebaseThisUser = firebaseUser.child(userID);
         this.userID = userID;
@@ -55,7 +57,10 @@ public class User {
         addToDatabase();
     }
 
-    private void addToDatabase(){
+    /*
+        update firebase with data of this class
+     */
+    public void addToDatabase(){
         firebaseThisUser.child("email").setValue(this.email);
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);
@@ -73,32 +78,70 @@ public class User {
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
-    private void getFromDatabase(){
+    /*
+        gets all data from a user from firebase
+     */
+    public void getFromDatabase(){
+        //TODO: make function
+
     }
 
-    private void createChatObjectArray(){
-        int x = 0;
-        for (String chatID : chatsIDs) {
-            chats[x]= new Chat(chatID);
-            x++;
-        }
+    /*
+        create a chat with a user, in this class and in database
+     */
+    public void createChat(String otherUserID){
+        Chat chat = new Chat(this.userID, otherUserID);
+        chatsIDs.add(chat.chatID);
+        firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
-    // Get data from Firebase
-    public boolean getUserInfo(){
-
-
-        return true; //return true if succesful
+    /*
+        delete a chat, in this class and in database
+     */
+    public void deleteChat(String chatID) {
+        chatsIDs.remove(chatID);
+        firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
-    // Send data to Firebase
-    public boolean storeUserInfo(){
-
-
-        return true; //return true if succesful
+    /*
+        adds a course, in this class and in database
+     */
+    public void addEnrolledCourse(String courseCode){
+        enrolledInIDs.add(courseCode);
+        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
     }
 
+    /*
+        removes a course, in this class and in database
+     */
+    public void removeEnrolledCourse(String courseCode){
+        enrolledInIDs.remove(courseCode);
+        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
+    }
+
+    /*
+        adds a course as active, in this class and in database
+     */
+    public void addActiveCourse(String courseCode){
+        activeCoursesIDs.add(courseCode);
+        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
+    }
+
+    /*
+        removes a course as active, in this class and in database
+     */
+    public void removeActiveCourse(String courseCode){
+        activeCoursesIDs.remove(courseCode);
+        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
+    }
+
+    /*
+        returns true if this user is in range, false if not in range
+     */
+    public boolean isInRange(double locationX, double locationY, int radius){
+        //TODO: create function
 
 
-
+        return false;
+    }
 }

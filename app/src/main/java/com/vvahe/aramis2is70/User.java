@@ -18,7 +18,7 @@ public class User {
     public String middleName;                   //middlename from user
     public String lastName;                     //lastname from user
     public String study;                        //study from user
-    public Integer year;
+    public Integer year;                        //studyyear from user
     public Double locationX = 51.4472632;       //X location from user
     public Double locationY = 5.4845778;        //Y location from user
     public Integer radiusSetting = 1000;        //search radius from user
@@ -75,42 +75,6 @@ public class User {
     }
 
     private void getFromDatabase(){
-        firebaseUser.addValueEventListener(new ValueEventListener() {
-
-            /** result is stored in dataSnapshot if user is data base, send user to dashboard*/
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.hasChild(this.userID)) {
-
-                    Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
-
-                    /** prevents user from going back once logged in, they will have to use logout button*/
-                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                    startActivity(loginIntent);
-                } else {
-                    Toast.makeText(LoginActivity.this, "User not found, please Register", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-
-        firebaseThisUser.getValue
-        firebaseThisUser.child("firstName").setValue(this.firstName);
-        firebaseThisUser.child("middleName").setValue(this.middleName);
-        firebaseThisUser.child("lastName").setValue(this.lastName);
-        firebaseThisUser.child("locationX").setValue(this.locationX);
-        firebaseThisUser.child("locationY").setValue(this.locationY);
-        firebaseThisUser.child("radiusSetting").setValue(this.radiusSetting);
-        firebaseThisUser.child("locationShow").setValue(this.locationShow);
-        firebaseThisUser.child("available").setValue(this.available);
-        firebaseThisUser.child("chatNotifications").setValue(this.chatNotifications);
-        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
-        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
-        firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
 

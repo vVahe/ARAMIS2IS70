@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+
 public class User {
 
     public String userID;                                                   //User ID
@@ -39,7 +40,7 @@ public class User {
      */
     public User(String userID) {
         firebaseThisUser = firebaseUser.child(userID);
-        getFromDatabase();
+        addFirebaseListener();
     }
 
     /*
@@ -55,6 +56,7 @@ public class User {
         this.study = study;
         this.year = year;
         addToDatabase();
+        addFirebaseListener();
     }
 
     /*
@@ -81,9 +83,41 @@ public class User {
     /*
         gets all data from a user from firebase
      */
-    public void getFromDatabase(){
-        //TODO: make function
+    private void setDataInClass(DataSnapshot dataSnapshot){
+        for(DataSnapshot ds : dataSnapshot.getChildren()){
+            this.email              = (String) ds.child("email").getValue();
+            this.firstName          = (String) ds.child("firstName").getValue();
+            this.middleName         = (String) ds.child("middleName").getValue();
+            this.lastName           = (String) ds.child("lastName").getValue();
+            this.study              = (String) ds.child("study").getValue();
+            this.year               = (Integer) ds.child("year").getValue();
+            this.locationX          = (Double) ds.child("locationX").getValue();
+            this.locationY          = (Double) ds.child("locationY").getValue();
+            this.radiusSetting      = (Integer) ds.child("radiusSetting").getValue();
+            this.locationShow       = (Boolean) ds.child("locationShow").getValue();
+            this.available          = (Boolean) ds.child("available").getValue();
+            this.chatNotifications  = (Boolean) ds.child("chatNotifications").getValue();
+            this.enrolledInIDs      = (ArrayList<String>) ds.child("enrolledIn").getValue();
+            this.activeCoursesIDs   = (ArrayList<String>) ds.child("activeCourses").getValue();
+            this.chatsIDs           = (ArrayList<String>) ds.child("chats").getValue();
+        }
+    }
 
+    /*
+        add the value event listener
+     */
+    private void addFirebaseListener(){
+        firebaseThisUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setDataInClass(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /*
@@ -139,9 +173,10 @@ public class User {
         returns true if this user is in range, false if not in range
      */
     public boolean isInRange(double locationX, double locationY, int radius){
-        //TODO: create function
-
-
-        return false;
+        double lowBoundX = locationX - radius;
+        double upBoundX = locationX + radius;
+        double lowBoundY = locationY - radius;
+        double upBoundY = locationY + radius;
+        return ((this.locationX > lowBoundX) && (this.locationX < upBoundX) && (this.locationY < lowBoundY) && (this.locationY < upBoundY));
     }
 }

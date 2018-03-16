@@ -98,7 +98,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                userName = dataSnapshot.child("name").getValue().toString();
+                userName = dataSnapshot.child("firstName").getValue().toString();
                 txtUser.setText(userName);
             }
 

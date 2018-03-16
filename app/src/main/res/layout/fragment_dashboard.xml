@@ -11,41 +11,13 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/txtHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="263dp"
-            android:text="Currently logged in as: " />
-
-        <TextView
-            android:id="@+id/txtName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/txtAramis"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="33dp"
-            android:text="default"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30sp" />
-
-        <TextView
             android:id="@+id/txtAramis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/txtHome"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="Aramis"
             android:textSize="50sp" />
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="11dp"
-            android:text="Logout" />
 
 
     </RelativeLayout>

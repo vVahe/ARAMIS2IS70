@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:padding="20dp"
     tools:context="com.vvahe.aramis2is70.RegisterActivity">
 
     <EditText
         android:id="@+id/firstNameField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -20,10 +20,10 @@
 
     <EditText
         android:id="@+id/middleNameField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/firstNameField"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/firstNameField"
         android:ems="10"
         android:hint="Middle name"
         android:inputType="textPersonName"
@@ -31,11 +31,10 @@
 
     <EditText
         android:id="@+id/lastNameField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/firstNameField"
-        android:layout_marginTop="44dp"
         android:ems="10"
         android:hint="Last name"
         android:inputType="textPersonName"
@@ -43,11 +42,10 @@
 
     <EditText
         android:id="@+id/studyField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/lastNameField"
-        android:layout_marginTop="44dp"
         android:ems="10"
         android:hint="Study"
         android:inputType="textPersonName"
@@ -55,10 +53,10 @@
 
     <EditText
         android:id="@+id/yearField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/studyField"
+        android:layout_below="@+id/lastNameField"
+        android:layout_toEndOf="@+id/studyField"
         android:ems="10"
         android:hint="Year"
         android:inputType="textPersonName"
@@ -66,10 +64,11 @@
 
     <EditText
         android:id="@+id/emailField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/emailRepeatField"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/studyField"
+        android:layout_marginTop="22dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -77,11 +76,10 @@
 
     <EditText
         android:id="@+id/emailRepeatField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/passwordField"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="27dp"
+        android:layout_below="@+id/emailField"
         android:ems="10"
         android:hint="Repeat email"
         android:inputType="textEmailAddress"
@@ -89,10 +87,11 @@
 
     <EditText
         android:id="@+id/passwordField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/passwordRepeatField"
-        android:layout_alignParentStart="true"
+        android:layout_alignBaseline="@+id/emailField"
+        android:layout_alignBottom="@+id/emailField"
+        android:layout_toEndOf="@+id/emailField"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -100,10 +99,10 @@
 
     <EditText
         android:id="@+id/passwordRepeatField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnRegister"
-        android:layout_alignParentStart="true"
+        android:layout_below="@+id/emailField"
+        android:layout_toEndOf="@+id/emailRepeatField"
         android:ems="10"
         android:hint="Repeat password"
         android:inputType="textPassword"
@@ -113,8 +112,8 @@
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/emailRepeatField"
         android:text="Register" />
 
 </RelativeLayout>

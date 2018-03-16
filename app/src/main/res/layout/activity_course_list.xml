@@ -6,30 +6,44 @@
     android:layout_height="match_parent"
     tools:context="com.vvahe.aramis2is70.ProfileActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/profile_toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#212121"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/course_list_toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_back_arrow"
-            android:background="@null"/>
+            android:background="#212121"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
 
-        <TextView
-            android:id="@+id/profile_text"
-            android:layout_width="wrap_content"
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_back_arrow"
+                android:background="@null"/>
+
+            <TextView
+                android:id="@+id/profile_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Courses"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <ListView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Profile"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:id="@+id/courseListView"/>
 
-    </android.support.v7.widget.Toolbar>
+    </LinearLayout>
+
+
 
 
 </android.support.constraint.ConstraintLayout>

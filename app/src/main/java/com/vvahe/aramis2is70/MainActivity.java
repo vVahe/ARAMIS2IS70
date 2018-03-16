@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
         chatFragment = new ChatFragment();
         settingsFragment = new SettingsFragment();
 
+        user = User.getInstance();
         checkUserLogin();
+        getUserData();
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void getUserData() {
+        user.setUserInfo(mAuth.getCurrentUser().getUid());
     }
 
     public void logout() {

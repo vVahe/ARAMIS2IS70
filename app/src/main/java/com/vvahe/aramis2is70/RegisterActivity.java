@@ -17,7 +17,28 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class RegisterActivity extends AppCompatActivity {
+
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String study;
+    private Integer year;
+    private String email;
+    private String emailRepeat;
+    private String password;
+    private String passwordRepeat;
+    public Double locationX = 51.4472632;                                   //X location from user
+    public Double locationY = 5.4845778;                                    //Y location from user
+    public Integer radiusSetting = 1000;                                    //search radius from user
+    public Boolean locationShow = true;                                     //user shows location
+    public Boolean available = true;                                        //is user available
+    public Boolean chatNotifications = true;                                //want to get chat notifications
+    public ArrayList<String> enrolledInIDs = new ArrayList<String>();       //array with IDs from courses enrolled in (for firebase)
+    public ArrayList<String> activeCoursesIDs = new ArrayList<String>();    //array with IDs from active courses (for firebase)
+    public ArrayList<String> chatsIDs = new ArrayList<String>();            //array with IDS from chat from user (for firebase)
 
     private EditText firstNameField;
     private EditText middleNameField;
@@ -68,15 +89,15 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void startRegister() {
 
-        final String firstName = firstNameField.getText().toString().trim();
-        final String middleName = middleNameField.getText().toString().trim();
-        final String lastName = lastNameField.getText().toString().trim();
-        final String study = studyField.getText().toString().trim();
-        final Integer year = Integer.parseInt(yearField.getText().toString().trim());
-        final String email = emailField.getText().toString().trim();
-        final String emailRepeat = emailRepeatField.getText().toString().trim();
-        final String password = passwordField.getText().toString().trim();
-        final String passwordRepeat = passwordRepeatField.getText().toString().trim();
+        firstName = firstNameField.getText().toString().trim();
+        middleName = middleNameField.getText().toString().trim();
+        lastName = lastNameField.getText().toString().trim();
+        study = studyField.getText().toString().trim();
+        year = Integer.parseInt(yearField.getText().toString().trim());
+        email = emailField.getText().toString().trim();
+        emailRepeat = emailRepeatField.getText().toString().trim();
+        password = passwordField.getText().toString().trim();
+        passwordRepeat = passwordRepeatField.getText().toString().trim();
 
         if(checkForEmptyInputFields(firstName, lastName, study, year, email, emailRepeat, password, passwordRepeat)) {
             Toast.makeText(RegisterActivity.this, "Please fill in all fields", Toast.LENGTH_LONG).show();
@@ -91,7 +112,8 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
 
                         String uID = mAuth.getCurrentUser().getUid();
-                        User user = new User(uID, email, firstName, middleName, lastName, study, year);
+
+                        createrUserInDB();
                         /* if registration was successful we can retrieve the unique user_id */
 
                         /* send user to dashboard after registration is complete*/
@@ -116,6 +138,25 @@ public class RegisterActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    private void createrUserInDB() {
+        DatabaseReference usersNode = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersNode.child("email").setValue(email);
+        usersNode.child("firstName").setValue(firstName);
+        usersNode.child("middleName").setValue(middleName);
+        usersNode.child("lastName").setValue(lastName);
+        usersNode.child("study").setValue(study);
+        usersNode.child("year").setValue(year);
+        usersNode.child("locationX").setValue(locationX);
+        usersNode.child("locationY").setValue(locationY);
+        usersNode.child("radiusSetting").setValue(radiusSetting);
+        usersNode.child("locationShow").setValue(locationShow);
+        usersNode.child("available").setValue(available);
+        usersNode.child("chatNotifications").setValue(chatNotifications);
+        usersNode.child("enrolledIn").setValue(enrolledInIDs);
+        usersNode.child("activeCourses").setValue(activeCoursesIDs);
+        usersNode.child("chats").setValue(chatsIDs);
     }
 
     public boolean checkForEmptyInputFields(String firstName, String lastName, String study,

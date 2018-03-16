@@ -2,8 +2,11 @@ package com.vvahe.aramis2is70;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -14,6 +17,23 @@ import java.util.ArrayList;
 
 
 public class User {
+
+    //single user object
+    private static User user = new User();
+
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // User is signed in
+
+            } else {
+                userID = mAuth.getCurrentUser().getUid();
+            }
+        }
+    };
 
     public String userID;                                                   //User ID
     public String email;                                                    //email address from user
@@ -32,52 +52,42 @@ public class User {
     public ArrayList<String> activeCoursesIDs = new ArrayList<String>();    //array with IDs from active courses (for firebase)
     public ArrayList<String> chatsIDs = new ArrayList<String>();            //array with IDS from chat from user (for firebase)
 
-    private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
-    private DatabaseReference firebaseThisUser;
+    //reference to users node in database
+    private DatabaseReference usersNode = FirebaseDatabase.getInstance().getReference().child("Users");
+    //reference to the currently logged in user
+    private DatabaseReference currentUser = usersNode.child(userID).getRef();
 
     /*
-        creates a new user class and gets data from firebase about the user
+        Empty constructor for referencing other classes
      */
-    public User(String userID) {
-        firebaseThisUser = firebaseUser.child(userID);
-        addFirebaseListener();
-    }
+    private User () {}
 
-    /*
-        creates a new user class and a new user in the database
-     */
-    public User(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
-        firebaseThisUser = firebaseUser.child(userID);
-        this.userID = userID;
-        this.email = email;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.study = study;
-        this.year = year;
-        addToDatabase();
-        addFirebaseListener();
+    public static User getInstance() {
+        if (user == null) {
+            user = new User();
+        }
+        return user;
     }
 
     /*
         update firebase with data of this class
      */
     public void addToDatabase(){
-        firebaseThisUser.child("email").setValue(this.email);
-        firebaseThisUser.child("firstName").setValue(this.firstName);
-        firebaseThisUser.child("middleName").setValue(this.middleName);
-        firebaseThisUser.child("lastName").setValue(this.lastName);
-        firebaseThisUser.child("study").setValue(this.study);
-        firebaseThisUser.child("year").setValue(this.year);
-        firebaseThisUser.child("locationX").setValue(this.locationX);
-        firebaseThisUser.child("locationY").setValue(this.locationY);
-        firebaseThisUser.child("radiusSetting").setValue(this.radiusSetting);
-        firebaseThisUser.child("locationShow").setValue(this.locationShow);
-        firebaseThisUser.child("available").setValue(this.available);
-        firebaseThisUser.child("chatNotifications").setValue(this.chatNotifications);
-        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
-        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
-        firebaseThisUser.child("chats").setValue(this.chatsIDs);
+        currentUser.child("email").setValue(this.email);
+        currentUser.child("firstName").setValue(this.firstName);
+        currentUser.child("middleName").setValue(this.middleName);
+        currentUser.child("lastName").setValue(this.lastName);
+        currentUser.child("study").setValue(this.study);
+        currentUser.child("year").setValue(this.year);
+        currentUser.child("locationX").setValue(this.locationX);
+        currentUser.child("locationY").setValue(this.locationY);
+        currentUser.child("radiusSetting").setValue(this.radiusSetting);
+        currentUser.child("locationShow").setValue(this.locationShow);
+        currentUser.child("available").setValue(this.available);
+        currentUser.child("chatNotifications").setValue(this.chatNotifications);
+        currentUser.child("enrolledIn").setValue(this.enrolledInIDs);
+        currentUser.child("activeCourses").setValue(this.activeCoursesIDs);
+        currentUser.child("chats").setValue(this.chatsIDs);
     }
 
     /*
@@ -103,11 +113,8 @@ public class User {
         }
     }
 
-    /*
-        add the value event listener
-     */
-    private void addFirebaseListener(){
-        firebaseThisUser.addValueEventListener(new ValueEventListener() {
+    public void setUserInfo(String userID) {
+        currentUser.getRef().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 setDataInClass(dataSnapshot);
@@ -118,7 +125,7 @@ public class User {
 
             }
         });
-    }
+    };
 
     /*
         create a chat with a user, in this class and in database
@@ -126,7 +133,7 @@ public class User {
     public void createChat(String otherUserID){
         Chat chat = new Chat(this.userID, otherUserID);
         chatsIDs.add(chat.chatID);
-        firebaseThisUser.child("chats").setValue(this.chatsIDs);
+        currentUser.child("chats").setValue(this.chatsIDs);
     }
 
     /*
@@ -134,7 +141,7 @@ public class User {
      */
     public void deleteChat(String chatID) {
         chatsIDs.remove(chatID);
-        firebaseThisUser.child("chats").setValue(this.chatsIDs);
+        currentUser.child("chats").setValue(this.chatsIDs);
     }
 
     /*
@@ -142,7 +149,7 @@ public class User {
      */
     public void addEnrolledCourse(String courseCode){
         enrolledInIDs.add(courseCode);
-        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
+        currentUser.child("enrolledIn").setValue(this.enrolledInIDs);
     }
 
     /*
@@ -150,7 +157,7 @@ public class User {
      */
     public void removeEnrolledCourse(String courseCode){
         enrolledInIDs.remove(courseCode);
-        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
+        currentUser.child("enrolledIn").setValue(this.enrolledInIDs);
     }
 
     /*
@@ -158,7 +165,7 @@ public class User {
      */
     public void addActiveCourse(String courseCode){
         activeCoursesIDs.add(courseCode);
-        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
+        currentUser.child("activeCourses").setValue(this.activeCoursesIDs);
     }
 
     /*
@@ -166,7 +173,7 @@ public class User {
      */
     public void removeActiveCourse(String courseCode){
         activeCoursesIDs.remove(courseCode);
-        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
+        currentUser.child("activeCourses").setValue(this.activeCoursesIDs);
     }
 
     /*

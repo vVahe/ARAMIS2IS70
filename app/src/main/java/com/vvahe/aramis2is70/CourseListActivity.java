@@ -54,7 +54,7 @@ public class CourseListActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            view = getLayoutInflater().inflate(R.layout.enrolled_course_list_item,null);
+            convertView = getLayoutInflater().inflate(R.layout.enrolled_course_list_item,null);
             TextView coursename = (TextView) findViewById(R.id.courseName);
             CheckBox active = (CheckBox) findViewById(R.id.courseActive);
             return null;

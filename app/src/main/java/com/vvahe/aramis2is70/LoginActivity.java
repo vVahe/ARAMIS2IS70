@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -114,6 +115,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     /** prevents user from going back once logged in, they will have to use logout button*/
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                    User mainUser = new User(user_id);
 
                     startActivity(loginIntent);
                 } else {

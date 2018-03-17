@@ -2,6 +2,7 @@ package com.vvahe.aramis2is70;
 
 
 import android.*;
+import android.content.BroadcastReceiver;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +32,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 
@@ -38,22 +42,23 @@ import java.util.ArrayList;
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+    private View mView;
+
     private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
     private DatabaseReference firebaseThisUser; //database reference to this user
 
-    private View mView;
-    private User userObj;
-    private String uID;
+    private User userObj; //reference to user Object
+    private int radiusSetting; //variable for radius
 
+    private String uID; //currently logged in user ID
+    private TextView textX; //for testing only
     private Button testBtn; //for testing only
 
-    private int radiusSetting;
-
-    private GoogleMap mGoogleMap;
+    private GoogleMap mGoogleMap; //google map Object
     private MapView mMapView;
     private UiSettings mUiSettings;
 
-    private final static int MY_PERMISSIONS = 101;
+    private final static int MY_PERMISSIONS = 101; //permission code
 
     public MapFragment() {
         // Required empty public constructor
@@ -78,12 +83,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        textX = getView().findViewById(R.id.textX);
         testBtn = getView().findViewById(R.id.testBtn);
 
+        /*
+            get userID of currently logged in user and create user object
+         */
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uID = user.getUid();
             userObj = new User(uID);
+            Log.i("TAG", "before button " + userObj.locationX.toString());
         } else {
             // No user is signed in
         }
@@ -99,6 +109,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 getUserWithinRadius();
+                textX.setText(userObj.locationX.toString());
+                Log.i("TAG", "after button " + userObj.locationX.toString());
             }
         });
     }
@@ -110,7 +122,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mUiSettings = mGoogleMap.getUiSettings();
 
-        // Keep the UI Settings state in sync with the checkboxes.
         mUiSettings.setZoomControlsEnabled(true);
         mUiSettings.setCompassEnabled(true);
         mUiSettings.setMyLocationButtonEnabled(true);
@@ -190,20 +201,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         double upBoundX = locationX + radius;
         double lowBoundY = locationY - radius;
         double upBoundY = locationY + radius;
-        return ((getMyLocX() > lowBoundX) && (getMyLocX() < upBoundX) && (getMyLocY() < lowBoundY) && (getMyLocY() < upBoundY));
+        return ((userObj.locationX > lowBoundX) && (userObj.locationX < upBoundX) && (userObj.locationY < lowBoundY) && (userObj.locationY < upBoundY));
     }
-
-
-    private double getMyLocY() {
-        //TODO: code to get current location
-        return 0;
-    }
-
-    private double getMyLocX() {
-        //TODO: code to get current location
-        return 0;
-    }
-
 
     private void enableMyLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==

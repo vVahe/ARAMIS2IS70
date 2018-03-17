@@ -27,6 +27,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProfileActivity" />
 
+        <service android:name=".GPS_Service"/>
+        <!-- API key for google maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD2Ma4IwXawFaPF0rrAdKgUQvyr73hABG4" />

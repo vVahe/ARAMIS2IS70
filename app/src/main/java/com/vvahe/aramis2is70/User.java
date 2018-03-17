@@ -217,7 +217,7 @@ public class User {
     /*
         add the value event listener
      */
-    private void addFirebaseListener(){
+    public void addFirebaseListener(){
         firebaseThisUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

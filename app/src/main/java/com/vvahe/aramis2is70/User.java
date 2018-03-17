@@ -2,6 +2,7 @@ package com.vvahe.aramis2is70;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -11,17 +12,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class User {
 
-    public String userID;                                                   //User ID
-    public String email;                                                    //email address from user
-    public String firstName;                                                //firstname from user
-    public String middleName;                                               //middlename from user
-    public String lastName;                                                 //lastname from user
-    public String study;                                                    //study from user
-    public Integer year;                                                    //studyyear from user
+    public String userID = "";                                              //User ID
+    public String email = "";                                               //email address from user
+    public String firstName = "";                                           //firstname from user
+    public String middleName = "";                                          //middlename from user
+    public String lastName = "";                                            //lastname from user
+    public String study = "";                                               //study from user
+    public Integer year = 9999;                                             //studyyear from user
     public Double locationX = 51.4472632;                                   //X location from user
     public Double locationY = 5.4845778;                                    //Y location from user
     public Integer radiusSetting = 1000;                                    //search radius from user
@@ -32,14 +34,15 @@ public class User {
     public ArrayList<String> activeCoursesIDs = new ArrayList<String>();    //array with IDs from active courses (for firebase)
     public ArrayList<String> chatsIDs = new ArrayList<String>();            //array with IDS from chat from user (for firebase)
 
-    private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
-    private DatabaseReference firebaseThisUser;
+    private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
+    private DatabaseReference firebaseThisUser; //database reference to this user
 
     /*
         creates a new user class and gets data from firebase about the user
      */
     public User(String userID) {
         firebaseThisUser = firebaseUser.child(userID);
+        this.userID = userID;
         addFirebaseListener();
     }
 
@@ -57,67 +60,6 @@ public class User {
         this.year = year;
         addToDatabase();
         addFirebaseListener();
-    }
-
-    /*
-        update firebase with data of this class
-     */
-    public void addToDatabase(){
-        firebaseThisUser.child("email").setValue(this.email);
-        firebaseThisUser.child("firstName").setValue(this.firstName);
-        firebaseThisUser.child("middleName").setValue(this.middleName);
-        firebaseThisUser.child("lastName").setValue(this.lastName);
-        firebaseThisUser.child("study").setValue(this.study);
-        firebaseThisUser.child("year").setValue(this.year);
-        firebaseThisUser.child("locationX").setValue(this.locationX);
-        firebaseThisUser.child("locationY").setValue(this.locationY);
-        firebaseThisUser.child("radiusSetting").setValue(this.radiusSetting);
-        firebaseThisUser.child("locationShow").setValue(this.locationShow);
-        firebaseThisUser.child("available").setValue(this.available);
-        firebaseThisUser.child("chatNotifications").setValue(this.chatNotifications);
-        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
-        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
-        firebaseThisUser.child("chats").setValue(this.chatsIDs);
-    }
-
-    /*
-        gets all data from a user from firebase
-     */
-    private void setDataInClass(DataSnapshot dataSnapshot){
-        for(DataSnapshot ds : dataSnapshot.getChildren()){
-            this.email              = (String) ds.child("email").getValue();
-            this.firstName          = (String) ds.child("firstName").getValue();
-            this.middleName         = (String) ds.child("middleName").getValue();
-            this.lastName           = (String) ds.child("lastName").getValue();
-            this.study              = (String) ds.child("study").getValue();
-            this.year               = (Integer) ds.child("year").getValue();
-            this.locationX          = (Double) ds.child("locationX").getValue();
-            this.locationY          = (Double) ds.child("locationY").getValue();
-            this.radiusSetting      = (Integer) ds.child("radiusSetting").getValue();
-            this.locationShow       = (Boolean) ds.child("locationShow").getValue();
-            this.available          = (Boolean) ds.child("available").getValue();
-            this.chatNotifications  = (Boolean) ds.child("chatNotifications").getValue();
-            this.enrolledInIDs      = (ArrayList<String>) ds.child("enrolledIn").getValue();
-            this.activeCoursesIDs   = (ArrayList<String>) ds.child("activeCourses").getValue();
-            this.chatsIDs           = (ArrayList<String>) ds.child("chats").getValue();
-        }
-    }
-
-    /*
-        add the value event listener
-     */
-    private void addFirebaseListener(){
-        firebaseThisUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                setDataInClass(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     /*
@@ -179,4 +121,114 @@ public class User {
         double upBoundY = locationY + radius;
         return ((this.locationX > lowBoundX) && (this.locationX < upBoundX) && (this.locationY < lowBoundY) && (this.locationY < upBoundY));
     }
+
+    /*
+        output data from class to log, only for testing purposes
+     */
+    public void outputToLog(){
+        Log.wtf("email", email);
+        Log.wtf("firstName", firstName);
+        Log.wtf("middleName", middleName);
+        Log.wtf("lastName", lastName);
+        Log.wtf("study", study);
+        Log.wtf("year", year.toString());
+        Log.wtf("locationX", locationX.toString());
+        Log.wtf("locationY", locationY.toString());
+        Log.wtf("radiusSetting", radiusSetting.toString());
+        Log.wtf("locationShow", locationShow.toString());
+        Log.wtf("available", available.toString());
+        Log.wtf("chatNotifications", chatNotifications.toString());
+        Log.wtf("enrolledInIDs", enrolledInIDs.toString());
+        Log.wtf("activeCoursesIDs", activeCoursesIDs.toString());
+        Log.wtf("chatsIDs", chatsIDs.toString());
+    }
+
+
+    /*
+        update firebase with data of this class
+     */
+    public void addToDatabase(){
+        firebaseThisUser.child("email").setValue(this.email);
+        firebaseThisUser.child("firstName").setValue(this.firstName);
+        firebaseThisUser.child("middleName").setValue(this.middleName);
+        firebaseThisUser.child("lastName").setValue(this.lastName);
+        firebaseThisUser.child("study").setValue(this.study);
+        firebaseThisUser.child("year").setValue(this.year);
+        firebaseThisUser.child("locationX").setValue(this.locationX);
+        firebaseThisUser.child("locationY").setValue(this.locationY);
+        firebaseThisUser.child("radiusSetting").setValue(this.radiusSetting);
+        firebaseThisUser.child("locationShow").setValue(this.locationShow);
+        firebaseThisUser.child("available").setValue(this.available);
+        firebaseThisUser.child("chatNotifications").setValue(this.chatNotifications);
+        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
+        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
+        firebaseThisUser.child("chats").setValue(this.chatsIDs);
+    }
+
+    /*
+        gets all data from a user from firebase
+     */
+    private void setDataInClass(DataSnapshot dataSnapshot){
+        for(DataSnapshot ds : dataSnapshot.getChildren()){
+            if (ds.getKey().equals("email")){
+                email = ds.getValue(String.class);
+            } else if (ds.getKey().equals("firstName")){
+                firstName = ds.getValue(String.class);
+            } else if (ds.getKey().equals("middleName")){
+                middleName = ds.getValue(String.class);
+            } else if (ds.getKey().equals("lastName")){
+                lastName = ds.getValue(String.class);
+            } else if (ds.getKey().equals("study")){
+                study = ds.getValue(String.class);
+            } else if (ds.getKey().equals("year")){
+                year = ds.getValue(Integer.class);
+            } else if (ds.getKey().equals("locationX")){
+                locationX = ds.getValue(Double.class);
+            } else if (ds.getKey().equals("locationY")){
+                locationY = ds.getValue(Double.class);
+            } else if (ds.getKey().equals("radiusSetting")){
+                radiusSetting = ds.getValue(Integer.class);
+            } else if (ds.getKey().equals("locationShow")){
+                locationShow = ds.getValue(Boolean.class);
+            } else if (ds.getKey().equals("available")){
+                available = ds.getValue(Boolean.class);
+            } else if (ds.getKey().equals("chatNotifications")){
+                chatNotifications = ds.getValue(Boolean.class);
+            } else if (ds.getKey().equals("enrolledIn")){
+                enrolledInIDs.clear();
+                for(DataSnapshot dsChild : ds.getChildren()) {
+                    enrolledInIDs.clear();
+                    enrolledInIDs.add(dsChild.getValue(String.class));
+                }
+            } else if (ds.getKey().equals("activeCourses")){
+                activeCoursesIDs.clear();
+                for(DataSnapshot dsChild : ds.getChildren()) {
+                    activeCoursesIDs.add(dsChild.getValue(String.class));
+                }
+            } else if (ds.getKey().equals("chats")){
+                chatsIDs.clear();
+                for(DataSnapshot dsChild : ds.getChildren()) {
+                    chatsIDs.add(dsChild.getValue(String.class));
+                }
+            }
+        }
+    }
+
+    /*
+        add the value event listener
+     */
+    private void addFirebaseListener(){
+        firebaseThisUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setDataInClass(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }

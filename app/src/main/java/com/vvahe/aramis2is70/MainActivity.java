@@ -181,4 +181,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth.addAuthStateListener(mAuthListener);
     }
 
+    /** used for onClicks in dashboard */
+    public void myClickMethod(View v) {
+        setFragment(mapFragment);
+
+
+    }
+
+
 }

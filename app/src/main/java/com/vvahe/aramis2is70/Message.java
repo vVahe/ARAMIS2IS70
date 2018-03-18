@@ -43,7 +43,7 @@ public class Message {
      */
     private void getMessageInfo(){
         //TODO: gets info about a specific message from firebase and puts it in this object
-        private DatabaseReference messageref;
+        DatabaseReference messageref;
         messageref = ref.child(this.chatID).child("messages").child(this.messageID);
 
         this.timeSend = Long.parseLong(messageref.child("timestamp").getKey());

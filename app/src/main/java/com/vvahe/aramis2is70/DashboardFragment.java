@@ -7,7 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -30,9 +31,23 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+
+        Toast.makeText(getActivity(), "Welcome to your dashboard", Toast.LENGTH_LONG).show();
+
+
+        TextView loggedInText = (TextView) getActivity().findViewById(R.id.loggedInText);
+        TextView userName = (TextView) getActivity().findViewById(R.id.userName);
+
     }
 
+    public void onClick(View view) {
+        Toast.makeText(getActivity(), "to profile settings", Toast.LENGTH_LONG).show();
+    }
 
+    public void myClickMethod(View v) {
+        Toast.makeText(getActivity(), "to profile settings", Toast.LENGTH_LONG).show();
+
+    }
 
 
 }

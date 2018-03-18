@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 public class CourseListActivity extends AppCompatActivity {
     private static ImageButton back;
+    private static Button addCourse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,10 @@ public class CourseListActivity extends AppCompatActivity {
 
         back = (ImageButton)findViewById(R.id.backButton);
         ListView listView = (ListView)findViewById(R.id.courseListView);
+        addCourse = (Button)findViewById(R.id.addCourseButton);
+
+        courseListAdapter courseListAdapter = new courseListAdapter();
+        listView.setAdapter(courseListAdapter);
 
         back();
     }
@@ -30,6 +36,15 @@ public class CourseListActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(CourseListActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void addCourse(){
+        addCourse.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(CourseListActivity.this, searchCourseActivity.class);
                 startActivity(intent);
             }
         });
@@ -55,9 +70,12 @@ public class CourseListActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = getLayoutInflater().inflate(R.layout.enrolled_course_list_item,null);
-            TextView coursename = (TextView) findViewById(R.id.courseName);
-            CheckBox active = (CheckBox) findViewById(R.id.courseActive);
-            return null;
+            TextView coursename = (TextView) convertView.findViewById(R.id.courseName);
+            CheckBox active = (CheckBox) convertView.findViewById(R.id.courseActive);
+
+            // coursename.setText(COURSES[i]); --> replace COURSES with the actual array of coursenames
+            // active.setActivated(true/false); --> true/false should probably be a boolean array
+            return convertView;
         }
     }
 }

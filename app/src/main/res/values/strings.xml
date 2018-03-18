@@ -9,4 +9,16 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_search_course">searchCourseActivity</string>
+
+    <string-array name="courseplaceholder">
+        <item>App Development</item>
+        <item>Human Technology Interaction</item>
+        <item>Programming Methods</item>
+        <item>Something else</item>
+        <item>Best course ever</item>
+        <item>Worst course ever</item>
+        <item>[2ID90]</item>
+        <item>[5XY20] Some random course</item>
+    </string-array>
 </resources>

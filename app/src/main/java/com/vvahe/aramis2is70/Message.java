@@ -1,6 +1,10 @@
 package com.vvahe.aramis2is70;
 
-import java.sql.Time;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.UUID;
 
 public class Message {
 
@@ -9,6 +13,9 @@ public class Message {
     public String userID;       //user that send this message
     public Long timeSend;       //time this message was send
     public String message;      //message from this message
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("chat");
 
     /*
         creates new message object, and gets all data from firebase about this message
@@ -35,8 +42,13 @@ public class Message {
         gets all message info from firebase and puts it in this class
      */
     private void getMessageInfo(){
-        //TODO: gets info about a specific message from firebase and puts it in this class
+        //TODO: gets info about a specific message from firebase and puts it in this object
+        private DatabaseReference messageref;
+        messageref = ref.child(this.chatID).child("messages").child(this.messageID);
 
+        this.timeSend = Long.parseLong(messageref.child("timestamp").getKey());
+        this.message = messageref.child("string").getKey();
+        this.userID = messageref.child("user").getKey();
     }
 
     /*
@@ -44,6 +56,8 @@ public class Message {
      */
     private void sendMessageInfo(){
         //TODO: make function, send message info to firebase
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.getCurrentUser().getUid();
 
     }
 
@@ -51,10 +65,7 @@ public class Message {
         returns a new possible message ID
      */
     private String getNewMessageID(){
-        //TODO: make function, return new possible ID for message (look up highest message id in firebase and add 1)
-
-
-        return "0";
+        return UUID.randomUUID().toString();
     }
 
 }

@@ -24,6 +24,9 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +38,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -93,7 +98,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (user != null) {
             uID = user.getUid();
             userObj = new User(uID);
-            Log.i("TAG", "before button " + userObj.locationX.toString());
+            radiusSetting = userObj.radiusSetting;
+            Log.i("TAG", "assigned uID  = " + userObj.userID);
         } else {
             // No user is signed in
         }
@@ -105,12 +111,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mMapView.getMapAsync(this);
         }
 
+        //for testing code only
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getUserWithinRadius();
                 textX.setText(userObj.locationX.toString());
-                Log.i("TAG", "after button " + userObj.locationX.toString());
             }
         });
     }
@@ -131,17 +137,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mUiSettings.setRotateGesturesEnabled(true);
 
         enableMyLocation();
-
-        addMarkers();
-    }
-
-    private void addMarkers() {
-        /*
-            get all users from in search radius and makes markers of them on the map
-         */
-        radiusSetting = userObj.radiusSetting;
-        getUserWithinRadius();
-
     }
 
     /*
@@ -152,28 +147,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         firebaseUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String firstName= "";
+
+                List<String[]> nearUsers = new ArrayList<>(); //stores name, locX, locY of nearby users
+                String tempFN = ""; //temp string
                 Double locX = 0.0;
                 Double locY = 0.0;
-                ArrayList<String> nearUsers = new ArrayList<>();
 
                 //get userID's of nearby users
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    Log.i("TAG", "ds contains  = " + ds);
+                    //TODO: log shows alot of emtpy records from database ??? need to figure out why
                     for (DataSnapshot ds2 : ds.getChildren()) {
-                        String tempFN = "";
+//                        Log.i("TAG", "ds2 contains  = " + ds2);
                         if (ds2.getKey().equals("firstName")) tempFN = ds2.getValue(String.class);
                         if (ds2.getKey().equals("locationX")) locX = ds2.getValue(Double.class);
                         if (ds2.getKey().equals("locationY")) locY = ds2.getValue(Double.class);
+//                        Log.i("TAG", "tempFN  = " + tempFN);
+//                        Log.i("TAG", "locX  = " + locX);
+//                        Log.i("TAG", "locY  = " + locY);
 
                         //TODO: also get userID en pic
 
                         //if user is in radius save userID in list
+                        Log.i("TAG", "Radiussetting = " + radiusSetting);
+                        Log.i("TAG", "inRadius? = " + inRadius(locX, locY, radiusSetting));
                         if (inRadius(locX, locY, radiusSetting)) {
-                            nearUsers.add(tempFN);
+                            String[] attributes = {tempFN, locX.toString(), locY.toString()};
+                            Log.i("TAG", "Attributes = " + attributes);
+                            nearUsers.add(attributes);
                         }
                     }
                 }
-
+                Log.i("TAG", "List contains  = " + nearUsers);
                 createMarkers(nearUsers);
             }
 
@@ -187,21 +192,42 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     /*
         create google map markers for all nearby users
      */
-    private void createMarkers(ArrayList<String> nearUsers) {
-        for (String user : nearUsers) {
-            //TODO: code for making markers which displays username
+    private void createMarkers(List<String[]> nearUsers) {
+        for (String[] user : nearUsers) {
+            Log.i("TAG", "string user = " + user);
+                Marker marker = mGoogleMap.addMarker(
+                        new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(user[1]), Double.parseDouble(user[2])))
+                            .title(user[0])
+                            .snippet("test")
+            );
         }
     }
 
     /*
-        returns true if this user is in range, false if not in range
+        returns true if distance between users is within radius, otherwise false
      */
-    public boolean inRadius(double locationX, double locationY, int radius){
-        double lowBoundX = locationX - radius;
-        double upBoundX = locationX + radius;
-        double lowBoundY = locationY - radius;
-        double upBoundY = locationY + radius;
-        return ((userObj.locationX > lowBoundX) && (userObj.locationX < upBoundX) && (userObj.locationY < lowBoundY) && (userObj.locationY < upBoundY));
+    public boolean inRadius(double lat2, double lon2, int radius) {
+            Boolean result = false;
+            Double lat1 = userObj.locationY;
+            Double lon1 = userObj.locationX;
+
+            //do some quick math
+            Double earthRadius = 6378.137; // Radius of earth in KM
+            Double dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+            Double dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+            Double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                            Math.sin(dLon/2) * Math.sin(dLon/2);
+            Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            Double d = earthRadius * c;
+
+        Log.i("TAG", "distance in meters = " + d);
+            //TODO: radius needs to be tweaked to only display users within 1000 meters
+            if (d * 1000 < radius) {
+                result = true;
+            }
+        return true;
     }
 
     private void enableMyLocation() {

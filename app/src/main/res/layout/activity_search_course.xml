@@ -30,28 +30,26 @@
                 android:id="@+id/profile_text"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Courses"
+                android:text="Add Courses"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
         </android.support.v7.widget.Toolbar>
 
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:queryHint="Search Course"/>
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/courseListView">
-        </ListView>
-
-        <Button
-            android:id="@+id/addCourseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Add Courses" />
+            android:id="@+id/courseListView"/>
 
     </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
 
+
+</android.support.constraint.ConstraintLayout>

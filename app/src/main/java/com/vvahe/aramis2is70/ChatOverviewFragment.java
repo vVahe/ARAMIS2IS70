@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.vvahe.aramis2is70.dummy.DummyContent;
-import com.vvahe.aramis2is70.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
@@ -93,6 +91,5 @@ public class ChatOverviewFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
     }
 }

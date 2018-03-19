@@ -17,6 +17,8 @@ import java.util.List;
 
 public class User {
 
+    private static User mainUser = new User();
+
     public String userID = "";                                              //User ID
     public String email = "";                                               //email address from user
     public String firstName = "";                                           //firstname from user
@@ -34,22 +36,35 @@ public class User {
     public ArrayList<String> activeCoursesIDs = new ArrayList<String>();    //array with IDs from active courses (for firebase)
     public ArrayList<String> chatsIDs = new ArrayList<String>();            //array with IDS from chat from user (for firebase)
 
+    public boolean userCreated = false;
+
     private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
     private DatabaseReference firebaseThisUser; //database reference to this user
+
+
+    private User() { }
+
+    /* Static 'instance' method */
+    public static User getInstance( ) {
+        return mainUser;
+    }
 
     /*
         creates a new user class and gets data from firebase about the user
      */
-    public User(String userID) {
+    public void getData(String userID) {
+        Log.wtf("getData()", "executed");
         firebaseThisUser = firebaseUser.child(userID);
         this.userID = userID;
         addFirebaseListener();
+        Log.i("TAG", "getData is done");
+        userCreated = true;
     }
 
     /*
         creates a new user class and a new user in the database
      */
-    public User(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
+    public void registrate(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
         firebaseThisUser = firebaseUser.child(userID);
         this.userID = userID;
         this.email = email;
@@ -58,6 +73,7 @@ public class User {
         this.lastName = lastName;
         this.study = study;
         this.year = year;
+        userCreated = true;
         addToDatabase();
         addFirebaseListener();
     }
@@ -111,16 +127,6 @@ public class User {
         firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
     }
 
-    /*
-        returns true if this user is in range, false if not in range
-     */
-    public boolean isInRange(double locationX, double locationY, int radius){
-        double lowBoundX = locationX - radius;
-        double upBoundX = locationX + radius;
-        double lowBoundY = locationY - radius;
-        double upBoundY = locationY + radius;
-        return ((this.locationX > lowBoundX) && (this.locationX < upBoundX) && (this.locationY < lowBoundY) && (this.locationY < upBoundY));
-    }
 
     /*
         output data from class to log, only for testing purposes
@@ -148,6 +154,10 @@ public class User {
         update firebase with data of this class
      */
     public void addToDatabase(){
+        Log.wtf("addToDatabase()", "executed");
+        if (mainUser.firebaseThisUser == null){
+            Log.wtf("isNull", "isNull");
+        }
         firebaseThisUser.child("email").setValue(this.email);
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);
@@ -217,7 +227,7 @@ public class User {
     /*
         add the value event listener
      */
-    public void addFirebaseListener(){
+    private void addFirebaseListener(){
         firebaseThisUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

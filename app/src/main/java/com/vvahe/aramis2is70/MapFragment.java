@@ -97,7 +97,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uID = user.getUid();
-            userObj = new User(uID);
+            userObj = User.getInstance();
             radiusSetting = userObj.radiusSetting;
             Log.i("TAG", "assigned uID  = " + userObj.userID);
         } else {
@@ -155,10 +155,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 //get userID's of nearby users
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-//                    Log.i("TAG", "ds contains  = " + ds);
+                    Log.i("TAG", "ds contains  = " + ds);
                     //TODO: log shows alot of emtpy records from database ??? need to figure out why
                     for (DataSnapshot ds2 : ds.getChildren()) {
-//                        Log.i("TAG", "ds2 contains  = " + ds2);
+                        Log.i("TAG", "ds2 contains  = " + ds2);
                         if (ds2.getKey().equals("firstName")) tempFN = ds2.getValue(String.class);
                         if (ds2.getKey().equals("locationX")) locX = ds2.getValue(Double.class);
                         if (ds2.getKey().equals("locationY")) locY = ds2.getValue(Double.class);
@@ -169,16 +169,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         //TODO: also get userID en pic
 
                         //if user is in radius save userID in list
-                        Log.i("TAG", "Radiussetting = " + radiusSetting);
-                        Log.i("TAG", "inRadius? = " + inRadius(locX, locY, radiusSetting));
+//                        Log.i("TAG", "Radiussetting = " + radiusSetting);
+//                        Log.i("TAG", "inRadius? = " + inRadius(locX, locY, radiusSetting));
                         if (inRadius(locX, locY, radiusSetting)) {
                             String[] attributes = {tempFN, locX.toString(), locY.toString()};
-                            Log.i("TAG", "Attributes = " + attributes);
+//                            Log.i("TAG", "Attributes = " + attributes);
                             nearUsers.add(attributes);
                         }
                     }
                 }
-                Log.i("TAG", "List contains  = " + nearUsers);
+//                Log.i("TAG", "List contains  = " + nearUsers);
                 createMarkers(nearUsers);
             }
 
@@ -194,7 +194,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      */
     private void createMarkers(List<String[]> nearUsers) {
         for (String[] user : nearUsers) {
-            Log.i("TAG", "string user = " + user);
+//            Log.i("TAG", "string user = " + user);
                 Marker marker = mGoogleMap.addMarker(
                         new MarkerOptions()
                             .position(new LatLng(Double.parseDouble(user[1]), Double.parseDouble(user[2])))
@@ -222,7 +222,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             Double d = earthRadius * c;
 
-        Log.i("TAG", "distance in meters = " + d);
+//        Log.i("TAG", "distance in meters = " + d);
             //TODO: radius needs to be tweaked to only display users within 1000 meters
             if (d * 1000 < radius) {
                 result = true;

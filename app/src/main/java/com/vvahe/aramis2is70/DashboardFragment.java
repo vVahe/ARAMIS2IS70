@@ -37,9 +37,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-
-        Toast.makeText(getActivity(), "Welcome to your dashboard", Toast.LENGTH_LONG).show();
-
         ImageView profilePicture = (ImageView) getActivity().findViewById(R.id.profilePicture);
         TextView loggedInText = (TextView) getActivity().findViewById(R.id.loggedInText);
         TextView userName = (TextView) getActivity().findViewById(R.id.userName);

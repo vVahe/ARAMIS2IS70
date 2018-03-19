@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -183,12 +185,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** used for onClicks in dashboard */
-    public void toMapFragment(View v) {
-        Toast.makeText(this, "Searching for other students", Toast.LENGTH_LONG).show();
+    public void toMapFragment(View view) throws InterruptedException {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radioButton:
+                if (checked)
+                    Toast.makeText(this, "Searching other students of Course 1", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.radioButton2:
+                if (checked)
+                    Toast.makeText(this, "Searching other students of Course 2", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.radioButton3:
+                if (checked)
+                    Toast.makeText(this, "Searching other students of Course 3", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.radioButton4:
+                if (checked)
+                    Toast.makeText(this, "Searching other students of Course 4", Toast.LENGTH_SHORT).show();
+                break;
+
         setFragment(mapFragment);
     }
 
-    public void toProfileSettings(View v) {
+    public void toProfileSettings(View view) {
         Toast.makeText(this, "Change your profile settings", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);

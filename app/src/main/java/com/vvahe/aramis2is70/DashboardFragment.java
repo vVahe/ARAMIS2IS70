@@ -1,5 +1,6 @@
 package com.vvahe.aramis2is70;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,18 +36,17 @@ public class DashboardFragment extends Fragment {
 
         Toast.makeText(getActivity(), "Welcome to your dashboard", Toast.LENGTH_LONG).show();
 
-
+        ImageView profilePicture = (ImageView) getActivity().findViewById(R.id.profilePicture);
         TextView loggedInText = (TextView) getActivity().findViewById(R.id.loggedInText);
         TextView userName = (TextView) getActivity().findViewById(R.id.userName);
+        TextView userMajor = (TextView) getActivity().findViewById(R.id.userMajor);
 
-    }
 
-    public void onClick(View view) {
-        Toast.makeText(getActivity(), "to profile settings", Toast.LENGTH_LONG).show();
+
     }
 
     public void myClickMethod(View v) {
-        Toast.makeText(getActivity(), "to profile settings", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "to settings", Toast.LENGTH_LONG).show();
 
     }
 

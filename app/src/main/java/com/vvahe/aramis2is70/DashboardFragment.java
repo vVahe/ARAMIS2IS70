@@ -43,7 +43,7 @@ public class DashboardFragment extends Fragment {
         TextView userMajor = (TextView) getActivity().findViewById(R.id.userMajor);
 
         TextView selCurCourseTxt = (TextView) getActivity().findViewById(R.id.selCurCourseTxt);
-        RadioButton radioButton = (RadioButton) getActivity().findViewById(R.id.radioButton);
+        RadioButton radioButton1 = (RadioButton) getActivity().findViewById(R.id.radioButton1);
         RadioButton radioButton2 = (RadioButton) getActivity().findViewById(R.id.radioButton2);
         RadioButton radioButton3 = (RadioButton) getActivity().findViewById(R.id.radioButton3);
         RadioButton radioButton4 = (RadioButton) getActivity().findViewById(R.id.radioButton4);

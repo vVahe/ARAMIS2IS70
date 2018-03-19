@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Check which radio button was clicked
         switch(view.getId()) {
-            case R.id.radioButton:
+            case R.id.radioButton1:
                 if (checked)
                     Toast.makeText(this, "Searching other students of Course 1", Toast.LENGTH_SHORT).show();
                 break;
@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 if (checked)
                     Toast.makeText(this, "Searching other students of Course 4", Toast.LENGTH_SHORT).show();
                 break;
+        }
 
         setFragment(mapFragment);
     }

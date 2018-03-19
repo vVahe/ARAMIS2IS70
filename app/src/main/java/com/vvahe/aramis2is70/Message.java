@@ -27,7 +27,7 @@ public class Message {
     }
 
     /*
-        creates new message object, and sends data to firebase
+        creates new message object
      */
     public Message(String chatID, String userID, String message){
         this.messageID = getNewMessageID();
@@ -35,8 +35,9 @@ public class Message {
         this.userID = userID;
         this.timeSend = System.currentTimeMillis();
         this.message = message;
-        sendMessageInfo();
     }
+
+    //Should we remove the Info from the get and send functions?
 
     /*
         gets all message info from firebase and puts it in this class
@@ -54,11 +55,19 @@ public class Message {
     /*
         sends all info in this class to firebase
      */
-    private void sendMessageInfo(){
+    public void sendMessageInfo(){
         //TODO: make function, send message info to firebase
         mAuth = FirebaseAuth.getInstance();
         mAuth.getCurrentUser().getUid();
 
+        //TODO check if this.userID is the same as the current user
+
+        private DatabaseReference messageref;
+        messageref = ref.child(this.chatID).child("messages").child(this.messageID);
+
+        messageref.child("user").setValue(this.userID);
+        messageref.child("content").setValue(this.message);
+        messageref.child("timestamp").setValue(this.timeSend);
     }
 
     /*

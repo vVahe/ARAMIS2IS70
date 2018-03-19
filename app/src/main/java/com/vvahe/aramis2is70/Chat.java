@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Chat {
 
@@ -60,8 +61,18 @@ public class Chat {
     /*
         send a message in this chat, user is the one who sends the message and string is the message
      */
+    //should we remove the userID since the sending user is known by authentication
+    //and the receiving user is known due to the chat
+    //in this case we do have to have something to easily reference the current user from within
+    //this class
     public void sendMessage(String userID, String message){
         //TODO: make function, add message to this class and send it to firebase
+        if (!(userID == this.userID1 || userID == this.userID2)) {
+            throw new IllegalArgumentException("user " + userID + " is not part of this chat")
+        }
+
+        Message m = new Message(this.chatID, userID, message);
+        m.sendMessageInfo();
     }
 
     /*
@@ -74,8 +85,5 @@ public class Chat {
     /*
         returns a new possible chat ID
      */
-    private String getNewChatID(){
-        //TODO:
-        return "0";
-    }
+    private String getNewChatID() { return UUID.randomUUID().toString(); }
 }

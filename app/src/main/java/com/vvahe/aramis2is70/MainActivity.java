@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         startActivity(logoutIntent);
-    };
+    }
 
     private void checkUserLogin() {
         /** checks if user is logged in not*/
@@ -184,12 +184,12 @@ public class MainActivity extends AppCompatActivity {
 
     /** used for onClicks in dashboard */
     public void toMapFragment(View v) {
-        Toast.makeText(this, "Welcome at the map", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Searching for other students", Toast.LENGTH_LONG).show();
         setFragment(mapFragment);
     }
 
     public void toProfileSettings(View v) {
-        Toast.makeText(this, "Welcome at your profile settings", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Change your profile settings", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }

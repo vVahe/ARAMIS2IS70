@@ -9,8 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -41,14 +45,27 @@ public class DashboardFragment extends Fragment {
         TextView userName = (TextView) getActivity().findViewById(R.id.userName);
         TextView userMajor = (TextView) getActivity().findViewById(R.id.userMajor);
 
+        TextView selCurCourseTxt = (TextView) getActivity().findViewById(R.id.selCurCourseTxt);
+        RadioButton radioButton = (RadioButton) getActivity().findViewById(R.id.radioButton);
+        RadioButton radioButton2 = (RadioButton) getActivity().findViewById(R.id.radioButton2);
+        RadioButton radioButton3 = (RadioButton) getActivity().findViewById(R.id.radioButton3);
+        RadioButton radioButton4 = (RadioButton) getActivity().findViewById(R.id.radioButton4);
 
+        TextView course1 = (TextView) getActivity().findViewById(R.id.course1);
+        ImageView course1info = (ImageView) getActivity().findViewById(R.id.course1info);
+        TextView course2 = (TextView) getActivity().findViewById(R.id.course1);
+        ImageView course2info = (ImageView) getActivity().findViewById(R.id.course2info);
+        TextView course3 = (TextView) getActivity().findViewById(R.id.course1);
+        ImageView course3info = (ImageView) getActivity().findViewById(R.id.course3info);
+        TextView course4 = (TextView) getActivity().findViewById(R.id.course1);
+        ImageView course4info = (ImageView) getActivity().findViewById(R.id.course4info);
+
+        TextView privacyTxt = (TextView) getActivity().findViewById(R.id.privacyTxt);
+        TextView availabilityTxt = (TextView) getActivity().findViewById(R.id.availabilityTxt);
+        Switch availabilitySwitch = (Switch) getActivity().findViewById(R.id.availabilitySwitch);
+        TextView mapTxt = (TextView) getActivity().findViewById(R.id.mapTxt);
+        Switch mapSwitch = (Switch) getActivity().findViewById(R.id.mapSwitch);
 
     }
-
-    public void myClickMethod(View v) {
-        Toast.makeText(getActivity(), "to settings", Toast.LENGTH_LONG).show();
-
-    }
-
 
 }

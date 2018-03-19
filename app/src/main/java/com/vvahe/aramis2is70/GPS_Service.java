@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class GPS_Service extends Service{
 
-    private User userObj;
+    private User userObj = User.getInstance();
     private String uID;
 
     private LocationListener listener;
@@ -38,16 +38,16 @@ public class GPS_Service extends Service{
     @Override
     public void onCreate() {
 
-        /*
-            get userID of currently logged in user and create user object
-         */
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            uID = user.getUid();
-            userObj = new User(uID);
-        } else {
-            //TODO: don't think this else statement can even be reached
-        }
+//        /*
+//            get userID of currently logged in user and create user object
+//         */
+//        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if (user != null) {
+//            uID = user.getUid();
+//            userObj.getData(uID);
+//        } else {
+//            //TODO: don't think this else statement can even be reached
+//        }
 
         /*
             get user location and puts in database
@@ -55,11 +55,12 @@ public class GPS_Service extends Service{
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
-                userObj.locationX = location.getLongitude();
-                userObj.locationY = location.getLatitude();
-                userObj.addToDatabase();
-                userObj.addFirebaseListener();
+                User userObject = User.getInstance();
+                userObject.locationX = location.getLongitude();
+                userObject.locationY = location.getLatitude();
+                if (userObj.userCreated) {
+                    userObject.addToDatabase();
+                }
             }
 
             @Override

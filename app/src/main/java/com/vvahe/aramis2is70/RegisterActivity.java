@@ -91,7 +91,10 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
 
                         String uID = mAuth.getCurrentUser().getUid();
-                        User user = new User(uID, email, firstName, middleName, lastName, study, year);
+
+                        User user = User.getInstance();
+                        user.registrate(uID, email, firstName, middleName, lastName, study, year);
+
                         /* if registration was successful we can retrieve the unique user_id */
 
                         /* send user to dashboard after registration is complete*/

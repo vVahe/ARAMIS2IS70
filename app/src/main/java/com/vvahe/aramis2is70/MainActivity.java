@@ -21,10 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
+
+    User userObj = User.getInstance();
 
     private BottomNavigationView bNavView;
     private FrameLayout frameLayout;
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getUserID();
+        Log.i("TAG", "get user is done");
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
 
@@ -105,6 +110,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void getUserID() {
+        /*
+            get userID of currently logged in user and create user object
+         */
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uID = user.getUid();
+            userObj.getData(uID);
+            Log.i("TAG", "usser f singleton created");
+        } else {
+            //TODO: don't think this else statement can even be reached
+        }
+    }
+
     /*
         user location permission stuff
      */
@@ -163,6 +182,9 @@ public class MainActivity extends AppCompatActivity {
                     /** prevents user from going back once logged in, they will have to use logout button*/
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent);
+                } else {
+                    User mainUser = User.getInstance();
+                    mainUser.getData(firebaseAuth.getUid());
                 }
             }
         };

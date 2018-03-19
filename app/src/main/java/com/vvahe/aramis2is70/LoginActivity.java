@@ -116,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                     /** prevents user from going back once logged in, they will have to use logout button*/
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+
                     startActivity(loginIntent);
                 } else {
                     Toast.makeText(LoginActivity.this, "User not found, please Register", Toast.LENGTH_LONG).show();

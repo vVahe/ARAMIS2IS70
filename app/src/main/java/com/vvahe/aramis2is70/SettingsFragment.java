@@ -46,9 +46,18 @@ public class SettingsFragment extends Fragment {
         seekBar();
         spinner();
         profileSettings();
+        courseSettings();
         return view;
     }
 
+    public void courseSettings(){
+        courses.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CourseListActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
     public void profileSettings(){
         profile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

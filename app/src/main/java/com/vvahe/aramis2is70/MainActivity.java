@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         startActivity(logoutIntent);
-    };
+    }
 
     private void checkUserLogin() {
         /** checks if user is logged in not*/
@@ -180,5 +181,18 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth.addAuthStateListener(mAuthListener);
     }
+
+    /** used for onClicks in dashboard */
+    public void toMapFragment(View v) {
+        Toast.makeText(this, "Searching for other students", Toast.LENGTH_LONG).show();
+        setFragment(mapFragment);
+    }
+
+    public void toProfileSettings(View v) {
+        Toast.makeText(this, "Change your profile settings", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
 
 }

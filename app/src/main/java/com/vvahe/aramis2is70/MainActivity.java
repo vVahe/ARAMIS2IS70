@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DashboardFragment dashboardFragment;
     private MapFragment mapFragment;
-    private ChatFragment chatFragment;
+    private ChatOverviewFragment chatOverviewFragment;
     private SettingsFragment settingsFragment;
 
     private DatabaseReference mDatabase;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         dashboardFragment = new DashboardFragment();
         mapFragment = new MapFragment();
-        chatFragment = new ChatFragment();
+        chatOverviewFragment = new ChatOverviewFragment();
         settingsFragment = new SettingsFragment();
 
         checkUserLogin();
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.nav_chat:
-                        setFragment(chatFragment);
+                        setFragment(chatOverviewFragment);
                         return true;
 
                     case R.id.nav_settings:

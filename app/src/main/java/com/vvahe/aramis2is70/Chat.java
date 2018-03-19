@@ -68,7 +68,7 @@ public class Chat {
     public void sendMessage(String userID, String message){
         //TODO: make function, add message to this class and send it to firebase
         if (!(userID == this.userID1 || userID == this.userID2)) {
-            throw new IllegalArgumentException("user " + userID + " is not part of this chat")
+            throw new IllegalArgumentException("user " + userID + " is not part of this chat");
         }
 
         Message m = new Message(this.chatID, userID, message);

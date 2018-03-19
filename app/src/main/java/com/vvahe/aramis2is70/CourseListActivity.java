@@ -17,6 +17,7 @@ public class CourseListActivity extends AppCompatActivity {
     private static ImageButton back;
     private static Button addCourse;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +31,7 @@ public class CourseListActivity extends AppCompatActivity {
         listView.setAdapter(courseListAdapter);
 
         back();
+        addCourse();
     }
 
     public void back(){
@@ -73,7 +75,8 @@ public class CourseListActivity extends AppCompatActivity {
             TextView coursename = (TextView) convertView.findViewById(R.id.courseName);
             CheckBox active = (CheckBox) convertView.findViewById(R.id.courseActive);
 
-            // coursename.setText(COURSES[i]); --> replace COURSES with the actual array of coursenames
+
+            // coursename.setText(COURSES[position]); --> replace COURSES with the actual array of coursenames
             // active.setActivated(true/false); --> true/false should probably be a boolean array
             return convertView;
         }

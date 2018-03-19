@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,30 +17,41 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class searchCourseActivity extends AppCompatActivity {
     ImageButton back;
     SearchView searchView;
     ListView listView;
     ArrayAdapter<String> adapter;
 
-    String[] courseplaceholder = getResources().getStringArray(R.array.courseplaceholder);
+    private DatabaseReference firebaseCourses = FirebaseDatabase.getInstance().getReference().child("courses"); //database reference to users
+    private DatabaseReference firebaseThisCourse; //database reference to this course
+
+    private Course courseObj;
+    private String fullName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_course);
 
+        String[] courseplaceholder = getResources().getStringArray(R.array.courseplaceholder);
+
         back = (ImageButton)findViewById(R.id.backButton);
         listView = (ListView)findViewById(R.id.courseListView);
         searchView = (SearchView)findViewById(R.id.search_view);
-        adapter = new ArrayAdapter<String>(
-                searchCourseActivity.this,
-                android.R.layout.simple_list_item_1,
-                courseplaceholder
-        );
 
-        listView.setAdapter(adapter);
-
+        getAllCourses();
         back();
         search();
     }
@@ -67,6 +79,41 @@ public class searchCourseActivity extends AppCompatActivity {
             }
         });
     }
+
+    /*
+       gets all userID's of users within radius
+    */
+    private void getAllCourses() {
+
+        firebaseCourses.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                final List<String> courseList = new ArrayList();
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for (DataSnapshot ds2 : ds.getChildren()) {
+                        if (ds2.getKey().equals("fullName")){
+                            courseList.add(ds2.getValue(String.class));
+                        };
+                        }
+                    }
+
+                adapter =new ArrayAdapter<String>(
+                        searchCourseActivity.this, android.R.layout.simple_list_item_1, courseList);
+
+                listView.setAdapter(adapter);
+                }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
 
 
 

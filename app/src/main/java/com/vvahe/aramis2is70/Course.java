@@ -1,14 +1,10 @@
 package com.vvahe.aramis2is70;
 
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.time.Year;
 
 public class Course {
 
@@ -47,7 +43,6 @@ public class Course {
                 alias = ds.getValue(String.class);
             } else if (ds.getKey().equals("fullName")){
                 fullName = ds.getValue(String.class);
-                Log.wtf("test2", fullName);
             } else if (ds.getKey().equals("timeslot")){
                 timeslot = ds.getValue(String.class);
             } else if (ds.getKey().equals("quartile")){

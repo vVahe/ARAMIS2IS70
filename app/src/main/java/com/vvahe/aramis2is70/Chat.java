@@ -13,11 +13,10 @@ public class Chat {
 
     public String chatID;                                               //chat ID
     public String otherUserID;                                          //other user
-    public Long timeCreated;                                            //time chat was created
     public ArrayList<Message> messages = new ArrayList<>();             //all messages send
 
     private DatabaseReference firebaseChat = FirebaseDatabase.getInstance().getReference().child("chats");
-    private DatabaseReference firebaseThisChat;
+    public DatabaseReference firebaseThisChat;
 
     private User mainUser = User.getInstance();
 
@@ -28,34 +27,18 @@ public class Chat {
         this.chatID = getChatID(otherUserID);
         firebaseThisChat = firebaseChat.child(this.chatID);
         this.otherUserID = otherUserID;
-        this.timeCreated = System.currentTimeMillis();
     }
 
     /*
     send a message in this chat
     */
     public void sendMessage(String message){
-        Message m = new Message(UUID.randomUUID().toString(), mainUser.userID, message, System.currentTimeMillis(), firebaseThisChat);
+        Message m = new Message(UUID.randomUUID().toString(), mainUser.userID, message, System.currentTimeMillis(), firebaseThisChat.child("messages"));
         m.send();
         messages.add(m);
     }
 
-    /*
-        gets all data from firebase and adds to this class
-     */
-    public void setDataInClass(DataSnapshot dataSnapshot){
-        for(DataSnapshot ds : dataSnapshot.getChildren()){
-            if (ds.getKey().equals("messages")){
-                setDataInMessages(ds);
-            } else if (ds.getKey().equals("timeCreated")){
-                timeCreated = ds.getValue(Long.class);
-            } else {
-                //what else to store for chat
-            }
-        }
-    }
-
-    private void setDataInMessages(DataSnapshot dataSnapshot){
+    public void setDataInMessages(DataSnapshot dataSnapshot){
         for(DataSnapshot chat : dataSnapshot.getChildren()){
             String message = "";
             String userID = "";
@@ -71,8 +54,7 @@ public class Chat {
                     //what else to store for message
                 }
             }
-            Message newMessage = new Message(chat.getKey(), userID, message, timeSend, firebaseThisChat);
-            newMessage.send();
+            Message newMessage = new Message(chat.getKey(), userID, message, timeSend, firebaseThisChat.child("messages"));
             messages.add(newMessage);
         }
     }

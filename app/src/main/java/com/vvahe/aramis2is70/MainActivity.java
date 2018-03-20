@@ -16,16 +16,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    public User userObj;
+    public User userObj = User.getInstance();
 
     private BottomNavigationView bNavView;
     private FrameLayout frameLayout;
     private Button logoutBtn;
+    private Button testBtn;
     private static final String TAG = "MainActivity";
 
     private DashboardFragment dashboardFragment;
@@ -46,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         bNavView = findViewById(R.id.mainNav);
         frameLayout = findViewById(R.id.mainFrame);
         logoutBtn = findViewById(R.id.logoutBtn);
+        testBtn = findViewById(R.id.testBtn);
 
         dashboardFragment = new DashboardFragment();
         mapFragment = new MapFragment();
@@ -54,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
         startGPS_Service();
 
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
+        testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logout();
+                test();
             }
         });
 
@@ -121,6 +131,38 @@ public class MainActivity extends AppCompatActivity {
         startActivity(logoutIntent);
     }
 
+    /* logout user and send to login page */
+    public void test() {
+
+
+
+        final Chat newChat = userObj.openChat("mGrGW4nGJ1UAqXFxY9Vwfe0OvCB3");
+
+        //Send message
+        newChat.sendMessage("Hallo, dit is een test message.");
+
+        //get messages and do something with it
+        newChat.firebaseThisChat.child("messages").orderByChild("timeSend").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                newChat.setDataInMessages(dataSnapshot);
+                ArrayList<Message> messages = newChat.messages;
+                for (Message msg: messages) {
+                    //Do something with each message
+                    Log.wtf(msg.userID, msg.timeSend.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+
+
+
+    }
+
     /* checks for logged in users */
     @Override
     public void onStart() {
@@ -136,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
 
         } else { //get current user and get the user object using userID
 
-            userObj = User.getInstance();
             userObj.getData(currentUser.getUid());
         }
     }

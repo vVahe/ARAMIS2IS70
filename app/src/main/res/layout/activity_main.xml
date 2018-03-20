@@ -29,8 +29,8 @@
         android:id="@+id/mainFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/mainNav"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:backgroundTint="@color/colorMenu">
 
     </FrameLayout>

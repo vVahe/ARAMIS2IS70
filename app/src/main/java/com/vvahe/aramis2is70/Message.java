@@ -3,7 +3,7 @@ package com.vvahe.aramis2is70;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import android.util.Log;
+
 import java.util.UUID;
 
 public class Message {
@@ -32,7 +32,6 @@ public class Message {
         sends all info in this class to firebase
      */
     public void send(){
-        Log.wtf("send", "executed");
         firebaseThisMessage.child("user").setValue(this.userID);
         firebaseThisMessage.child("timeSend").setValue(this.timeSend);
         firebaseThisMessage.child("string").setValue(this.message);

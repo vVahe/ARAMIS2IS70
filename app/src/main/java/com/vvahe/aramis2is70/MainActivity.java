@@ -62,13 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
         startGPS_Service();
 
-        testBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                test();
-            }
-        });
-
         /* set first fragment to be displayed on startup */
         setFragment(dashboardFragment);
 

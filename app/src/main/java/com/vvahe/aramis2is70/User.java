@@ -32,6 +32,7 @@ public class User {
     public Boolean locationShow = true;                                     //user shows location
     public Boolean available = true;                                        //is user available
     public Boolean chatNotifications = true;                                //want to get chat notifications
+    public String selectedCourse = "2IS70";
     public ArrayList<String> enrolledInIDs = new ArrayList<String>();       //array with IDs from courses enrolled in (for firebase)
     public ArrayList<String> activeCoursesIDs = new ArrayList<String>();    //array with IDs from active courses (for firebase)
     public ArrayList<String> chatsIDs = new ArrayList<String>();            //array with IDS from chat from user (for firebase)

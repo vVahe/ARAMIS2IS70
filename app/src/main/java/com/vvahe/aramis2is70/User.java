@@ -1,19 +1,12 @@
 package com.vvahe.aramis2is70;
 
-import android.content.Intent;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class User {
 
@@ -54,18 +47,16 @@ public class User {
         creates a new user class and gets data from firebase about the user
      */
     public void getData(String userID) {
-        Log.wtf("getData()", "executed");
         firebaseThisUser = firebaseUser.child(userID);
         this.userID = userID;
         addFirebaseListener();
-        Log.i("TAG", "getData is done");
         userCreated = true;
     }
 
     /*
         creates a new user class and a new user in the database
      */
-    public void registrate(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
+    public void register(String userID, String email, String firstName, String middleName, String lastName, String study, Integer year){
         firebaseThisUser = firebaseUser.child(userID);
         this.userID = userID;
         this.email = email;
@@ -82,10 +73,11 @@ public class User {
     /*
         create a chat with a user, in this class and in database
      */
-    public void createChat(String otherUserID){
-        Chat chat = new Chat(this.userID, otherUserID);
+    public Chat openChat(String otherUserID){
+        Chat chat = new Chat(otherUserID);
         chatsIDs.add(chat.chatID);
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
+        return chat;
     }
 
     /*
@@ -155,10 +147,6 @@ public class User {
         update firebase with data of this class
      */
     public void addToDatabase(){
-        Log.wtf("addToDatabase()", "executed");
-        if (mainUser.firebaseThisUser == null){
-            Log.wtf("isNull", "isNull");
-        }
         firebaseThisUser.child("email").setValue(this.email);
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);

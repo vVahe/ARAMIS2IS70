@@ -93,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
                         String uID = mAuth.getCurrentUser().getUid();
 
                         User user = User.getInstance();
-                        user.registrate(uID, email, firstName, middleName, lastName, study, year);
+                        user.register(uID, email, firstName, middleName, lastName, study, year);
 
                         /* if registration was successful we can retrieve the unique user_id */
 

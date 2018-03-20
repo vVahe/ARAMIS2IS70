@@ -1,6 +1,5 @@
 package com.vvahe.aramis2is70;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,11 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -21,6 +22,12 @@ import org.w3c.dom.Text;
  * A simple {@link Fragment} subclass.
  */
 public class DashboardFragment extends Fragment {
+
+    public User userObj;
+    private ListView courseList;
+
+    private TextView userNameTxt;
+    private TextView studyTxt;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -33,36 +40,47 @@ public class DashboardFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
-    /** put code that should run on start up in onViewCreated */
+    /* put code that should run on start up in onViewCreated */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        ImageView profilePicture = (ImageView) getActivity().findViewById(R.id.profilePicture);
-        TextView loggedInText = (TextView) getActivity().findViewById(R.id.loggedInText);
-        TextView userName = (TextView) getActivity().findViewById(R.id.userName);
-        TextView userMajor = (TextView) getActivity().findViewById(R.id.userMajor);
+        userNameTxt = getView().findViewById(R.id.nameTxt);
+        studyTxt = getView().findViewById(R.id.studyTxt);
 
-        TextView selCurCourseTxt = (TextView) getActivity().findViewById(R.id.selCurCourseTxt);
-        RadioButton radioButton1 = (RadioButton) getActivity().findViewById(R.id.radioButton1);
-        RadioButton radioButton2 = (RadioButton) getActivity().findViewById(R.id.radioButton2);
-        RadioButton radioButton3 = (RadioButton) getActivity().findViewById(R.id.radioButton3);
-        RadioButton radioButton4 = (RadioButton) getActivity().findViewById(R.id.radioButton4);
+        courseList = getView().findViewById(R.id.courseList);
+        CourseAdapter courseAdapter = new CourseAdapter();
+        courseList.setAdapter(courseAdapter);
 
-        TextView course1 = (TextView) getActivity().findViewById(R.id.course1);
-        ImageView course1info = (ImageView) getActivity().findViewById(R.id.course1info);
-        TextView course2 = (TextView) getActivity().findViewById(R.id.course1);
-        ImageView course2info = (ImageView) getActivity().findViewById(R.id.course2info);
-        TextView course3 = (TextView) getActivity().findViewById(R.id.course1);
-        ImageView course3info = (ImageView) getActivity().findViewById(R.id.course3info);
-        TextView course4 = (TextView) getActivity().findViewById(R.id.course1);
-        ImageView course4info = (ImageView) getActivity().findViewById(R.id.course4info);
+    }
 
-        TextView privacyTxt = (TextView) getActivity().findViewById(R.id.privacyTxt);
-        TextView availabilityTxt = (TextView) getActivity().findViewById(R.id.availabilityTxt);
-        Switch availabilitySwitch = (Switch) getActivity().findViewById(R.id.availabilitySwitch);
-        TextView mapTxt = (TextView) getActivity().findViewById(R.id.mapTxt);
-        Switch mapSwitch = (Switch) getActivity().findViewById(R.id.mapSwitch);
+    class CourseAdapter extends BaseAdapter {
 
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup parent) {
+            view = getLayoutInflater().inflate(R.layout.dashboard_course_item, null);
+
+            RadioButton radioBtn = view.findViewById(R.id.radioButton);
+            TextView courseIDTxt = view.findViewById(R.id.courseIDTxt);
+            TextView courseNameTxt = view.findViewById(R.id.courseNameTxt);
+            Button toListBtn = view.findViewById(R.id.availableListBtn);
+
+            return view;
+        }
     }
 
 }

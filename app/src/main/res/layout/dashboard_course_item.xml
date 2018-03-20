@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioButton
+        android:id="@+id/radioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="17dp" />
+
+    <TextView
+        android:id="@+id/courseIDTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/radioButton"
+        android:layout_marginStart="27dp"
+        android:layout_toEndOf="@+id/radioButton"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/courseNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/courseIDTxt"
+        android:layout_toEndOf="@+id/courseIDTxt"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/availableListBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/courseNameTxt"
+        android:layout_alignBottom="@+id/courseNameTxt"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:text="i" />
+</RelativeLayout>

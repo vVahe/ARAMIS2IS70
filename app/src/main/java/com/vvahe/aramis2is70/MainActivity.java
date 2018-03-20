@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bNavView;
     private FrameLayout frameLayout;
     private Button logoutBtn;
+    private Button testBtn;
     private static final String TAG = "MainActivity";
 
     private DashboardFragment dashboardFragment;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         bNavView = findViewById(R.id.mainNav);
         frameLayout = findViewById(R.id.mainFrame);
         logoutBtn = findViewById(R.id.logoutBtn);
+        testBtn = findViewById(R.id.testBtn);
 
         dashboardFragment = new DashboardFragment();
         mapFragment = new MapFragment();
@@ -127,6 +129,38 @@ public class MainActivity extends AppCompatActivity {
         /* prevents user from going back once logged in, they will have to use logout button*/
         logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(logoutIntent);
+    }
+
+    /* logout user and send to login page */
+    public void test() {
+
+
+
+        final Chat newChat = userObj.openChat("mGrGW4nGJ1UAqXFxY9Vwfe0OvCB3");
+
+        //Send message
+        newChat.sendMessage("Hallo, dit is een test message.");
+
+        //get messages and do something with it
+        newChat.firebaseThisChat.child("messages").orderByChild("timeSend").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                newChat.setDataInMessages(dataSnapshot);
+                ArrayList<Message> messages = newChat.messages;
+                for (Message msg: messages) {
+                    //Do something with each message
+                    Log.wtf(msg.userID, msg.timeSend.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+
+
+
     }
 
     /* checks for logged in users */

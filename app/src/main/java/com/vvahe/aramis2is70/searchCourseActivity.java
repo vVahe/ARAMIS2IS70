@@ -36,8 +36,6 @@ public class searchCourseActivity extends AppCompatActivity {
     private DatabaseReference firebaseCourses = FirebaseDatabase.getInstance().getReference().child("courses"); //database reference to users
     private DatabaseReference firebaseThisCourse; //database reference to this course
 
-    private Course courseObj;
-    private String fullName;
 
 
     @Override

@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -18,7 +20,13 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 
 /**
@@ -26,13 +34,24 @@ import org.w3c.dom.Text;
  */
 public class DashboardFragment extends Fragment {
 
-    private RadioGroup radioGroup;
-    public User userObj;
+    public User userObj = User.getInstance();
     private ListView courseList;
+
+    private String[] activeCourses = {"2IPC0", "2IS70"};
 
     private TextView userNameTxt;
     private TextView studyTxt;
+    private Switch availableSwitch;
+    private Switch locationSwith;
     private int selectedPosition = 0;
+    String courseID = "";
+    String courseName = "";
+    int counter = 0;
+    private boolean done = false;
+    ArrayList<String> courseIDs = new ArrayList<>();
+    ArrayList<String> courseNames = new ArrayList<>();
+
+    private DatabaseReference allCourses = FirebaseDatabase.getInstance().getReference().child("Courses"); //database reference to users
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -48,24 +67,53 @@ public class DashboardFragment extends Fragment {
     /* put code that should run on start up in onViewCreated */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        getCourses();
 
         userNameTxt = getView().findViewById(R.id.nameTxt);
         studyTxt = getView().findViewById(R.id.studyTxt);
-        radioGroup = getView().findViewById(R.id.radioGroup);
+
+        availableSwitch = getView().findViewById(R.id.availableSwitch);
+        locationSwith = getView().findViewById(R.id.locationSwitch);
 
         courseList = getView().findViewById(R.id.courseList);
         CourseAdapter courseAdapter = new CourseAdapter();
-        courseList.setAdapter(courseAdapter);
+
+        if (done == true) {
+            courseList.setAdapter(courseAdapter);
+        }
+
         courseList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-    }
+        availableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    userObj.available = true;
+                } else {
+                    userObj.available = false;
+                }
+                userObj.addToDatabase();
+                Log.i("TAG", "available = " + userObj.available);
+            }
+        });
 
+        locationSwith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    userObj.locationShow = true;
+                } else {
+                    userObj.locationShow = false;
+                }
+                userObj.addToDatabase();
+                Log.i("TAG", "location show = " + userObj.locationShow);
+            }
+        });
+    }
 
     class CourseAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return 3; //amount of items
+            return activeCourses.length; //amount of items
         }
 
         @Override
@@ -80,6 +128,7 @@ public class DashboardFragment extends Fragment {
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
+
             view = getLayoutInflater().inflate(R.layout.dashboard_course_item, null);
 
             RadioButton radioBtn = view.findViewById(R.id.radioButton);
@@ -95,12 +144,54 @@ public class DashboardFragment extends Fragment {
                 }
             });
 
-            TextView courseIDTxt = view.findViewById(R.id.courseIDTxt);
-            TextView courseNameTxt = view.findViewById(R.id.courseNameTxt);
+            final TextView courseIDTxt = view.findViewById(R.id.courseIDTxt);
+            final TextView courseNameTxt = view.findViewById(R.id.courseNameTxt);
             Button toListBtn = view.findViewById(R.id.availableListBtn);
+
+            Log.i("TAG", "position = " + position);
+
+//            courseIDTxt.setText(courseIDs.get(position) + " - ");
+//            courseNameTxt.setText(courseNames.get(position));
 
             return view;
         }
+    }
+
+    private void getCourses() {
+        allCourses.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Log.i("TAG", "counter = " + counter);
+                    Log.i("TAG", "ds = " + ds);
+                    Log.i("TAG", "course in class = " + activeCourses[counter]);
+                    Log.i("TAG", "course in db = " + ds.getKey());
+                    for (DataSnapshot ds2 : ds.getChildren()) {
+                        if (activeCourses[counter].equals(ds.getKey())) {
+
+                            if (ds2.getKey().equals("courseCode")) courseIDs.add(ds2.getValue(String.class));
+                            if (ds2.getKey().equals("fullName")) courseNames.add(ds2.getValue(String.class));
+
+                        }
+                    }
+                    Log.i("TAG", "1");
+                    counter++;
+
+                }
+                counter = 0;
+                Log.i("TAG", "2");
+
+            }
+
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        done = true;
     }
 
 }

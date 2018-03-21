@@ -30,6 +30,7 @@ public class User {
     public ArrayList<String> chatsIDs = new ArrayList<String>();            //array with IDS from chat from user (for firebase)
 
     public boolean userCreated = false;
+    public boolean dataReady = false;
 
     private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
     public DatabaseReference firebaseThisUser; //database reference to this user
@@ -162,9 +163,6 @@ public class User {
         update firebase with data of this class
      */
     public void addToDatabase(){
-        if (userCreated == false){
-            return;
-        }
         firebaseThisUser.child("email").setValue(this.email);
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);
@@ -226,6 +224,7 @@ public class User {
                 }
             }
         }
+        dataReady = true;
     }
 
     /*

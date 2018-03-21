@@ -58,7 +58,7 @@ public class GPS_Service extends Service{
                 User userObject = User.getInstance();
                 userObject.locationX = location.getLongitude();
                 userObject.locationY = location.getLatitude();
-                if (userObj.userCreated) {
+                if (userObj.dataReady) {
                     userObject.addToDatabase();
                 }
             }

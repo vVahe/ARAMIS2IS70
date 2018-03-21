@@ -119,8 +119,6 @@ public class searchCourseActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         userObj.addEnrolledCourse(courseList.get(position));
                         Log.i("tag", "usercourses"+ userObj.enrolledInIDs);
-                        userObj.addToDatabase();
-
                     }
                 });
 

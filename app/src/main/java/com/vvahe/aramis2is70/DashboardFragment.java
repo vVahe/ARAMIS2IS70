@@ -212,7 +212,7 @@ public class DashboardFragment extends Fragment {
                 Log.i("TAG", "2");
 
             }
-            
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

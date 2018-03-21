@@ -108,6 +108,7 @@ public class User {
         adds a course, in this class and in database
      */
     public void addEnrolledCourse(String courseCode){
+        Log.wtf("enrolledBefore", enrolledInIDs.toString());
         if (!(enrolledInIDs.contains(courseCode))) {
             Log.wtf("TAG", courseCode+" added");
             enrolledInIDs.add(courseCode);
@@ -115,6 +116,7 @@ public class User {
         } else {
             Log.wtf("TAG", courseCode+" already enrolled");
         }
+        Log.wtf("enrolledAfter", enrolledInIDs.toString());
     }
 
     /*
@@ -176,6 +178,7 @@ public class User {
      */
     public void addToDatabase(){
         Log.wtf("TAG", "addToDatabase() executed");
+        outputToLog();
         firebaseThisUser.child("email").setValue(this.email);
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);
@@ -197,6 +200,7 @@ public class User {
         gets all data from a user from firebase
      */
     private void setDataInClass(DataSnapshot dataSnapshot){
+        Log.wtf("tag", "setDataInClass() executed");
         for(DataSnapshot ds : dataSnapshot.getChildren()){
             if (ds.getKey().equals("email")){
                 email = ds.getValue(String.class);
@@ -227,7 +231,6 @@ public class User {
             } else if (ds.getKey().equals("enrolledIn")){
                 enrolledInIDs.clear();
                 for(DataSnapshot dsChild : ds.getChildren()) {
-                    enrolledInIDs.clear();
                     enrolledInIDs.add(dsChild.getValue(String.class));
                 }
             } else if (ds.getKey().equals("chats")){

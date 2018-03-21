@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -17,6 +18,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,8 +36,14 @@ public class searchCourseActivity extends AppCompatActivity {
     ListView listView;
     ArrayAdapter<String> adapter;
 
+
     private DatabaseReference firebaseCourses = FirebaseDatabase.getInstance().getReference().child("courses"); //database reference to users
     private DatabaseReference firebaseThisCourse; //database reference to this course
+    private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
+    private DatabaseReference firebaseThisUser; //database reference to this user
+
+    private User userObj; //reference to user Object
+    private String uID; //currently logged in user ID
 
 
 
@@ -43,13 +52,20 @@ public class searchCourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_course);
 
-        String[] courseplaceholder = getResources().getStringArray(R.array.courseplaceholder);
-
         back = (ImageButton)findViewById(R.id.backButton);
         listView = (ListView)findViewById(R.id.courseListView);
         searchView = (SearchView)findViewById(R.id.search_view);
 
-        getAllCourses();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            uID = user.getUid();
+            userObj = User.getInstance();
+            Log.i("TAG", "assigned uID  = " + userObj.userID);
+        } else {
+            // No user is signed in
+        }
+
+        dataHandler();
         back();
         search();
     }
@@ -81,7 +97,7 @@ public class searchCourseActivity extends AppCompatActivity {
     /*
        gets all userID's of users within radius
     */
-    private void getAllCourses() {
+    private void dataHandler() {
 
         firebaseCourses.addValueEventListener(new ValueEventListener() {
             @Override
@@ -90,18 +106,25 @@ public class searchCourseActivity extends AppCompatActivity {
                 final List<String> courseList = new ArrayList();
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    for (DataSnapshot ds2 : ds.getChildren()) {
-                        if (ds2.getKey().equals("fullName")){
-                            courseList.add(ds2.getValue(String.class));
-                        };
-                        }
-                    }
+                    courseList.add(ds.getValue(String.class));
+                }
 
                 adapter =new ArrayAdapter<String>(
                         searchCourseActivity.this, android.R.layout.simple_list_item_1, courseList);
 
                 listView.setAdapter(adapter);
-                }
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        userObj.addEnrolledCourse(courseList.get(position));
+                        Log.i("tag", "usercourses"+ userObj.enrolledInIDs);
+                        userObj.addToDatabase();
+
+                    }
+                });
+
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -109,10 +132,4 @@ public class searchCourseActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-
-
 }

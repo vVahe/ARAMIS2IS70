@@ -44,11 +44,10 @@ public class CourseListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list);
 
-        back = (ImageButton)findViewById(R.id.backButton);
-        listView = (ListView)findViewById(R.id.courseListView);
-        addCourse = (Button)findViewById(R.id.addCourseButton);
+        back = (ImageButton)findViewById(R.id.backButton);  // set view for button
+        listView = (ListView)findViewById(R.id.courseListView); // set view for List
+        addCourse = (Button)findViewById(R.id.addCourseButton); // set view for other button
 
-        //courseListAdapter courseListAdapter = new courseListAdapter();
 
          /*
             get userID of currently logged in user and create user object
@@ -62,11 +61,14 @@ public class CourseListActivity extends AppCompatActivity {
             // No user is signed in
         }
 
-        back();
-        addCourse();
-        getEnrolledCourses();
+        back(); // method for the back button
+        addCourse();    // method for addCourse button
+        getEnrolledCourses(); // method to get all enrolled courses from database
     }
 
+    /**
+     * 
+     */
     public void back(){
         back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -87,67 +89,12 @@ public class CourseListActivity extends AppCompatActivity {
 
     public void getEnrolledCourses(){
 
-       /* firebaseUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                final List<String> courseList = new ArrayList();
-
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if(ds.getKey().equals(userObj.userID)) {
-                        for (DataSnapshot ds2 : ds.getChildren()) {
-                            for (DataSnapshot ds3 : ds2.getChildren()) {
-                                if (ds2.getKey().equals("enrolledIn")) {
-                                    courseList.add(ds3.getValue(String.class));
-                                }
-                            }
-                        }
-                    }
-                }*/
        List<String> courseList = new ArrayList();
        courseList = userObj.enrolledInIDs;
+       Log.i("tag", "It creates courseList");
+       adapter =new ArrayAdapter<String>(
+               CourseListActivity.this, android.R.layout.simple_list_item_1, courseList);
+        listView.setAdapter(adapter);
+    }
 
-                adapter =new ArrayAdapter<String>(
-                        CourseListActivity.this, android.R.layout.simple_list_item_1, courseList);
-
-                listView.setAdapter(adapter);
-            }
-
-            /*@Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    } */
-
-    /*public class courseListAdapter extends BaseAdapter{
-
-        @Override
-        public int getCount() {
-            return 0;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = getLayoutInflater().inflate(R.layout.enrolled_course_list_item,null);
-            TextView coursename = (TextView) convertView.findViewById(R.id.courseName);
-            CheckBox active = (CheckBox) convertView.findViewById(R.id.courseActive);
-
-
-            // coursename.setText(COURSES[position]); --> replace COURSES with the actual array of coursenames
-            // active.setActivated(true/false); --> true/false should probably be a boolean array
-            return convertView;
-        }
-    }*/
 }

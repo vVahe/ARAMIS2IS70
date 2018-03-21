@@ -146,6 +146,9 @@ public class User {
         update firebase with data of this class
      */
     public void addToDatabase(){
+        if (userCreated == false){
+            return;
+        }
         firebaseThisUser.child("email").setValue(this.email);
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);

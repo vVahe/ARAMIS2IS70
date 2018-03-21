@@ -21,7 +21,7 @@ public class User {
     public Integer year = 9999;                                             //studyyear from user
     public Double locationX = 51.4472632;                                   //X location from user
     public Double locationY = 5.4845778;                                    //Y location from user
-    public Integer radiusSetting = 1000;                                    //search radius from user
+    public Integer radiusSetting = 5000;                                    //search radius from user
     public Boolean locationShow = true;                                     //user shows location
     public Boolean available = true;                                        //is user available
     public Boolean chatNotifications = true;                                //want to get chat notifications

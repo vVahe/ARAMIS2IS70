@@ -5,36 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.vvahe.aramis2is70.ProfileActivity">
-
-    <LinearLayout
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/profile_toolbar"
+        android:layout_height="wrap_content">
+        <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#212121"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/profile_toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_back_arrow"
-            android:background="@null"/>
+            android:background="#212121"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
 
-        <TextView
-            android:id="@+id/profile_text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Profile"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_action_back_arrow" />
 
-    </android.support.v7.widget.Toolbar>
+            <TextView
+                android:id="@+id/profile_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Profile"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+        </android.support.v7.widget.Toolbar>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -54,10 +60,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/profilePicture"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/wallet_holo_blue_light"
-                android:textAllCaps="false"
                 android:background="@null"
-                android:text="Change picture" />
+                android:text="Change picture"
+                android:textAllCaps="false"
+                android:textColor="@color/wallet_holo_blue_light" />
 
 
         </RelativeLayout>
@@ -66,49 +72,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/profileTextUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/profileTextUsername"
-            android:layout_marginLeft="5dp"
-            android:text="Username" />
+            <TextView
+                android:id="@+id/profileTextUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/profileTextUsername"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp"
+                android:text="First name" />
 
-        <EditText
-            android:id="@+id/profileFieldUsername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:hint="User Name"
-            android:inputType="text" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/profileTextStudy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/profileTextStudy"
-            android:layout_marginLeft="5dp"
-            android:text="Bachelor/Master" />
-
-        <EditText
-            android:id="@+id/profileFieldStudy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:hint="Bachelor/ Master"
-            android:inputType="text" />
+            <EditText
+                android:id="@+id/profileFieldFirstname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/profileTextUsername"
+                android:layout_below="@+id/profileTextUsername"
+                android:ems="10"
+                android:inputType="text" />
 
         </RelativeLayout>
 
@@ -116,24 +96,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/profileTextEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/profileTextEmail"
-            android:layout_marginLeft="5dp"
-            android:text="Email" />
+            <TextView
+                android:id="@+id/profileTextUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/profileTextUsername"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp"
+                android:text="Middle name" />
 
-        <EditText
-            android:id="@+id/profileFieldEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
+            <EditText
+                android:id="@+id/profileFieldMiddlename"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/profileTextUsername"
+                android:ems="10"
+                android:inputType="text" />
 
         </RelativeLayout>
 
@@ -141,29 +120,101 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/profileTextYear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/profileTextYear"
-            android:layout_marginLeft="5dp"
-            android:text="Year" />
+            <TextView
+                android:id="@+id/profileTextUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/profileTextUsername"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp"
+                android:text="Last name" />
 
-        <EditText
-            android:id="@+id/profileFieldYear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:hint="Year you are in"
-            android:inputType="textEmailAddress" />
+            <EditText
+                android:id="@+id/profileFieldLastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/profileTextUsername"
+                android:ems="10"
+                android:inputType="text" />
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/profileTextEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/profileTextEmail"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp"
+                android:text="Email" />
+
+            <EditText
+                android:id="@+id/profileFieldEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/profileTextEmail"
+                android:ems="10"
+                android:inputType="textEmailAddress" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/profileTextStudy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/profileTextStudy"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp"
+                android:text="Bachelor/Master" />
+
+            <EditText
+                android:id="@+id/profileFieldStudy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/profileTextStudy"
+                android:layout_marginEnd="6dp"
+                android:ems="10"
+                android:inputType="text" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/profileTextYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/profileTextYear"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp"
+                android:text="Year" />
+
+            <EditText
+                android:id="@+id/profileFieldYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/profileTextYear"
+                android:ems="10"
+                android:inputType="textEmailAddress" />
+
+        </RelativeLayout>
 
 
     </LinearLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

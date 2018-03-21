@@ -28,7 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 public class SettingsFragment extends Fragment {
     private static SeekBar seekBar;
     private static TextView textView;
-    private static Spinner spinner;
     private static ImageButton profile;
     private static ImageButton courses;
     private static Button logout;
@@ -54,7 +53,6 @@ public class SettingsFragment extends Fragment {
         // set all of the elements
         seekBar = (SeekBar)view.findViewById(R.id.searchradius_seekBar);
         textView = (TextView)view.findViewById(R.id.seekbar_text);
-        spinner = (Spinner)view.findViewById(R.id.map_filter_spinner);
         profile = (ImageButton)view.findViewById(R.id.profileSettingsButton);
         courses = (ImageButton)view.findViewById(R.id.courseSettingsButton);
         logout = (Button)view.findViewById(R.id.settings_btnLogout);
@@ -84,7 +82,6 @@ public class SettingsFragment extends Fragment {
 
         // methods for data handeling of seekBar, Spinner and buttons
         seekBar();
-        spinner();
         profileSettings();
         courseSettings();
         logout();
@@ -156,13 +153,6 @@ public class SettingsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-    }
-
-    public void spinner() { // sets the Array of strings from resources as options for spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.filter_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
     }
 
     public void seekBar(){  // attaches textview with progress to the thumb of the seekBar

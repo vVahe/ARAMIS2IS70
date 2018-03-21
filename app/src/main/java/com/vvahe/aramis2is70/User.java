@@ -89,6 +89,36 @@ public class User {
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
+    public void setFirstName(String newFirstName){
+        firstName = newFirstName;
+        firebaseThisUser.child("firstName").setValue(newFirstName);
+    }
+
+    public void setMiddleName(String newMiddleName){
+        middleName = newMiddleName;
+        firebaseThisUser.child("middleName").setValue(newMiddleName);
+    }
+
+    public void setLastName(String newLastName){
+        lastName = newLastName;
+        firebaseThisUser.child("lastName").setValue(newLastName);
+    }
+
+    public void setYear(Integer newYear){
+        year = newYear;
+        firebaseThisUser.child("year").setValue(newYear);
+    }
+
+    public void setStudy(String newStudy){
+        study = newStudy;
+        firebaseThisUser.child("study").setValue(newStudy);
+    }
+
+    public void setEmail(String newEmail){
+        email = newEmail;
+        firebaseThisUser.child("email").setValue(newEmail);
+    }
+
     public void setLocationShow(Boolean value){
         locationShow = value;
         firebaseThisUser.child("locationShow").setValue(locationShow);

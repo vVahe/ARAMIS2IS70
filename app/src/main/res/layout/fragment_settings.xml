@@ -186,31 +186,6 @@
 
         <View style="@style/Divider" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-
-            <TextView
-                android:id="@+id/map_filter_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="Appear on map for"
-                android:textColor="#DE000000"
-                android:textSize="20sp" />
-
-            <Spinner
-                android:id="@+id/map_filter_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/map_filter_text" />
-
-
-        </RelativeLayout>
-
         <View style="@style/Divider" />
 
         <RelativeLayout

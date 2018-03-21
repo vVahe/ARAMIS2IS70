@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         bNavView = findViewById(R.id.mainNav);
         frameLayout = findViewById(R.id.mainFrame);
-        logoutBtn = findViewById(R.id.logoutBtn);
 
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -79,12 +78,6 @@ public class MainActivity extends AppCompatActivity {
         /* set first fragment to be displayed on startup */
         setFragment(dashboardFragment);
 
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
 
         /* handles switches between fragment when bottomNav is used */
         bNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -130,15 +123,6 @@ public class MainActivity extends AppCompatActivity {
             Intent i =new Intent(getApplicationContext(),GPS_Service.class);
             startService(i);
         }
-    }
-
-    /* logout user and send to login page */
-    public void logout() {
-        mAuth.signOut();
-        Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
-        /* prevents user from going back once logged in, they will have to use logout button*/
-        logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(logoutIntent);
     }
 
     /* checks for logged in users */

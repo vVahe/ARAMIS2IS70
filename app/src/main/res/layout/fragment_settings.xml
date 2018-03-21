@@ -67,11 +67,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_action_select"
-                android:background="@null"/>
+                android:background="@null"
+                android:src="@drawable/ic_action_select" />
         </RelativeLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -101,11 +101,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_action_select"
-                android:background="@null"/>
+                android:background="@null"
+                android:src="@drawable/ic_action_select" />
         </RelativeLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -116,8 +116,8 @@
                 android:id="@+id/notification_settings_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
                 android:text="Chat notification"
                 android:textColor="#DE000000"
                 android:textSize="20sp" />
@@ -126,9 +126,9 @@
                 android:id="@+id/notification_settings_text_extra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/notification_settings_text"
+                android:layout_marginLeft="10dp"
                 android:text="Enable/Disable chat notifications"
                 android:textSize="15sp" />
 
@@ -136,11 +136,10 @@
                 android:id="@+id/notification_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                />
+                android:layout_alignParentRight="true" />
         </RelativeLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -151,8 +150,8 @@
                 android:id="@+id/searchradius_settings_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
                 android:text="Search Radius"
                 android:textColor="#DE000000"
                 android:textSize="20sp" />
@@ -161,9 +160,9 @@
                 android:id="@+id/searchradius_settings_text_extra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/searchradius_settings_text"
+                android:layout_marginLeft="10dp"
                 android:text="Specifies the radius in which other users will be shown on the map"
                 android:textSize="15sp" />
 
@@ -171,22 +170,21 @@
                 android:id="@+id/searchradius_seekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:layout_below="@+id/searchradius_settings_text_extra"
+                android:layout_margin="20dp"
                 android:max="200"
-                android:thumb="@drawable/ic_action_seekbar_thumb"/>
+                android:thumb="@drawable/ic_action_seekbar_thumb" />
 
             <TextView
                 android:id="@+id/seekbar_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/searchradius_seekBar"
-                android:text=""
-                />
+                android:text="" />
 
         </RelativeLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -197,9 +195,9 @@
                 android:id="@+id/map_filter_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_alignParentLeft="true"
                 android:text="Appear on map for"
                 android:textColor="#DE000000"
                 android:textSize="20sp" />
@@ -208,13 +206,12 @@
                 android:id="@+id/map_filter_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/map_filter_text"
-                />
+                android:layout_toRightOf="@+id/map_filter_text" />
 
 
         </RelativeLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -238,8 +235,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_action_select"
-                android:background="@null"/>
+                android:background="@null"
+                android:src="@drawable/ic_action_select" />
 
         </RelativeLayout>
 

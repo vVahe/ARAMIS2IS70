@@ -8,10 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 
 /**
@@ -23,6 +26,9 @@ public class SettingsFragment extends Fragment {
     private static Spinner spinner;
     private static ImageButton profile;
     private static ImageButton courses;
+    private static Button logout;
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -41,13 +47,28 @@ public class SettingsFragment extends Fragment {
         spinner = (Spinner)view.findViewById(R.id.map_filter_spinner);
         profile = (ImageButton)view.findViewById(R.id.profileSettingsButton);
         courses = (ImageButton)view.findViewById(R.id.courseSettingsButton);
+        logout = (Button)view.findViewById(R.id.settings_btnLogout);
 
         // methods for data handeling of seekBar, Spinner and buttons
         seekBar();
         spinner();
         profileSettings();
         courseSettings();
+        logout();
         return view;
+    }
+    public void logout(){
+        logout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Intent logoutIntent = new Intent(getActivity(), LoginActivity.class);
+                /* prevents user from going back once logged in, they will have to use logout button*/
+                logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(logoutIntent);
+            }
+        });
+
     }
 
     public void courseSettings(){

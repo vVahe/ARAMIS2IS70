@@ -2,8 +2,10 @@ package com.vvahe.aramis2is70;
 
 import com.google.android.gms.vision.text.Line;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -18,6 +20,10 @@ public class Chat {
     private DatabaseReference firebaseChat = FirebaseDatabase.getInstance().getReference().child("chats");
     public DatabaseReference firebaseThisChat;
 
+    private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
+    private DatabaseReference firebaseOtherUser; //database reference to this user
+    public ArrayList<String> otherChatsIDs = new ArrayList<String>();
+
     private User mainUser = User.getInstance();
 
     /*
@@ -26,6 +32,7 @@ public class Chat {
     public Chat(String otherUserID){
         this.chatID = getChatID(otherUserID);
         firebaseThisChat = firebaseChat.child(this.chatID);
+        firebaseOtherUser = firebaseChat.child(otherUserID).child("chats");
         this.otherUserID = otherUserID;
     }
 
@@ -36,6 +43,7 @@ public class Chat {
         Message m = new Message(UUID.randomUUID().toString(), mainUser.userID, message, System.currentTimeMillis(), firebaseThisChat.child("messages"));
         m.send();
         messages.add(m);
+        setInOtherUser();
     }
 
     public void setDataInMessages(DataSnapshot dataSnapshot){
@@ -70,5 +78,32 @@ public class Chat {
         } else {
             return otherUserID + mainUser.userID;
         }
+    }
+
+    /*
+       if new message is send to chat, put this chat id in the "chats" of the other user in database.
+    */
+    private void setInOtherUser(){
+        firebaseOtherUser.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                otherChatsIDs.clear();
+
+                for(DataSnapshot chat : dataSnapshot.getChildren()){
+                    otherChatsIDs.add(chat.getValue(String.class));
+                }
+
+                if (!(otherChatsIDs.contains(chatID))){
+                    otherChatsIDs.add(chatID);
+                }
+                firebaseOtherUser.setValue(otherChatsIDs);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

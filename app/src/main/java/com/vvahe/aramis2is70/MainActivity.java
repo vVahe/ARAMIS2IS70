@@ -65,11 +65,17 @@ public class MainActivity extends AppCompatActivity {
         /* set first fragment to be displayed on startup */
         setFragment(dashboardFragment);
 
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
         /* handles switches between fragment when bottomNav is used */
         bNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
 
                 switch(item.getItemId()) {
                     case R.id.nav_home:
@@ -112,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     /* logout user and send to login page */
     public void logout() {
         mAuth.signOut();
@@ -140,12 +145,6 @@ public class MainActivity extends AppCompatActivity {
             userObj.getData(currentUser.getUid());
         }
     }
-
-//    public void toProfileSettings(View view) {
-//        Toast.makeText(this, "Change your profile settings", Toast.LENGTH_LONG).show();
-//        Intent intent = new Intent(this, ProfileActivity.class);
-//        startActivity(intent);
-//    }
 
     /* user location permission stuff */
     private boolean runtime_permissions() {

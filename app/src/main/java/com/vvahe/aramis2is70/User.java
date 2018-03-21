@@ -25,9 +25,8 @@ public class User {
     public Boolean locationShow = true;                                     //user shows location
     public Boolean available = true;                                        //is user available
     public Boolean chatNotifications = true;                                //want to get chat notifications
-    public String selectedCourse = "2IS70";
+    public String selectedCourse = "";                                      //the selected course
     public ArrayList<String> enrolledInIDs = new ArrayList<String>();       //array with IDs from courses enrolled in (for firebase)
-    public ArrayList<String> activeCoursesIDs = new ArrayList<String>();    //array with IDs from active courses (for firebase)
     public ArrayList<String> chatsIDs = new ArrayList<String>();            //array with IDS from chat from user (for firebase)
 
     public boolean userCreated = false;
@@ -88,6 +87,21 @@ public class User {
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
+    public void setLocationShow(Boolean value){
+        locationShow = value;
+        firebaseThisUser.child("locationShow").setValue(locationShow);
+    }
+
+    public void setAvailable(Boolean value){
+        available = value;
+        firebaseThisUser.child("available").setValue(value);
+    }
+
+    public void setChatNotifications(Boolean value){
+        chatNotifications = value;
+        firebaseThisUser.child("chatNotifications").setValue(value);
+    }
+
     /*
         adds a course, in this class and in database
      */
@@ -105,19 +119,19 @@ public class User {
     }
 
     /*
-        adds a course as active, in this class and in database
+        set a course as active
      */
-    public void addActiveCourse(String courseCode){
-        activeCoursesIDs.add(courseCode);
-        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
+    public void setSelectedCourse(String courseCode){
+        selectedCourse = courseCode;
+        firebaseThisUser.child("selectedCourse").setValue(selectedCourse);
     }
 
     /*
-        removes a course as active, in this class and in database
+        unset the selected course
      */
-    public void removeActiveCourse(String courseCode){
-        activeCoursesIDs.remove(courseCode);
-        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
+    public void unsetSelectedCourse(){
+        selectedCourse = "";
+        firebaseThisUser.child("selectedCourse").setValue(selectedCourse);
     }
 
 
@@ -138,7 +152,7 @@ public class User {
         Log.wtf("available", available.toString());
         Log.wtf("chatNotifications", chatNotifications.toString());
         Log.wtf("enrolledInIDs", enrolledInIDs.toString());
-        Log.wtf("activeCoursesIDs", activeCoursesIDs.toString());
+        Log.wtf("selectedCourse", selectedCourse.toString());
         Log.wtf("chatsIDs", chatsIDs.toString());
     }
 
@@ -147,6 +161,9 @@ public class User {
         update firebase with data of this class
      */
     public void addToDatabase(){
+        if (userCreated == false){
+            return;
+        }
         firebaseThisUser.child("email").setValue(this.email);
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);
@@ -160,7 +177,7 @@ public class User {
         firebaseThisUser.child("available").setValue(this.available);
         firebaseThisUser.child("chatNotifications").setValue(this.chatNotifications);
         firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
-        firebaseThisUser.child("activeCourses").setValue(this.activeCoursesIDs);
+        firebaseThisUser.child("selectedCourse").setValue(this.selectedCourse);
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
@@ -193,16 +210,13 @@ public class User {
                 available = ds.getValue(Boolean.class);
             } else if (ds.getKey().equals("chatNotifications")){
                 chatNotifications = ds.getValue(Boolean.class);
+            } else if (ds.getKey().equals("selectedCourse")){
+                selectedCourse = ds.getValue(String.class);
             } else if (ds.getKey().equals("enrolledIn")){
                 enrolledInIDs.clear();
                 for(DataSnapshot dsChild : ds.getChildren()) {
                     enrolledInIDs.clear();
                     enrolledInIDs.add(dsChild.getValue(String.class));
-                }
-            } else if (ds.getKey().equals("activeCourses")){
-                activeCoursesIDs.clear();
-                for(DataSnapshot dsChild : ds.getChildren()) {
-                    activeCoursesIDs.add(dsChild.getValue(String.class));
                 }
             } else if (ds.getKey().equals("chats")){
                 chatsIDs.clear();

@@ -46,8 +46,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginEnd="242dp"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
                 android:src="@drawable/profilepic" />
 
             <TextView

@@ -75,10 +75,20 @@ public class DashboardFragment extends Fragment {
         availableSwitch = getView().findViewById(R.id.availableSwitch);
         locationSwith = getView().findViewById(R.id.locationSwitch);
 
-        userObj.firebaseThisUser.child("available").addValueEventListener(new ValueEventListener() {
+        userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                availableSwitch.setChecked(dataSnapshot.getValue(boolean.class));
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    if (ds.getKey().equals("available")){
+                        availableSwitch.setChecked(ds.getValue(boolean.class));
+                    } else if (ds.getKey().equals("locationShow")){
+                        locationSwith.setChecked(ds.getValue(boolean.class));
+                    } else if (ds.getKey().equals("firstName")){
+                        userNameTxt.setText(ds.getValue(String.class));
+                    } else if (ds.getKey().equals("study")){
+                        studyTxt.setText(ds.getValue(String.class));
+                    }
+                }
             }
 
             @Override

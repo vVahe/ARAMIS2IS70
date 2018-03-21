@@ -108,8 +108,10 @@ public class User {
         adds a course, in this class and in database
      */
     public void addEnrolledCourse(String courseCode){
-        enrolledInIDs.add(courseCode);
-        firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
+        if (!(enrolledInIDs.contains(courseCode))) {
+            enrolledInIDs.add(courseCode);
+            firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
+        }
     }
 
     /*

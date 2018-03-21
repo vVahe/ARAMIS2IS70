@@ -181,7 +181,7 @@ public class User {
     /*
         update firebase with data of this class
      */
-    public void addToDatabase(){
+    private void addToDatabase(){
         Log.wtf("TAG", "addToDatabase() executed");
         outputToLog();
         firebaseThisUser.child("email").setValue(this.email);

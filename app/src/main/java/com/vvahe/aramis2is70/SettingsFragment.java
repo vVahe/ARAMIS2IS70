@@ -33,6 +33,7 @@ public class SettingsFragment extends Fragment {
     private static ImageButton courses;
     private static Button logout;
     private static SeekBar radius;
+    private static TextView radiusText;
     private static Switch notifications;
 
     private User userObj = User.getInstance();
@@ -58,6 +59,7 @@ public class SettingsFragment extends Fragment {
         courses = (ImageButton)view.findViewById(R.id.courseSettingsButton);
         logout = (Button)view.findViewById(R.id.settings_btnLogout);
         radius = (SeekBar)view.findViewById(R.id.searchradius_seekBar);
+        radiusText = (TextView)view.findViewById(R.id.seekbar_text);
         notifications = (Switch)view.findViewById(R.id.notification_switch);
 
         //get all current data and display
@@ -67,6 +69,7 @@ public class SettingsFragment extends Fragment {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     if (ds.getKey().equals("radiusSetting")){
                         radius.setProgress(ds.getValue(Integer.class));
+                        radiusText.setText(ds.getValue(Integer.class)+" meter");
                     } else if (ds.getKey().equals("chatNotifications")){
                         notifications.setChecked(ds.getValue(boolean.class));
                     }
@@ -123,6 +126,7 @@ public class SettingsFragment extends Fragment {
                 if (fromUser){
                     userObj.setRadius(progress);
                 }
+                radiusText.setText(progress+" meter");
             }
 
             @Override

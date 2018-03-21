@@ -172,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/searchradius_settings_text_extra"
                 android:layout_margin="20dp"
-                android:max="200"
+                android:max="5000"
                 android:thumb="@drawable/ic_action_seekbar_thumb" />
 
             <TextView

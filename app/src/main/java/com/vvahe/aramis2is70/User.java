@@ -134,6 +134,11 @@ public class User {
         firebaseThisUser.child("locationY").setValue(locationY);
     }
 
+    public void setRadius(Integer radius){
+        this.radiusSetting = radius;
+        firebaseThisUser.child("radiusSetting").setValue(radius);
+    }
+
     /*
         set a course as active
      */

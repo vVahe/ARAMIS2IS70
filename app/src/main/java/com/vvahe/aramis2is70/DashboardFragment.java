@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -42,7 +43,7 @@ public class DashboardFragment extends Fragment {
     private TextView userNameTxt;
     private TextView studyTxt;
     private Switch availableSwitch;
-    private Switch locationSwith;
+    private Switch locationSwitch;
     private int selectedPosition = 0;
     String courseID = "";
     String courseName = "";
@@ -73,7 +74,7 @@ public class DashboardFragment extends Fragment {
         studyTxt = getView().findViewById(R.id.studyTxt);
 
         availableSwitch = getView().findViewById(R.id.availableSwitch);
-        locationSwith = getView().findViewById(R.id.locationSwitch);
+        locationSwitch = getView().findViewById(R.id.locationSwitch);
 
         userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -82,24 +83,13 @@ public class DashboardFragment extends Fragment {
                     if (ds.getKey().equals("available")){
                         availableSwitch.setChecked(ds.getValue(boolean.class));
                     } else if (ds.getKey().equals("locationShow")){
-                        locationSwith.setChecked(ds.getValue(boolean.class));
+                        locationSwitch.setChecked(ds.getValue(boolean.class));
                     } else if (ds.getKey().equals("firstName")){
                         userNameTxt.setText(ds.getValue(String.class));
                     } else if (ds.getKey().equals("study")){
                         studyTxt.setText(ds.getValue(String.class));
                     }
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        userObj.firebaseThisUser.child("locationShow").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                locationSwith.setChecked(dataSnapshot.getValue(boolean.class));
             }
 
             @Override
@@ -117,23 +107,19 @@ public class DashboardFragment extends Fragment {
 
         courseList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        availableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    userObj.setAvailable(true);
-                } else {
-                    userObj.setAvailable(false);
-                }
+        availableSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checked = availableSwitch.isChecked();
+                userObj.setAvailable(checked);
             }
         });
 
-        locationSwith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    userObj.setLocationShow(true);
-                } else {
-                    userObj.setLocationShow(false);
-                }
+        locationSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checked = locationSwitch.isChecked();
+                userObj.setLocationShow(checked);
             }
         });
     }

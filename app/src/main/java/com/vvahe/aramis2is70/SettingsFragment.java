@@ -9,12 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 
 /**
@@ -27,6 +32,10 @@ public class SettingsFragment extends Fragment {
     private static ImageButton profile;
     private static ImageButton courses;
     private static Button logout;
+    private static SeekBar radius;
+    private static Switch notifications;
+
+    private User userObj = User.getInstance();
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
 
@@ -48,6 +57,27 @@ public class SettingsFragment extends Fragment {
         profile = (ImageButton)view.findViewById(R.id.profileSettingsButton);
         courses = (ImageButton)view.findViewById(R.id.courseSettingsButton);
         logout = (Button)view.findViewById(R.id.settings_btnLogout);
+        radius = (SeekBar)view.findViewById(R.id.searchradius_seekBar);
+        notifications = (Switch)view.findViewById(R.id.notification_switch);
+
+        //get all current data and display
+        userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    if (ds.getKey().equals("radiusSetting")){
+                        radius.setProgress(ds.getValue(Integer.class));
+                    } else if (ds.getKey().equals("chatNotifications")){
+                        notifications.setChecked(ds.getValue(boolean.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         // methods for data handeling of seekBar, Spinner and buttons
         seekBar();
@@ -55,8 +85,23 @@ public class SettingsFragment extends Fragment {
         profileSettings();
         courseSettings();
         logout();
+        radius();
+        notifications();
         return view;
     }
+
+    public void notifications(){
+        notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    userObj.setChatNotifications(true);
+                } else {
+                    userObj.setChatNotifications(false);
+                }
+            }
+        });
+    }
+
     public void logout(){
         logout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -68,7 +113,28 @@ public class SettingsFragment extends Fragment {
                 startActivity(logoutIntent);
             }
         });
+    }
 
+    public void radius(){
+        radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser){
+                    userObj.setRadius(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     public void courseSettings(){

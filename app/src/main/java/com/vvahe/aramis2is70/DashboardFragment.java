@@ -87,24 +87,20 @@ public class DashboardFragment extends Fragment {
         availableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    userObj.available = true;
+                    userObj.setAvailable(true);
                 } else {
-                    userObj.available = false;
+                    userObj.setAvailable(false);
                 }
-                userObj.addToDatabase();
-                Log.i("TAG", "available = " + userObj.available);
             }
         });
 
         locationSwith.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    userObj.locationShow = true;
+                    userObj.setLocationShow(true);
                 } else {
-                    userObj.locationShow = false;
+                    userObj.setLocationShow(false);
                 }
-                userObj.addToDatabase();
-                Log.i("TAG", "location show = " + userObj.locationShow);
             }
         });
     }

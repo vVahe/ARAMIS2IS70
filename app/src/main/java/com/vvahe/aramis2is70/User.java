@@ -87,6 +87,21 @@ public class User {
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
+    public void setLocationShow(Boolean value){
+        locationShow = value;
+        firebaseThisUser.child("locationShow").setValue(locationShow);
+    }
+
+    public void setAvailable(Boolean value){
+        available = value;
+        firebaseThisUser.child("available").setValue(value);
+    }
+
+    public void setChatNotifications(Boolean value){
+        chatNotifications = value;
+        firebaseThisUser.child("chatNotifications").setValue(value);
+    }
+
     /*
         adds a course, in this class and in database
      */

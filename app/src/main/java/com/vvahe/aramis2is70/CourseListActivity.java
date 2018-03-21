@@ -35,7 +35,7 @@ public class CourseListActivity extends AppCompatActivity {
     private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
     private DatabaseReference firebaseThisUser; //database reference to this user
 
-    private User userObj; //reference to user Object
+    private User userObj = User.getInstance(); //reference to user Object
     private String uID; //currently logged in user ID
 
 
@@ -47,19 +47,6 @@ public class CourseListActivity extends AppCompatActivity {
         back = (ImageButton)findViewById(R.id.backButton);  // set view for button
         listView = (ListView)findViewById(R.id.courseListView); // set view for List
         addCourse = (Button)findViewById(R.id.addCourseButton); // set view for other button
-
-
-         /*
-            get userID of currently logged in user and create user object
-         */
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            uID = user.getUid();
-            userObj = User.getInstance();
-            Log.i("TAG", "assigned uID  = " + userObj.userID);
-        } else {
-            // No user is signed in
-        }
 
         back(); // method for the back button
         addCourse();    // method for addCourse button
@@ -92,6 +79,7 @@ public class CourseListActivity extends AppCompatActivity {
        List<String> courseList = new ArrayList();
        courseList = userObj.enrolledInIDs;
        Log.i("tag", "It creates courseList");
+       Log.i("tag", courseList.toString());
        adapter =new ArrayAdapter<String>(
                CourseListActivity.this, android.R.layout.simple_list_item_1, courseList);
         listView.setAdapter(adapter);

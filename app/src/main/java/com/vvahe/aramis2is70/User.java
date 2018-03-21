@@ -109,8 +109,11 @@ public class User {
      */
     public void addEnrolledCourse(String courseCode){
         if (!(enrolledInIDs.contains(courseCode))) {
+            Log.wtf("TAG", courseCode+" added");
             enrolledInIDs.add(courseCode);
             firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
+        } else {
+            Log.wtf("TAG", courseCode+" already enrolled");
         }
     }
 
@@ -120,6 +123,13 @@ public class User {
     public void removeEnrolledCourse(String courseCode){
         enrolledInIDs.remove(courseCode);
         firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
+    }
+
+    public void setLocation(Double locationX, Double locationY){
+        this.locationX = locationX;
+        this.locationY = locationY;
+        firebaseThisUser.child("locationX").setValue(locationX);
+        firebaseThisUser.child("locationY").setValue(locationY);
     }
 
     /*
@@ -165,6 +175,7 @@ public class User {
         update firebase with data of this class
      */
     public void addToDatabase(){
+        Log.wtf("TAG", "addToDatabase() executed");
         firebaseThisUser.child("email").setValue(this.email);
         firebaseThisUser.child("firstName").setValue(this.firstName);
         firebaseThisUser.child("middleName").setValue(this.middleName);

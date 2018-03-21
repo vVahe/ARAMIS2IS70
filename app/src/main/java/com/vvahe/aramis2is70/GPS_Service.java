@@ -56,11 +56,7 @@ public class GPS_Service extends Service{
             @Override
             public void onLocationChanged(Location location) {
                 User userObject = User.getInstance();
-                userObject.locationX = location.getLongitude();
-                userObject.locationY = location.getLatitude();
-                if (userObj.dataReady) {
-                    userObject.addToDatabase();
-                }
+                userObject.setLocation(location.getLongitude(), location.getLatitude());
             }
 
             @Override

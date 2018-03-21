@@ -32,7 +32,7 @@ public class User {
     public boolean userCreated = false;
 
     private DatabaseReference firebaseUser = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
-    private DatabaseReference firebaseThisUser; //database reference to this user
+    public DatabaseReference firebaseThisUser; //database reference to this user
 
 
     private User() { }
@@ -46,6 +46,7 @@ public class User {
         creates a new user class and gets data from firebase about the user
      */
     public void getData(String userID) {
+        Log.wtf("userObj.getData()", "executed");
         firebaseThisUser = firebaseUser.child(userID);
         this.userID = userID;
         addFirebaseListener();

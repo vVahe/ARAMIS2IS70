@@ -75,6 +75,29 @@ public class DashboardFragment extends Fragment {
         availableSwitch = getView().findViewById(R.id.availableSwitch);
         locationSwith = getView().findViewById(R.id.locationSwitch);
 
+        userObj.firebaseThisUser.child("available").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                availableSwitch.setChecked(dataSnapshot.getValue(boolean.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        userObj.firebaseThisUser.child("locationShow").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                locationSwith.setChecked(dataSnapshot.getValue(boolean.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         courseList = getView().findViewById(R.id.courseList);
         CourseAdapter courseAdapter = new CourseAdapter();
 

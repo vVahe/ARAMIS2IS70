@@ -5,10 +5,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
 public class Chat {
@@ -32,7 +34,7 @@ public class Chat {
     public Chat(String otherUserID){
         this.chatID = getChatID(otherUserID);
         firebaseThisChat = firebaseChat.child(this.chatID);
-        firebaseOtherUser = firebaseChat.child(otherUserID).child("chats");
+        firebaseOtherUser = firebaseUser.child(otherUserID).child("chats");
         this.otherUserID = otherUserID;
     }
 
@@ -40,7 +42,7 @@ public class Chat {
     send a message in this chat
     */
     public void sendMessage(String message){
-        Message m = new Message(UUID.randomUUID().toString(), mainUser.userID, message, System.currentTimeMillis(), firebaseThisChat.child("messages"));
+        Message m = new Message(UUID.randomUUID().toString(), mainUser.userID, message, ServerValue.TIMESTAMP, firebaseThisChat.child("messages"));
         m.send();
         messages.add(m);
         setInOtherUser();
@@ -50,14 +52,14 @@ public class Chat {
         for(DataSnapshot chat : dataSnapshot.getChildren()){
             String message = "";
             String userID = "";
-            Long timeSend = new Long(0);
+            Map<String, String> timeSend = ServerValue.TIMESTAMP;
             for(DataSnapshot ds : chat.getChildren()) {
                 if (ds.getKey().equals("string")) {
                     message = ds.getValue(String.class);
                 } else if (ds.getKey().equals("user")) {
                     userID = ds.getValue(String.class);
                 } else if (ds.getKey().equals("timeSend")) {
-                    timeSend = ds.getValue(Long.class);
+                    timeSend = ds.getValue(Map.class);
                 } else {
                     //what else to store for message
                 }

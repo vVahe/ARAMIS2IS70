@@ -76,8 +76,11 @@ public class User {
      */
     public Chat openChat(String otherUserID){
         Chat chat = new Chat(otherUserID);
-        chatsIDs.add(chat.chatID);
-        firebaseThisUser.child("chats").setValue(this.chatsIDs);
+        if (!(chatsIDs.contains(chat.chatID))){
+            chatsIDs.add(chat.chatID);
+            firebaseThisUser.child("chats").setValue(this.chatsIDs);
+        }
+        Log.wtf("TAG", "openChat() executed");
         return chat;
     }
 

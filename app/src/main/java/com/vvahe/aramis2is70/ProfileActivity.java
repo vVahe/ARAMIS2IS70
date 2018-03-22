@@ -1,29 +1,51 @@
 package com.vvahe.aramis2is70;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileActivity extends AppCompatActivity {
 
-    private static ImageButton back;
-    private static EditText firstName;
-    private static EditText middleName;
-    private static EditText lastName;
-    private static EditText study;
-    private static EditText email;
-    private static EditText year;
+
+    private CircleImageView profilePicture;
+    private Button changeImagebtn;
+    private ImageButton back;
+    private EditText firstName;
+    private EditText middleName;
+    private EditText lastName;
+    private EditText study;
+    private EditText email;
+    private EditText year;
     private User userObj = User.getInstance();
+
+    private static final int TAKE_PICTURE = 1;
+    private Uri imageUri;
+
 
 
     @Override
@@ -31,6 +53,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        profilePicture = findViewById(R.id.profilePicture);
+        changeImagebtn = findViewById(R.id.change_picture_button);
         back = (ImageButton)findViewById(R.id.backButton);
         firstName = (EditText)findViewById(R.id.profileFieldFirstname) ;
         middleName = (EditText)findViewById (R.id.profileFieldMiddlename);
@@ -84,6 +111,13 @@ public class ProfileActivity extends AppCompatActivity {
         email();
         year();
         back();
+
+        changeImagebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePhoto();
+            }
+        });
     }
 
     public void firstName(){
@@ -183,5 +217,40 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    public void takePhoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(photo));
+        imageUri = Uri.fromFile(photo);
+        startActivityForResult(intent, TAKE_PICTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case TAKE_PICTURE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri selectedImage = imageUri;
+                    getContentResolver().notifyChange(selectedImage, null);
+                    ContentResolver cr = getContentResolver();
+                    Bitmap bitmap;
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media
+                                .getBitmap(cr, selectedImage);
+
+                        profilePicture.setImageBitmap(bitmap);
+                        Toast.makeText(this, selectedImage.toString(),
+                                Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
+                                .show();
+                        Log.e("Camera", e.toString());
+                    }
+                }
+        }
     }
 }

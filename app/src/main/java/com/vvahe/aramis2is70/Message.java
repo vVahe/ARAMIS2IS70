@@ -15,7 +15,7 @@ public class Message {
     public String messageID;    //messageID
     public String userID;       //user that send this message
     public Map<String, String> timeSend;       //time this message was send
-    public String message;      //message from this message
+    public String message;      //contents of this message
 
     private FirebaseAuth mAuth;
     private DatabaseReference firebaseThisChat = FirebaseDatabase.getInstance().getReference().child("chats");

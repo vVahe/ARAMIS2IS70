@@ -3,104 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
+    <!--One instance of the list-->
 
-        <TextView
-            android:text='Chat'
-            android:singleLine="true"
-            android:textColor="#FFFFFF"
-            android:textSize="25dp"
-            android:fontFamily="sans-serif"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-    </android.support.v7.widget.Toolbar>
 
     <ListView
-        android:id="@+id/contactHistory"
+        android:id="@+id/chatList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="44dp" />
+
+    <Button
+        android:id="@+id/testChatBtn"
         android:layout_width="wrap_content"
-        android:layout_height="0px"
-        android:layout_weight="1"/>
-
-    <!--One instance of the list-->
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_below="@id/toolbar">
-
-        <!--Profile picture -->
-        <ImageView
-            android:id="@+id/profilePic"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="7"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft='10dp'
-            android:src="@drawable/ic_action_profile" />
-
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_weight="2"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp">
-
-                <!--Name and course-->
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/contactName"
-                        android:text='Sandra Adams'
-                        android:textStyle="bold"
-                        android:singleLine="true"
-                        android:textSize="20dp"
-                        android:fontFamily="sans-serif"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <TextView
-                        android:id="@+id/courseName"
-                        android:text='2IS70 - App Development'
-                        android:singleLine="true"
-                        android:textSize="20dp"
-                        android:textColor="#4285f4"
-                        android:fontFamily="sans-serif"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                </LinearLayout>
-
-            <!--Last message-->
-                <TextView
-                    android:id="@+id/lastMessage"
-                    android:text='Do you know when the presentation is? It’s supposed to be on wednesday right?'
-                    android:textSize="20dp"
-                    android:fontFamily="sans-serif"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="2"
-                    android:layout_weight="1"/>
-
-
-        </LinearLayout>
-
-
-
-    </LinearLayout>
-
-
-
-
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Button" />
 </RelativeLayout>

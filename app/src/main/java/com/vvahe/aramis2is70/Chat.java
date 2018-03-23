@@ -59,7 +59,7 @@ public class Chat {
                 } else if (ds.getKey().equals("user")) {
                     userID = ds.getValue(String.class);
                 } else if (ds.getKey().equals("timeSend")) {
-                    timeSend = ds.getValue(Map.class);
+                    //timeSend = ds.getValue(Map.class);
                 } else {
                     //what else to store for message
                 }

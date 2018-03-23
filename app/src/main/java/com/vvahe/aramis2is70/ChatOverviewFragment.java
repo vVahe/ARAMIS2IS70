@@ -16,6 +16,8 @@ import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +43,7 @@ public class ChatOverviewFragment extends Fragment {
     private User userObj = User.getInstance();
     private ListView chatList;
     private DatabaseReference firebaseChat = FirebaseDatabase.getInstance().getReference().child("chats");
+    private DatabaseReference firebaseOtherUser = FirebaseDatabase.getInstance().getReference().child("Users");
 
     public ChatOverviewFragment() {
     }
@@ -74,6 +77,7 @@ public class ChatOverviewFragment extends Fragment {
     }
 
     class ChatAdapter extends BaseAdapter {
+        String[] idArray = new String[getCount()];
 
         @Override
         public int getCount() {
@@ -95,30 +99,54 @@ public class ChatOverviewFragment extends Fragment {
 
             view = getLayoutInflater().inflate(R.layout.chatoverview_chat_item, null);
 
-            firebaseChat.addValueEventListener(new ValueEventListener() {
+            final String chatID = userObj.chatsIDs.get(position);
+            final String otherUserID = chatID.replace(userObj.userID, "");
+
+            final Chat chat = new Chat(otherUserID);
+
+            final View finalView = view;
+
+            firebaseChat.child(userObj.chatsIDs.get(position)).child("messages").orderByChild("timeSend").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.getKey().equals(userObj.chatsIDs.get(position))) {
-                            Log.i("TAG", "ds = " + ds);
-                            Query lastMessage = firebaseChat.child(userObj.chatsIDs.get(position)).orderByKey().limitToLast(1);
-                            Log.i("TAG", "Query = " + lastMessage);
 
-                            lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Log.i("TAG", "ds2 = " + dataSnapshot);
-                                    String message = dataSnapshot.child("string").getValue().toString();
-                                }
+                    chat.setDataInMessages(dataSnapshot);
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    //Handle possible errors.
-                                }
-                            });
+                    final Message lastMessage = chat.messages.get(chat.messages.size()-1); //The last send message
+                    final TextView lastMsg = finalView.findViewById(R.id.lastMessageTxt); //last message view
+                    final TextView userName = finalView.findViewById(R.id.userNameTxt); //user name view
+                    final RelativeLayout chatInstance = finalView.findViewById(R.id.chatInstance);  //chatinstance view
+                    lastMsg.setText(lastMessage.message);
+
+                    firebaseOtherUser.child(otherUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            lastMsg.setText(lastMessage.message);
+                            String firstName = dataSnapshot.child("firstName").getValue(String.class);
+                            String middleName = dataSnapshot.child("middleName").getValue(String.class);
+                            String lastName = dataSnapshot.child("lastName").getValue(String.class);
+                            if (middleName.equals("")){
+                                userName.setText(firstName.substring(0, 1).toUpperCase()+firstName.substring(1)+" "+lastName.substring(0, 1).toUpperCase()+lastName.substring(1));
+                            } else {
+                                userName.setText(firstName.substring(0, 1).toUpperCase()+firstName.substring(1)+" "+middleName+" "+lastName.substring(0, 1).toUpperCase()+lastName.substring(1));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
                         }
-                    }
+                    });
+
+                    chatInstance.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.i("TAG",  "click");
+                            //TODO: open chat
+                            Chat chat = userObj.openChat("A17KadUBoiX01gHnEBz6lHwLMv82");
+                            chat.sendMessage("testMessage");
+                        }
+                    });
                 }
 
                 @Override

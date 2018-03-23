@@ -1,6 +1,7 @@
 package com.vvahe.aramis2is70;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -145,6 +146,9 @@ public class ChatOverviewFragment extends Fragment {
                             //TODO: open chat
                             Chat chat = userObj.openChat("A17KadUBoiX01gHnEBz6lHwLMv82");
                             chat.sendMessage("testMessage");
+                            Intent toChatIntent = new Intent(getContext(), ChatInstanceActivity.class);
+                            toChatIntent.putExtra("chatID", chatID);
+                            startActivity(toChatIntent);
                         }
                     });
                 }

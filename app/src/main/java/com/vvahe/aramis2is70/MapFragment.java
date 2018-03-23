@@ -137,6 +137,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mUiSettings.setRotateGesturesEnabled(true);
 
         enableMyLocation();
+
+        mGoogleMap.setInfoWindowAdapter(new CustomMarker(getContext()));
     }
 
     /*
@@ -149,19 +151,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 List<String[]> nearUsers = new ArrayList<>(); //stores name, locX, locY of nearby users
+                String tempUserID = "";
+//                int tempUserPic = 0;
+                String tempStudy = "";
                 String tempFN = ""; //temp string
                 Double locX = 0.0;
                 Double locY = 0.0;
 
+
                 //get userID's of nearby users
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Log.i("TAG", "ds contains  = " + ds);
+                    nearUsers.clear();
+//                    Log.i("TAG", "ds contains  = " + ds);
                     //TODO: log shows alot of emtpy records from database ??? need to figure out why
                     for (DataSnapshot ds2 : ds.getChildren()) {
-                        Log.i("TAG", "ds2 contains  = " + ds2);
-                        if (ds2.getKey().equals("firstName")) tempFN = ds2.getValue(String.class);
-                        if (ds2.getKey().equals("locationX")) locX = ds2.getValue(Double.class);
-                        if (ds2.getKey().equals("locationY")) locY = ds2.getValue(Double.class);
+//                        Log.i("TAG", "ds2 contains  = " + ds2);
+                        tempUserID = ds.getKey().toString();
+                        if (ds2.getKey().equals("firstName")) tempFN = (String) ds2.getValue();
+                        if (ds2.getKey().equals("locationX")) locX = (Double) ds2.getValue();
+                        if (ds2.getKey().equals("locationY")) locY = (Double) ds2.getValue();
+                        if (ds2.getKey().equals("study")) tempStudy = (String) ds2.getValue();
 //                        Log.i("TAG", "tempFN  = " + tempFN);
 //                        Log.i("TAG", "locX  = " + locX);
 //                        Log.i("TAG", "locY  = " + locY);
@@ -172,8 +181,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //                        Log.i("TAG", "Radiussetting = " + radiusSetting);
 //                        Log.i("TAG", "inRadius? = " + inRadius(locX, locY, radiusSetting));
                         if (inRadius(locX, locY, radiusSetting)) {
-                            String[] attributes = {tempFN, locX.toString(), locY.toString()};
-//                            Log.i("TAG", "Attributes = " + attributes);
+                            String[] attributes = {tempUserID, tempFN, locX.toString(), locY.toString(), tempStudy};
+                            Log.i("TAG", "Attributes = " + attributes);
                             nearUsers.add(attributes);
                         }
                     }
@@ -193,11 +202,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         create google map markers for all nearby users
      */
     private void createMarkers(List<String[]> nearUsers) {
+        mGoogleMap.clear();
+        Log.i("TAG", "nearUsers = " + nearUsers);
         for (String[] user : nearUsers) {
 //            Log.i("TAG", "string user = " + user);
-                Marker marker = mGoogleMap.addMarker(
-                        new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(user[1]), Double.parseDouble(user[2])))
+            Marker marker = mGoogleMap.addMarker(
+                    new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(user[2]), Double.parseDouble(user[3])))
                             .title(user[0])
                             .snippet("test")
             );

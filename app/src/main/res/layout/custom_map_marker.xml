@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    android:padding="10dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:padding="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/markerProfilePic"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@mipmap/default_user_pic_xhdpi" />
+
+        <TextView
+            android:id="@+id/markerFirstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="18dp"
+            android:layout_toEndOf="@+id/markerProfilePic"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/markerLastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/markerFirstName"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/markerStudy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/markerBtn"
+            android:layout_alignBottom="@+id/markerBtn"
+            android:layout_alignStart="@+id/markerFirstName"
+            android:layout_toStartOf="@+id/markerBtn"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/markerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/markerLastName"
+            android:layout_marginStart="23dp"
+            android:layout_toEndOf="@+id/markerLastName"
+            android:text="Send Message" />
+
+        <TextView
+            android:id="@+id/markerMoreInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/markerProfilePic"
+            android:layout_alignStart="@+id/markerStudy"
+            android:text="TextView" />
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -5,6 +5,6 @@
     <!-- colorAccent used to be #ff4081 (pink), but not used by anyone I guess
     Rodger replaced it, if it broke smth just say so
     I needed it for the Switch color -->
-    <color name="colorAccent">#c5c5c5</color>
+    <color name="colorAccent">#dbdbdb</color>
     <color name="colorMenu">#a2d5ff</color>
 </resources>

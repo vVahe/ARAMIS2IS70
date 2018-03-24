@@ -147,7 +147,7 @@ public class ChatOverviewFragment extends Fragment {
                             Chat chat = userObj.openChat("A17KadUBoiX01gHnEBz6lHwLMv82");
                             chat.sendMessage("testMessage");
                             Intent toChatIntent = new Intent(getContext(), ChatInstanceActivity.class);
-                            toChatIntent.putExtra("chatID", chatID);
+                            toChatIntent.putExtra("chatID", chatID); //send extra info with intent, chatID in this case
                             startActivity(toChatIntent);
                         }
                     });

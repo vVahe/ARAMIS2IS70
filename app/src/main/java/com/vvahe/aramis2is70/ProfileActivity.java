@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -56,7 +57,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final int TAKE_PICTURE = 1;
     private static final int GALLERY_INTENT = 2;
-    private StorageReference mStorage;
+    private StorageReference mStorage;  // reference to root firebaseStorage
+    private StorageReference picStorage;    // reference to profile picture in storage
     private ProgressDialog mProgressDialog;
 
 
@@ -79,6 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
         study = (EditText)findViewById (R.id.profileFieldStudy);
         year = (EditText)findViewById (R.id.profileFieldYear);
         mStorage = FirebaseStorage.getInstance().getReference();
+        picStorage = mStorage.child(userObj.userID).child("Profile Picture");
         mProgressDialog = new ProgressDialog(this);
 
         userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
@@ -126,6 +129,7 @@ public class ProfileActivity extends AppCompatActivity {
         email();
         year();
         back();
+        setPicture();
 
         changeImagebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +145,18 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public  void setPicture() {
+        if(picStorage != null){
+            picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    profilePicture.setImageBitmap(bmp);
+                }
+            });
+        }
     }
 
     public void firstName(){

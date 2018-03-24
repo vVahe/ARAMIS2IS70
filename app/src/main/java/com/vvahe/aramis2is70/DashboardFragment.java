@@ -1,6 +1,8 @@
 package com.vvahe.aramis2is70;
 
 import android.app.ListActivity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,13 +23,18 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -38,8 +45,12 @@ public class DashboardFragment extends Fragment {
     public User userObj = User.getInstance();
     private ListView courseList;
 
+    private StorageReference mStorage;  // reference to root firebaseStorage
+    private StorageReference picStorage;    // reference to profile picture in storage
+
     private String[] activeCourses = {"2IPC0", "2IS70"};
 
+    private CircleImageView profilePicture;
     private TextView userNameTxt;
     private TextView studyTxt;
     private Switch availableSwitch;
@@ -72,6 +83,9 @@ public class DashboardFragment extends Fragment {
 
         userNameTxt = getView().findViewById(R.id.nameTxt);
         studyTxt = getView().findViewById(R.id.studyTxt);
+        profilePicture = getView().findViewById(R.id.profilePic);
+        mStorage = FirebaseStorage.getInstance().getReference();
+        picStorage = mStorage.child(userObj.userID).child("Profile Picture");
 
         availableSwitch = getView().findViewById(R.id.availableSwitch);
         locationSwitch = getView().findViewById(R.id.locationSwitch);
@@ -122,6 +136,8 @@ public class DashboardFragment extends Fragment {
                 userObj.setLocationShow(checked);
             }
         });
+
+        setPicture();
     }
 
     class CourseAdapter extends BaseAdapter {
@@ -169,6 +185,18 @@ public class DashboardFragment extends Fragment {
 //            courseNameTxt.setText(courseNames.get(position));
 
             return view;
+        }
+    }
+
+    public  void setPicture() {
+        if(picStorage != null){
+            picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    profilePicture.setImageBitmap(bmp);
+                }
+            });
         }
     }
 

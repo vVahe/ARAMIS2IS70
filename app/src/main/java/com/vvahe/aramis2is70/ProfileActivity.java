@@ -1,6 +1,7 @@
 package com.vvahe.aramis2is70;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,11 +23,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -34,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private CircleImageView profilePicture;
     private Button changeImagebtn;
+    private Button galleryTestbtn;
     private ImageButton back;
     private EditText firstName;
     private EditText middleName;
@@ -44,8 +55,9 @@ public class ProfileActivity extends AppCompatActivity {
     private User userObj = User.getInstance();
 
     private static final int TAKE_PICTURE = 1;
-    private Uri imageUri;
-
+    private static final int GALLERY_INTENT = 2;
+    private StorageReference mStorage;
+    private ProgressDialog mProgressDialog;
 
 
     @Override
@@ -58,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         profilePicture = findViewById(R.id.profilePicture);
         changeImagebtn = findViewById(R.id.change_picture_button);
+        galleryTestbtn = findViewById(R.id.buttonGalleryTest);
         back = (ImageButton)findViewById(R.id.backButton);
         firstName = (EditText)findViewById(R.id.profileFieldFirstname) ;
         middleName = (EditText)findViewById (R.id.profileFieldMiddlename);
@@ -65,6 +78,8 @@ public class ProfileActivity extends AppCompatActivity {
         email = (EditText)findViewById (R.id.profileFieldEmail);
         study = (EditText)findViewById (R.id.profileFieldStudy);
         year = (EditText)findViewById (R.id.profileFieldYear);
+        mStorage = FirebaseStorage.getInstance().getReference();
+        mProgressDialog = new ProgressDialog(this);
 
         userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -118,6 +133,14 @@ public class ProfileActivity extends AppCompatActivity {
                 takePhoto();
             }
         });
+        galleryTestbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fromGallery();
+            }
+        });
+
+
     }
 
     public void firstName(){
@@ -220,12 +243,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void takePhoto() {
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
         startActivityForResult(intent, TAKE_PICTURE);
+    }
+
+    public void fromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+
+        intent.setType("image/*");
+
+        startActivityForResult(intent, GALLERY_INTENT);
     }
 
     @Override
@@ -234,22 +262,42 @@ public class ProfileActivity extends AppCompatActivity {
         switch (requestCode) {
             case TAKE_PICTURE:
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImage = imageUri;
-                    getContentResolver().notifyChange(selectedImage, null);
-                    ContentResolver cr = getContentResolver();
-                    Bitmap bitmap;
-                    try {
-                        bitmap = android.provider.MediaStore.Images.Media
-                                .getBitmap(cr, selectedImage);
+                    mProgressDialog.setMessage("Uploading ...");
+                    mProgressDialog.show();
 
-                        profilePicture.setImageBitmap(bitmap);
-                        Toast.makeText(this, selectedImage.toString(),
-                                Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
-                                .show();
-                        Log.e("Camera", e.toString());
-                    }
+                    //get the camera image
+                    Bundle extras = data.getExtras();
+                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] dataBAOS = baos.toByteArray();
+
+                    // upload to firebase
+                    StorageReference filepath = mStorage.child(userObj.userID).child("Profile Picture");
+                    UploadTask uploadTask = filepath.putBytes(dataBAOS);
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(ProfileActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
+                            mProgressDialog.dismiss();
+                        }
+                    });
+                }
+                break;
+            case GALLERY_INTENT:
+                if(resultCode == Activity.RESULT_OK) {
+                    mProgressDialog.setMessage("Uploading ...");
+                    mProgressDialog.show();
+
+                    Uri galleyUri = data.getData();
+                    StorageReference filepath = mStorage.child(userObj.userID).child("Profile Picture");
+                    filepath.putFile(galleyUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(ProfileActivity.this, "Upload done", Toast.LENGTH_LONG).show();
+                            mProgressDialog.dismiss();
+                        }
+                    });
                 }
         }
     }

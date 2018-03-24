@@ -10,23 +10,79 @@
     <!--Text input field-->
 
 
-    <ListView
-        android:id="@+id/messageList"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relativeLayout2"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="59dp">
+
+        <ListView
+            android:id="@+id/messageList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
 
     <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/profile_toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="#212121"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
+
+            <ImageButton
+                android:id="@+id/backChatBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_action_back_arrow" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="62dp"
+            android:src="@mipmap/default_user_pic_mdpi"
+            android:id="@+id/otherUserImage" />
+
+        <TextView
+            android:id="@+id/otherUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/otherUserImage"
+            android:layout_marginStart="18dp"
+            android:layout_toEndOf="@+id/otherUserImage"
+            android:text="Profile"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:padding="8dp"
-        android:id="@+id/relativeLayout2">
+        android:background="@color/wallet_highlighted_text_holo_dark"
+        android:padding="8dp">
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/messageField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -36,11 +92,11 @@
             android:inputType="textPersonName" />
 
         <Button
-            android:id="@+id/sendBtn"
+            android:id="@+id/sendMessageBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/editText2"
-            android:layout_alignBottom="@+id/editText2"
+            android:layout_alignBaseline="@+id/messageField"
+            android:layout_alignBottom="@+id/messageField"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="17dp"
             android:text="send message" />

@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -73,10 +74,24 @@ public class ChatInstanceActivity extends AppCompatActivity {
         sendMesageBtn = findViewById(R.id.sendMessageBtn);
         messageField = findViewById(R.id.messageField);
         backBtn = findViewById(R.id.backChatBtn);
-
         messageList = findViewById(R.id.messageList);
-        final MessageAdapter messageAdapter = new MessageAdapter();
-        messageList.setAdapter(messageAdapter);
+
+        chatRef.child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatObj.setDataInMessages(dataSnapshot);
+                final MessageAdapter messageAdapter = new MessageAdapter();
+                messageList.setAdapter(messageAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         sendMesageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +116,7 @@ public class ChatInstanceActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 8; //TODO: not good need other way to get number of message
+            return chatObj.messages.size(); //TODO: not good need other way to get number of message
         }
 
         @Override
@@ -117,38 +132,25 @@ public class ChatInstanceActivity extends AppCompatActivity {
         @Override
         public View getView(final int position, View view, ViewGroup parent) {
 
-            finalView = getLayoutInflater().inflate(R.layout.message_you, null);
+            String sender;
+            String messageString;
+            //TODO: include timestamp
+            //String messageTimeStamp;
 
-            chatRef.child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
+            ArrayList<Message> allMessage = chatObj.messages;
+            sender = allMessage.get(position).userID;
+            messageString = allMessage.get(position).message;
 
-                String sender;
-                String messageString;
-//                String messageTimeStamp;
-                final TextView singeMessage = finalView.findViewById(R.id.singleMessageTxt);
+            if (sender.equals(userObj.userID)) {
+                finalView = getLayoutInflater().inflate(R.layout.message_you, null);
+                TextView singleMessage = finalView.findViewById(R.id.singleMessageTxt);
+                singleMessage.setText(messageString);
+            } else {
+                finalView = getLayoutInflater().inflate(R.layout.message_other, null);
+                TextView singleMessage = finalView.findViewById(R.id.singleMessageTxt);
+                singleMessage.setText(messageString);
+            }
 
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                        chatObj.setDataInMessages(dataSnapshot);
-
-                        ArrayList<Message> allMessage = chatObj.messages;
-
-                            sender = allMessage.get(position).userID;
-                            messageString = allMessage.get(position).message;
-                            //TODO: include timestamp
-
-                            //TODO: trying to change layout based on sender not working yet :(
-                            if (sender.equals(userObj.userID)) {
-                                finalView = getLayoutInflater().inflate(R.layout.message_other, null);
-                            }
-
-                            singeMessage.setText(messageString);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
             return finalView;
         }
     }

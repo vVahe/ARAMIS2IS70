@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/place_autocomplete_prediction_primary_text_highlight"
     android:padding="6dp">
 
     <TextView
@@ -10,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="35dp"
+        android:layout_alignParentTop="true"
         android:text="TextView" />
 </RelativeLayout>

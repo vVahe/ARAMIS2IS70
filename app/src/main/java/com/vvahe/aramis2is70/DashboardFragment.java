@@ -55,7 +55,6 @@ public class DashboardFragment extends Fragment {
     private TextView studyTxt;
     private Switch availableSwitch;
     private Switch locationSwitch;
-    private int selectedPosition = 0;
     String selectedCourse = "";
 
     ArrayList<String> courseNames = new ArrayList<>();
@@ -166,6 +165,7 @@ public class DashboardFragment extends Fragment {
 
             RadioButton radioBtn = view.findViewById(R.id.radioButton);
             radioBtn.setTag(position);
+            final int positionHolder = position;
 
             //stuff that handles only one button being allowed to be selected
             if (courseNames.get(position).equals(selectedCourse)){
@@ -176,9 +176,8 @@ public class DashboardFragment extends Fragment {
             radioBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    selectedPosition = (Integer)view.getTag();
                     notifyDataSetChanged();
-                    String courseID = courseNames.get(selectedPosition);
+                    String courseID = courseNames.get(positionHolder);
                     userObj.setSelectedCourse(courseID);
 
                 }

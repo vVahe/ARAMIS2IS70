@@ -259,7 +259,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void takePhoto() {
-
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, TAKE_PICTURE);
     }

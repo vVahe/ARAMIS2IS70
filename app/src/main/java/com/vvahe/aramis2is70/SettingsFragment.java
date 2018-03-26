@@ -91,9 +91,11 @@ public class SettingsFragment extends Fragment {
     }
 
     public void notifications(){
-        notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+        notifications.setOnClickListener(new CompoundButton.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (notifications.isChecked()) {
                     userObj.setChatNotifications(true);
                 } else {
                     userObj.setChatNotifications(false);

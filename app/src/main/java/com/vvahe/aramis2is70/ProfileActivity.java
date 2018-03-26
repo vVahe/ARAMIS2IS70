@@ -81,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
         study = (EditText)findViewById (R.id.profileFieldStudy);
         year = (EditText)findViewById (R.id.profileFieldYear);
         mStorage = FirebaseStorage.getInstance().getReference();
-        picStorage = mStorage.child(userObj.userID).child("Profile Picture");
+
         mProgressDialog = new ProgressDialog(this);
 
         userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
@@ -114,6 +114,8 @@ public class ProfileActivity extends AppCompatActivity {
                         year.setSelection(cursor);
                     }
                 }
+                picStorage = mStorage.child(userObj.userID).child("Profile Picture");
+                setPicture();
             }
 
             @Override
@@ -129,7 +131,6 @@ public class ProfileActivity extends AppCompatActivity {
         email();
         year();
         back();
-        setPicture();
 
         changeImagebtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -76,13 +78,24 @@ public class CourseListActivity extends AppCompatActivity {
 
     public void getEnrolledCourses(){
 
-       List<String> courseList = new ArrayList();
-       courseList = userObj.enrolledInIDs;
+       final List<String> courseList = userObj.enrolledInIDs;
+       //courseList = userObj.enrolledInIDs;
        Log.i("tag", "It creates courseList");
        Log.i("tag", courseList.toString());
        adapter =new ArrayAdapter<String>(
                CourseListActivity.this, android.R.layout.simple_list_item_1, courseList);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String course = courseList.get(position);
+                Toast.makeText(CourseListActivity.this, "Unenrolled for: " + course, Toast.LENGTH_LONG).show();
+                userObj.removeEnrolledCourse(courseList.get(position));
+                getEnrolledCourses(); // update list of enrolled courses
+                Log.i("tag", "usercourses"+ userObj.enrolledInIDs);
+            }
+        });
     }
 
 }

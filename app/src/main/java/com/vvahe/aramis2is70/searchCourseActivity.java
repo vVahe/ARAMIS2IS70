@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -117,6 +118,8 @@ public class searchCourseActivity extends AppCompatActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String course = courseList.get(position);
+                        Toast.makeText(searchCourseActivity.this, "Enrolled for: " + course, Toast.LENGTH_LONG).show();
                         userObj.addEnrolledCourse(courseList.get(position));
                         Log.i("tag", "usercourses"+ userObj.enrolledInIDs);
                     }

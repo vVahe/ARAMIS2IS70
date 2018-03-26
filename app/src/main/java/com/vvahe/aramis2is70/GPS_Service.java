@@ -87,7 +87,7 @@ public class GPS_Service extends Service{
         /*
             updates location every 3 seconds
          */
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,0,listener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,0,listener);
 
     }
 }

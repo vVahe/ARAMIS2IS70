@@ -13,20 +13,13 @@
         android:layout_marginTop="17dp" />
 
     <TextView
-        android:id="@+id/courseIDTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/radioButton"
-        android:layout_marginStart="27dp"
-        android:layout_toEndOf="@+id/radioButton"
-        android:text="TextView" />
-
-    <TextView
         android:id="@+id/courseNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/courseIDTxt"
-        android:layout_toEndOf="@+id/courseIDTxt"
+        android:layout_alignBaseline="@+id/radioButton"
+        android:layout_alignBottom="@+id/radioButton"
+        android:layout_marginStart="22dp"
+        android:layout_toEndOf="@+id/radioButton"
         android:text="TextView" />
 
     <Button

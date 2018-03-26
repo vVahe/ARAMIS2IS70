@@ -119,7 +119,9 @@ public class MainActivity extends AppCompatActivity {
 
     /* start GPS service for user location */
     private void startGPS_Service() {
+
         if (!runtime_permissions()) {
+            Log.wtf("permission:", "not executed");
             Intent i =new Intent(getApplicationContext(),GPS_Service.class);
             startService(i);
         }

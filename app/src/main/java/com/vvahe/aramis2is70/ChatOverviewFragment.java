@@ -126,7 +126,7 @@ public class ChatOverviewFragment extends Fragment {
                             String firstName = dataSnapshot.child("firstName").getValue(String.class);
                             String middleName = dataSnapshot.child("middleName").getValue(String.class);
                             String lastName = dataSnapshot.child("lastName").getValue(String.class);
-                            if (middleName.equals("")){
+                            if (middleName == null){
                                 userName.setText(firstName.substring(0, 1).toUpperCase()+firstName.substring(1)+" "+lastName.substring(0, 1).toUpperCase()+lastName.substring(1));
                             } else {
                                 userName.setText(firstName.substring(0, 1).toUpperCase()+firstName.substring(1)+" "+middleName+" "+lastName.substring(0, 1).toUpperCase()+lastName.substring(1));

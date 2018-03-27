@@ -18,6 +18,8 @@ android {
     }
 }
 
+
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.0.2'
@@ -35,6 +37,8 @@ dependencies {
     compile 'com.google.android.gms:play-services:11.8.0'
     //for creating circle images
     compile 'de.hdodenhof:circleimageview:2.2.0'
+    //for interactive google maps markers
+    compile 'com.appolica:interactive-info-window:v1.0.6'
 }
 
 //added for Firebase support

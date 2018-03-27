@@ -46,7 +46,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ChatOverviewFragment extends Fragment {
 
-    private Button test;
 //    private Chat chat = new Chat();
     private User userObj = User.getInstance();
     private ListView chatList;
@@ -69,20 +68,9 @@ public class ChatOverviewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         chatList = getView().findViewById(R.id.chatList);
-        test = getView().findViewById(R.id.testChatBtn);
 
         final ChatAdapter chatAdapter = new ChatAdapter();
         chatList.setAdapter(chatAdapter);
-
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Chat chat = userObj.openChat("Uh7H3X2k97cP1AK6mahvfEXsaBB2");
-                chat.sendMessage("test");
-                chatAdapter.notifyDataSetChanged();
-            }
-        });
-
     }
 
     class ChatAdapter extends BaseAdapter {

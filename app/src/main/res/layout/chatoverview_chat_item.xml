@@ -18,10 +18,13 @@
         android:id="@+id/userNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/chatThumbnail"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/chatThumbnail"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/lastMessageTxt"
@@ -29,7 +32,6 @@
         android:layout_height="40dp"
         android:layout_alignStart="@+id/userNameTxt"
         android:layout_below="@+id/userNameTxt"
-        android:layout_marginTop="11dp"
         android:text="TextView" />
 
 </RelativeLayout>

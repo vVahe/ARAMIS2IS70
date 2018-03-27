@@ -83,7 +83,7 @@
 
         <EditText
             android:id="@+id/messageField"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
@@ -95,11 +95,10 @@
             android:id="@+id/sendMessageBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/messageField"
-            android:layout_alignBottom="@+id/messageField"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="17dp"
-            android:text="send message" />
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/messageField"
+            android:text="send" />
     </RelativeLayout>
 
 </RelativeLayout>

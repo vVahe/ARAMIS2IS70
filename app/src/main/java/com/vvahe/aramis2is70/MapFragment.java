@@ -44,7 +44,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private User userObj = User.getInstance(); //reference to user Object
     private int radiusSetting = userObj.radiusSetting; //variable for radius
-    private Chat chat;
 
     private String uID = userObj.userID; //currently logged in user ID
     private Button testBtn; //for testing only
@@ -124,10 +123,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String[] temp = (String[]) marker.getTag();
-                chat = new Chat(temp[0]);
-                String chatID = chat.getChatID(temp[0]);
+                Chat chat = userObj.openChat(temp[0]);
                 Intent toChatInstance = new Intent(getContext(), ChatInstanceActivity.class);
-                toChatInstance.putExtra("chatID", chatID);
+                toChatInstance.putExtra("chatID", chat.chatID);
                 startActivity(toChatInstance);
             }
         });

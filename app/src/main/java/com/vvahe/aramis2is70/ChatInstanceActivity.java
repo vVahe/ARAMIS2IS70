@@ -76,13 +76,16 @@ public class ChatInstanceActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.backChatBtn);
         messageList = findViewById(R.id.messageList);
 
-        chatRef.child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
+        final MessageAdapter[] messageAdapter = new MessageAdapter[1];
+
+        chatRef.child("messages").orderByChild("timeSend").addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 chatObj.setDataInMessages(dataSnapshot);
-                final MessageAdapter messageAdapter = new MessageAdapter();
-                messageList.setAdapter(messageAdapter);
+                messageAdapter[0] = new MessageAdapter();
+                messageList.setAdapter(messageAdapter[0]);
+                messageList.setSelection(messageAdapter[0].getCount() - 1);
             }
 
             @Override
@@ -98,7 +101,8 @@ public class ChatInstanceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String messageTemp = messageField.getText().toString();
                 chatObj.sendMessage(messageTemp);
-                //TODO: message list not updated yet after message is send
+                messageField.setText("");
+                messageAdapter[0].notifyDataSetChanged();
             }
         });
 
@@ -116,7 +120,7 @@ public class ChatInstanceActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return chatObj.messages.size(); //TODO: not good need other way to get number of message
+            return chatObj.messages.size();
         }
 
         @Override

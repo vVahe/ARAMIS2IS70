@@ -1,6 +1,7 @@
 package com.vvahe.aramis2is70;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -186,6 +187,17 @@ public class DashboardFragment extends Fragment {
             final TextView courseNameTxt = view.findViewById(R.id.courseNameTxt);
             Button toListBtn = view.findViewById(R.id.availableListBtn);
             courseNameTxt.setText(courseNames.get(position));
+
+            final int positionTemp = position;
+
+            toListBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent toAvailableList = new Intent(getContext(), AvailableListActivity.class);
+                    toAvailableList.putExtra("selected course", courseNames.get(positionTemp));
+                    startActivity(toAvailableList);
+                }
+            });
 
             return view;
         }

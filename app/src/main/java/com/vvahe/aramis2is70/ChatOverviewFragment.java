@@ -71,6 +71,20 @@ public class ChatOverviewFragment extends Fragment {
 
         final ChatAdapter chatAdapter = new ChatAdapter();
         chatList.setAdapter(chatAdapter);
+
+        userObj.firebaseThisUser.child("chats").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     class ChatAdapter extends BaseAdapter {

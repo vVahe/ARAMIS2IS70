@@ -107,6 +107,7 @@ public class CourseListActivity extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
                 final String course = courseList.get(position);
+                Toast.makeText(CourseListActivity.this, "Unenrolled for: " + course, Toast.LENGTH_LONG).show();
                 userObj.removeEnrolledCourse(course);
                 courseList.remove(course);
                 mAdapter.notifyDataSetChanged();

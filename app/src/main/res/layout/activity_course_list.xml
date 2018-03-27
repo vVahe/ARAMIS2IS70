@@ -36,12 +36,13 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars = "vertical"
             android:layout_weight="1"
             android:id="@+id/courseListView">
-        </ListView>
+        </android.support.v7.widget.RecyclerView>
 
         <Button
             android:id="@+id/addCourseButton"

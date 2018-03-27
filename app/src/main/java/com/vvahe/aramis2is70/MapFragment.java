@@ -1,5 +1,6 @@
 package com.vvahe.aramis2is70;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -122,10 +123,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Log.i("TAG", "click");
                 String[] temp = (String[]) marker.getTag();
-                Log.i("TAG", "other id = " + temp[0]);
                 chat = new Chat(temp[0]);
+                String chatID = chat.getChatID(temp[0]);
+                Intent toChatInstance = new Intent(getContext(), ChatInstanceActivity.class);
+                toChatInstance.putExtra("chatID", chatID);
+                startActivity(toChatInstance);
             }
         });
     }
@@ -168,7 +171,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     }
                     //if user is in radius save userID in list
-                    if (inRadius(locX, locY, radiusSetting)) { //&& (userObj.selectedCourse.equals(selectedCourse))
+                    if (inRadius(locX, locY, radiusSetting) && (otherUserID != uID)) { //&& (userObj.selectedCourse.equals(selectedCourse))
                         String[] attributes = {otherUserID, firstName, lastName, locX.toString(), locY.toString(), study, selectedCourse};
                         nearUsers.add(attributes);
                     }

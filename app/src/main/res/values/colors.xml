@@ -7,4 +7,6 @@
     I needed it for the Switch color -->
     <color name="colorAccent">#dbdbdb</color>
     <color name="colorMenu">#a2d5ff</color>
+
+    <color name="splashScreen">#47a3ef</color>
 </resources>

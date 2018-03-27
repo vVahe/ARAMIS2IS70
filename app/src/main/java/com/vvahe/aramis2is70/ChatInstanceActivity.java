@@ -2,6 +2,8 @@ package com.vvahe.aramis2is70;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -41,11 +46,14 @@ public class ChatInstanceActivity extends AppCompatActivity {
     private User userObj = User.getInstance();
     private Chat chatObj;
 
+    private DatabaseReference firebaseOtherUser = FirebaseDatabase.getInstance().getReference().child("Users");
+
     private EditText messageField;
     private TextView otherUserName;
 //    private CircleImageView otherUserImage;
     private Button sendMesageBtn;
     private ImageButton backBtn;
+    private CircleImageView otherUserImage;
 
     private String userID;
     private String chatID;
@@ -75,6 +83,34 @@ public class ChatInstanceActivity extends AppCompatActivity {
         messageField = findViewById(R.id.messageField);
         backBtn = findViewById(R.id.backChatBtn);
         messageList = findViewById(R.id.messageList);
+        otherUserImage = findViewById(R.id.otherUserImage);
+
+        StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
+        picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                otherUserImage.setImageBitmap(bmp);
+            }
+        });
+
+        firebaseOtherUser.child(otherUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String firstName = ((firstName = dataSnapshot.child("firstName").getValue(String.class)) != null) ? firstName : "";
+                String middleName = ((middleName = dataSnapshot.child("middleName").getValue(String.class)) != null) ? middleName : "";
+                String lastName = ((lastName = dataSnapshot.child("lastName").getValue(String.class)) != null) ? lastName : "";
+                if (middleName.equals("")) {
+                    otherUserName.setText(firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1));
+                } else {
+                    otherUserName.setText(firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + middleName + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         final MessageAdapter[] messageAdapter = new MessageAdapter[1];
 

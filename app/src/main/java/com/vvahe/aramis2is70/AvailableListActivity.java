@@ -1,5 +1,6 @@
 package com.vvahe.aramis2is70;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,8 @@ public class AvailableListActivity extends AppCompatActivity {
         availableList = findViewById(R.id.availableList);
         backBtn = findViewById(R.id.backDashboardBtn);
         selectedCourse = findViewById(R.id.selectedCourse);
+
+        selectedCourse.setText(selCourse);
 
         AvailabeListAdapter availabeListAdapter = new AvailabeListAdapter();
         availableList.setAdapter(availabeListAdapter);
@@ -123,8 +126,24 @@ public class AvailableListActivity extends AppCompatActivity {
 
             view = getLayoutInflater().inflate(R.layout.available_list_item, null);
 
+            final View finalView = view;
 
+            final TextView name = finalView.findViewById(R.id.ALNameTxt);
+            final TextView btn = finalView.findViewById(R.id.sendMessageBtn);
 
+            final String[] otherUser = availableUsers.get(position);
+
+            name.setText(otherUser[1] + otherUser[2]);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Chat chat = userObj.openChat(otherUser[0]);
+                    Intent toChatInstance = new Intent(v.getContext(), ChatInstanceActivity.class);
+                    toChatInstance.putExtra("chatID", chat.chatID);
+                    startActivity(toChatInstance);
+                }
+            });
 
            return view;
         }

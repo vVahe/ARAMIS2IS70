@@ -45,6 +45,10 @@
             android:name=".ChatInstanceActivity"
             android:label="Chat Instance"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AvailableListActivity"
+            android:label="Available List"
+            android:theme="@style/AppTheme" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -48,17 +48,15 @@ public class AvailableListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_list);
 
-        selCourse = getIntent().getExtras().getString("chatID");
+        selCourse = getIntent().getExtras().getString("selected course");
+
+        Log.i("tag1", selCourse);
 
         availableList = findViewById(R.id.availableList);
         backBtn = findViewById(R.id.backDashboardBtn);
         selectedCourse = findViewById(R.id.selectedCourse);
 
         selectedCourse.setText(selCourse);
-
-        AvailabeListAdapter availabeListAdapter = new AvailabeListAdapter();
-        availableList.setAdapter(availabeListAdapter);
-
         getAvailabeUsers(selCourse);
 
     }
@@ -94,6 +92,9 @@ public class AvailableListActivity extends AppCompatActivity {
                     }
                     Log.i("TAG", "nearbyUsers = " + availableUsers);
                 }
+                AvailabeListAdapter availabeListAdapter = new AvailabeListAdapter();
+                availableList.setAdapter(availabeListAdapter);
+                Log.i("TAG", "setAdapter");
             }
 
             @Override
@@ -106,23 +107,25 @@ public class AvailableListActivity extends AppCompatActivity {
 
     private class AvailabeListAdapter extends BaseAdapter {
 
+
         @Override
         public int getCount() {
-            return 0;
+            return availableUsers.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return availableUsers.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
+            Log.i("TAG2", availableUsers.get(position)[1] );
 
             view = getLayoutInflater().inflate(R.layout.available_list_item, null);
 
@@ -132,6 +135,8 @@ public class AvailableListActivity extends AppCompatActivity {
             final TextView btn = finalView.findViewById(R.id.sendMessageBtn);
 
             final String[] otherUser = availableUsers.get(position);
+            Log.i("TAG1", availableUsers.get(position)[1] );
+
 
             name.setText(otherUser[1] + otherUser[2]);
 

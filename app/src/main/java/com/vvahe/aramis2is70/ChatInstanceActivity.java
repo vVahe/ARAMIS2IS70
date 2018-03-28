@@ -83,7 +83,7 @@ public class ChatInstanceActivity extends AppCompatActivity {
         chatID = getIntent().getExtras().getString("chatID"); //get chat ID
         chatRef = firebaseChat.child(chatID); //database reference to this chat
         otherUserID = chatID.replace(userObj.userID, ""); //get otherUserId (= chatID - userID)
-
+        otherUserName.setText(userObj.usernames.get(userObj.chatsIDs.indexOf(chatID)));
         chatObj = new Chat(otherUserID); //Create chat object
         final MessageAdapter[] messageAdapter = new MessageAdapter[1]; //Create messageAdapter
 
@@ -98,9 +98,13 @@ public class ChatInstanceActivity extends AppCompatActivity {
                 String middleName = ((middleName = dataSnapshot.child("middleName").getValue(String.class)) != null) ? middleName : "";
                 String lastName = ((lastName = dataSnapshot.child("lastName").getValue(String.class)) != null) ? lastName : "";
                 if (middleName.equals("")) {
-                    otherUserName.setText(firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1));
+                    String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
+                    userObj.usernames.add(userObj.chatsIDs.indexOf(chatID), username);
+                    otherUserName.setText(username);
                 } else {
-                    otherUserName.setText(firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + middleName + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1));
+                    String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1) + " " + middleName + " " + lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
+                    userObj.usernames.add(userObj.chatsIDs.indexOf(chatID), username);
+                    otherUserName.setText(username);
                 }
             }
             @Override

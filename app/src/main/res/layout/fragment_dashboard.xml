@@ -42,16 +42,17 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profilePic"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginEnd="242dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_above="@+id/privacySetTxt"
+                android:layout_alignStart="@+id/privacySetTxt"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
-                android:src="@drawable/profilepic" />
+                android:src="@mipmap/default_user_pic_hdpi" />
 
             <TextView
                 android:id="@+id/loggedInAsTxt"

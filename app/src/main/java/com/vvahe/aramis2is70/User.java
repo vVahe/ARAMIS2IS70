@@ -34,6 +34,7 @@ public class User {
     public ArrayList<String> chatsIDs = new ArrayList<>();            //array with IDS from chat from user (for firebase)
     public String pathToProfilePic = "";
     public ArrayList<String> pathToProfilePics = new ArrayList<>();
+    public ArrayList<String> usernames = new ArrayList<>();
 
     public boolean userCreated = false;
     public boolean dataReady = false;
@@ -85,14 +86,17 @@ public class User {
     public Chat openChat(String otherUserID){
         Chat chat = new Chat(otherUserID);
         if (!(chatsIDs.contains(chat.chatID))){
+
             ContextWrapper cw = new ContextWrapper(context);
             File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             pathToProfilePics.add("");
 
+            usernames.add("");
+
             chatsIDs.add(chat.chatID);
             firebaseThisUser.child("chats").setValue(this.chatsIDs);
         }
-        Log.wtf("TAG", "openChat() executed");
+
         return chat;
     }
 
@@ -101,6 +105,7 @@ public class User {
      */
     public void deleteChat(String chatID) {
         pathToProfilePics.remove(chatsIDs.indexOf(chatID));
+        usernames.remove(chatsIDs.indexOf(chatID));
         chatsIDs.remove(chatID);
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
@@ -291,6 +296,9 @@ public class User {
                     chatsIDs.add(dsChild.getValue(String.class));
                     if (pathToProfilePics.size() <= x){
                         pathToProfilePics.add("");
+                    }
+                    if (usernames.size() <= x){
+                        usernames.add("");
                     }
                     x++;
                 }

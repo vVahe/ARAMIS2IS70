@@ -126,6 +126,11 @@ public class ChatOverviewFragment extends Fragment {
 
             final View finalView = view;
 
+            final TextView userName = finalView.findViewById(R.id.userNameTxt); //user name view
+            userName.setText(userObj.usernames.get(userObj.chatsIDs.indexOf(chatID)));
+
+            final CircleImageView availableBorder = finalView.findViewById(R.id.chatThumbnailAvailable);
+            availableBorder.setVisibility(View.INVISIBLE);
             final CircleImageView picture = finalView.findViewById(R.id.chatThumbnail); //picture view
             loadImageFromStorage(position, picture, otherUserID);
 
@@ -136,19 +141,30 @@ public class ChatOverviewFragment extends Fragment {
                     chat.setDataInMessages(dataSnapshot);
 
                     final TextView lastMsg = finalView.findViewById(R.id.lastMessageTxt); //last message view
-                    final TextView userName = finalView.findViewById(R.id.userNameTxt); //user name view
                     final RelativeLayout chatInstance = finalView.findViewById(R.id.chatInstance);  //chatinstance view
 
-                    firebaseOtherUser.child(otherUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    firebaseOtherUser.child(otherUserID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            Boolean available = ((available = dataSnapshot.child("available").getValue(Boolean.class)) != null) ? available : false;
                             String firstName= ((firstName = dataSnapshot.child("firstName").getValue(String.class)) != null) ? firstName : "";
                             String middleName = ((middleName = dataSnapshot.child("middleName").getValue(String.class)) != null) ? middleName : "";
                             String lastName = ((lastName = dataSnapshot.child("lastName").getValue(String.class)) != null) ? lastName : "";
+
                             if (middleName.equals("")){
-                                userName.setText(firstName.substring(0, 1).toUpperCase()+firstName.substring(1)+" "+lastName.substring(0, 1).toUpperCase()+lastName.substring(1));
+                                String displayName = firstName.substring(0, 1).toUpperCase()+firstName.substring(1)+" "+lastName.substring(0, 1).toUpperCase()+lastName.substring(1);
+                                userObj.usernames.set(userObj.chatsIDs.indexOf(chatID), displayName);
+                                userName.setText(displayName);
                             } else {
-                                userName.setText(firstName.substring(0, 1).toUpperCase()+firstName.substring(1)+" "+middleName+" "+lastName.substring(0, 1).toUpperCase()+lastName.substring(1));
+                                String displayName = firstName.substring(0, 1).toUpperCase()+firstName.substring(1)+" "+middleName+" "+lastName.substring(0, 1).toUpperCase()+lastName.substring(1);
+                                userObj.usernames.set(userObj.chatsIDs.indexOf(chatID), displayName);
+                                userName.setText(displayName);
+                            }
+
+                            if (available){
+                                availableBorder.setVisibility(View.VISIBLE);
+                            } else {
+                                availableBorder.setVisibility(View.INVISIBLE);
                             }
 
                             if (chat.messages.size() == 0) {

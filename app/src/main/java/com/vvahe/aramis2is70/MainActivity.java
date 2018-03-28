@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
 
         } else { //get current user and get the user object using userID
-
             userObj.getData(currentUser.getUid());
             userObj.context = getApplicationContext();
         }
@@ -73,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         mapFragment = new MapFragment();
         chatOverviewFragment = new ChatOverviewFragment();
         settingsFragment = new SettingsFragment();
-
         startGPS_Service();
 
         /* set first fragment to be displayed on startup */

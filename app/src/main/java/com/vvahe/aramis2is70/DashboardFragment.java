@@ -27,6 +27,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,6 +57,7 @@ public class DashboardFragment extends Fragment {
 
     private StorageReference mStorage;  // reference to root firebaseStorage
     private StorageReference picStorage;    // reference to profile picture in storage
+    private FirebaseAuth mAuth;
 
     private String[] activeCourses = {"2IPC0", "2IS70"};
 
@@ -88,42 +91,51 @@ public class DashboardFragment extends Fragment {
         studyTxt = getView().findViewById(R.id.studyTxt);
         profilePicture = getView().findViewById(R.id.profilePic);
         mStorage = FirebaseStorage.getInstance().getReference();
-        picStorage = mStorage.child(userObj.userID).child("Profile Picture");
 
         availableSwitch = getView().findViewById(R.id.availableSwitch);
         locationSwitch = getView().findViewById(R.id.locationSwitch);
 
-        userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    if (ds.getKey().equals("available")){
-                        availableSwitch.setChecked(ds.getValue(boolean.class));
-                    } else if (ds.getKey().equals("locationShow")){
-                        locationSwitch.setChecked(ds.getValue(boolean.class));
-                    } else if (ds.getKey().equals("firstName")){
-                        userNameTxt.setText(ds.getValue(String.class));
-                    } else if (ds.getKey().equals("study")) {
-                        studyTxt.setText(ds.getValue(String.class));
-                    } else if (ds.getKey().equals("selectedCourse")){
-                        selectedCourse = ds.getValue(String.class);
-                    } else if (ds.getKey().equals("enrolledIn")){
-                        courseNames.clear();
-                        for(DataSnapshot dsChild : ds.getChildren()) {
-                            courseNames.add(dsChild.getValue(String.class));
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) { //not logged in send to login page
+            Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(loginIntent);
+            userObj.reset();
+        } else { //get current user and get the user object using userID
+            Log.wtf("executed", "onviewCreated() executed");
+            userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        if (ds.getKey().equals("available")){
+                            availableSwitch.setChecked(ds.getValue(boolean.class));
+                        } else if (ds.getKey().equals("locationShow")){
+                            locationSwitch.setChecked(ds.getValue(boolean.class));
+                        } else if (ds.getKey().equals("firstName")){
+                            userNameTxt.setText(ds.getValue(String.class));
+                        } else if (ds.getKey().equals("study")) {
+                            studyTxt.setText(ds.getValue(String.class));
+                        } else if (ds.getKey().equals("selectedCourse")){
+                            selectedCourse = ds.getValue(String.class);
+                        } else if (ds.getKey().equals("enrolledIn")){
+                            courseNames.clear();
+                            for(DataSnapshot dsChild : ds.getChildren()) {
+                                courseNames.add(dsChild.getValue(String.class));
+                            }
+
                         }
-
                     }
+                    CourseAdapter courseAdapter = new CourseAdapter();
+                    courseList.setAdapter(courseAdapter);
                 }
-                CourseAdapter courseAdapter = new CourseAdapter();
-                courseList.setAdapter(courseAdapter);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
         courseList = getView().findViewById(R.id.courseList);
 
@@ -230,6 +242,11 @@ public class DashboardFragment extends Fragment {
     }
 
     public  void setPicture() {
+        try {
+            picStorage = mStorage.child(userObj.userID).child("Profile Picture");
+        } catch (IllegalArgumentException e){
+
+        }
         if(picStorage != null){
             picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override

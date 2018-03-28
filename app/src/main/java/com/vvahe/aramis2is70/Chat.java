@@ -52,14 +52,14 @@ public class Chat {
         for(DataSnapshot chat : dataSnapshot.getChildren()){
             String message = "";
             String userID = "";
-            Map<String, String> timeSend = ServerValue.TIMESTAMP;
+            Long timeSend = new Long(0);
             for(DataSnapshot ds : chat.getChildren()) {
                 if (ds.getKey().equals("string")) {
                     message = ds.getValue(String.class);
                 } else if (ds.getKey().equals("user")) {
                     userID = ds.getValue(String.class);
                 } else if (ds.getKey().equals("timeSend")) {
-                    //timeSend = ds.getValue(Map.class);
+                    timeSend = ds.getValue(Long.class);
                 } else {
                     //what else to store for message
                 }

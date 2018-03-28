@@ -49,6 +49,7 @@ public class Chat {
     }
 
     public void setDataInMessages(DataSnapshot dataSnapshot){
+        messages.clear();
         for(DataSnapshot chat : dataSnapshot.getChildren()){
             String message = "";
             String userID = "";

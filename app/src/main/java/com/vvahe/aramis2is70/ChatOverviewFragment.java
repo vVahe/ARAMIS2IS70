@@ -1,6 +1,7 @@
 package com.vvahe.aramis2is70;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +34,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,16 +127,7 @@ public class ChatOverviewFragment extends Fragment {
             final View finalView = view;
 
             final CircleImageView picture = finalView.findViewById(R.id.chatThumbnail); //picture view
-            StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
-            picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    picture.setImageBitmap(bmp);
-                }
-            });
-
-
+            loadImageFromStorage(position, picture, otherUserID);
 
             firebaseChat.child(userObj.chatsIDs.get(position)).child("messages").orderByChild("timeSend").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -189,7 +186,55 @@ public class ChatOverviewFragment extends Fragment {
 
                 }
             });
+
             return view;
+        }
+
+        private String saveToInternalStorage(Bitmap bitmapImage, String otherUserID){
+            ContextWrapper cw = new ContextWrapper(getContext());
+            // path to /data/data/yourapp/app_data/imageDir
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            // Create imageDir
+            File mypath=new File(directory,otherUserID+".bmp");
+
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(mypath);
+                // Use the compress method on the BitMap object to write image to the OutputStream
+                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            } catch (Exception e) {
+                //e.printStackTrace();
+            } finally {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                }
+            }
+            return directory.getAbsolutePath();
+        }
+
+        private void loadImageFromStorage(Integer position, CircleImageView view, String otherUserID) {
+            try {
+                File f=new File(userObj.pathToProfilePics.get(position), otherUserID+".bmp");
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                view.setImageBitmap(b);
+            } catch (FileNotFoundException | IndexOutOfBoundsException e) {
+                getImage(position, view, otherUserID);
+            }
+        }
+
+        private void getImage(final Integer position, final CircleImageView view, final String otherUserID){
+            StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
+            picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    view.setImageBitmap(bmp);
+                    String path = saveToInternalStorage(bmp, otherUserID);
+                    userObj.pathToProfilePics.add(position, path);
+                }
+            });
         }
     }
 }

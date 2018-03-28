@@ -1,6 +1,8 @@
 package com.vvahe.aramis2is70;
 
 import android.app.ListActivity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +35,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -139,14 +146,14 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        setPicture();
+        loadImageFromStorage(userObj.pathToProfilePic);
     }
 
     class CourseAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return courseNames.size(); //amount of items
+            return courseNames.size()+1; //amount of items
         }
 
         @Override
@@ -167,37 +174,56 @@ public class DashboardFragment extends Fragment {
             RadioButton radioBtn = view.findViewById(R.id.radioButton);
             radioBtn.setTag(position);
             final int positionHolder = position;
-
-            //stuff that handles only one button being allowed to be selected
-            if (courseNames.get(position).equals(selectedCourse)){
-                radioBtn.setChecked(true);
-            } else {
-                radioBtn.setChecked(false);
-            }
-            radioBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    notifyDataSetChanged();
-                    String courseID = courseNames.get(positionHolder);
-                    userObj.setSelectedCourse(courseID);
-
-                }
-            });
-
             final TextView courseNameTxt = view.findViewById(R.id.courseNameTxt);
             Button toListBtn = view.findViewById(R.id.availableListBtn);
-            courseNameTxt.setText(courseNames.get(position));
 
-            final int positionTemp = position;
-
-            toListBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent toAvailableList = new Intent(getContext(), AvailableListActivity.class);
-                    toAvailableList.putExtra("selected course", courseNames.get(positionTemp));
-                    startActivity(toAvailableList);
+            if (!(position == courseNames.size())) {
+                Log.wtf("pos", String.valueOf(position));
+                //stuff that handles only one button being allowed to be selected
+                if (courseNames.get(position).equals(selectedCourse)) {
+                    radioBtn.setChecked(true);
+                } else {
+                    radioBtn.setChecked(false);
                 }
-            });
+                radioBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String courseID = courseNames.get(positionHolder);
+                        userObj.setSelectedCourse(courseID);
+                        notifyDataSetChanged();
+                    }
+                });
+
+                courseNameTxt.setText(courseNames.get(position));
+
+                final int positionTemp = position;
+
+                toListBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent toAvailableList = new Intent(getContext(), AvailableListActivity.class);
+                        toAvailableList.putExtra("selected course", courseNames.get(positionTemp));
+                        startActivity(toAvailableList);
+                    }
+                });
+            } else {
+                if ("".equals(selectedCourse)){
+                    radioBtn.setChecked(true);
+                } else {
+                    radioBtn.setChecked(false);
+                }
+
+                radioBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userObj.unsetSelectedCourse();
+                        notifyDataSetChanged();
+                    }
+                });
+                courseNameTxt.setText("Not studying");
+                toListBtn.setVisibility(View.GONE);
+                toListBtn.setVisibility(View.INVISIBLE);
+            }
 
             return view;
         }
@@ -210,8 +236,44 @@ public class DashboardFragment extends Fragment {
                 public void onSuccess(byte[] bytes) {
                     Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     profilePicture.setImageBitmap(bmp);
+                    String path = saveToInternalStorage(bmp);
+                    userObj.pathToProfilePic = path;
                 }
             });
+        }
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(getContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,userObj.userID+".bmp");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            //e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                //e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
+    }
+
+    private void loadImageFromStorage(String path) {
+        try {
+            File f=new File(path, userObj.userID+".bmp");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            profilePicture.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            setPicture();
         }
     }
 

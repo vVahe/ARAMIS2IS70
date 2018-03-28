@@ -94,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         User user = User.getInstance();
                         user.register(uID, email, firstName, middleName, lastName, study, year);
+                        user.context = getApplicationContext();
 
                         /* if registration was successful we can retrieve the unique user_id */
 

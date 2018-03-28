@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         } else { //get current user and get the user object using userID
 
             userObj.getData(currentUser.getUid());
+            userObj.context = getApplicationContext();
         }
 
         dashboardFragment = new DashboardFragment();

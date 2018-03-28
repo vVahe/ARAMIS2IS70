@@ -109,6 +109,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
+                userObj.reset();
                 Intent logoutIntent = new Intent(getActivity(), LoginActivity.class);
                 /* prevents user from going back once logged in, they will have to use logout button*/
                 logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

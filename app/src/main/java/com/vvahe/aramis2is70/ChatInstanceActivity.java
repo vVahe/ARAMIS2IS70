@@ -1,6 +1,8 @@
 package com.vvahe.aramis2is70;
 
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +34,11 @@ import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 
@@ -81,14 +88,7 @@ public class ChatInstanceActivity extends AppCompatActivity {
         final MessageAdapter[] messageAdapter = new MessageAdapter[1]; //Create messageAdapter
 
         /* Display profile image from other user */
-        StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
-        picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                otherUserImage.setImageBitmap(bmp);
-            }
-        });
+        loadImageFromStorage(otherUserImage, otherUserID);
 
          /* Display info from other user */
         firebaseOtherUser.child(otherUserID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -141,10 +141,58 @@ public class ChatInstanceActivity extends AppCompatActivity {
 
     }
 
+    private String saveToInternalStorage(Bitmap bitmapImage, String otherUserID){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,otherUserID+".bmp");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            //e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                //e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
+    }
+
+    private void loadImageFromStorage(CircleImageView view, String otherUserID) {
+        try {
+            File f=new File(userObj.pathToProfilePics.get(userObj.chatsIDs.indexOf(chatID)), otherUserID+".bmp");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            view.setImageBitmap(b);
+        } catch (FileNotFoundException | IndexOutOfBoundsException e) {
+            getImage(view, otherUserID);
+        }
+    }
+
+    private void getImage(final CircleImageView view, final String otherUserID) {
+        StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
+        picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                view.setImageBitmap(bmp);
+                String path = saveToInternalStorage(bmp, otherUserID);
+                userObj.pathToProfilePics.add(userObj.chatsIDs.indexOf(chatID), path);
+            }
+        });
+    }
+
     private class MessageAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
+            Log.wtf("size", String.valueOf(chatObj.messages.size()));
             return chatObj.messages.size();
         }
 
@@ -185,5 +233,7 @@ public class ChatInstanceActivity extends AppCompatActivity {
 
             return finalView;
         }
+
+
     }
 }

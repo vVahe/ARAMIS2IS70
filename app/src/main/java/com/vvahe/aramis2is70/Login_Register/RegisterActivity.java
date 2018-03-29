@@ -1,4 +1,4 @@
-package com.vvahe.aramis2is70;
+package com.vvahe.aramis2is70.Login_Register;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,6 +16,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.vvahe.aramis2is70.MainActivity;
+import com.vvahe.aramis2is70.R;
+import com.vvahe.aramis2is70.User;
 
 public class RegisterActivity extends AppCompatActivity {
 

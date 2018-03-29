@@ -38,9 +38,40 @@
 
     <TextView
         android:id="@+id/lastMessageTxt"
-        android:layout_width="250dp"
+        android:layout_width="200dp"
         android:layout_height="40dp"
         android:layout_alignStart="@+id/userNameTxt"
         android:layout_below="@+id/userNameTxt" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/numberNewMessagesGreen"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:visibility="invisible"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/lastMessageTxt"
+        android:layout_marginEnd="22dp"
+        android:src="@mipmap/green" />
+
+    <TextView
+        android:id="@+id/timeLastSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="17dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/numberNewMessages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/numberNewMessagesGreen"
+        android:layout_alignStart="@+id/numberNewMessagesGreen"
+        android:layout_marginBottom="3.5dp"
+        android:layout_marginStart="5.5dp"
+        android:visibility="invisible"
+ />
 
 </RelativeLayout>

@@ -1,10 +1,12 @@
-package com.vvahe.aramis2is70;
+package com.vvahe.aramis2is70.Other;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
+
+import com.vvahe.aramis2is70.MainActivity;
+import com.vvahe.aramis2is70.R;
 
 public class SplashScreenActivity extends Activity {
 

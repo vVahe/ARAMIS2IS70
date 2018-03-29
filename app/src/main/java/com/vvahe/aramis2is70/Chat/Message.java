@@ -1,4 +1,4 @@
-package com.vvahe.aramis2is70;
+package com.vvahe.aramis2is70.Chat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -22,10 +22,9 @@ public class Message {
     public Map<String, String> timeSend;       //time this message was send
     public Long timeSendLong = new Long(0);
     public String message;      //contents of this message
+    public Boolean hasRed;
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference firebaseThisChat = FirebaseDatabase.getInstance().getReference().child("chats");
-    private DatabaseReference firebaseThisMessage;
+    public DatabaseReference firebaseThisMessage;
 
     /*
         creates new message object
@@ -36,27 +35,29 @@ public class Message {
         this.timeSend = timeSend;
         this.message = message;
         this.firebaseThisMessage = firebaseThisChat.child(messageID);
+        this.hasRed = false;
     }
 
     /*
         creates new message object
      */
-    public Message(String messageID, String userID, String message, Long timeSend, DatabaseReference firebaseThisChat){
+    public Message(String messageID, String userID, String message, Long timeSend, Boolean hasRed, DatabaseReference firebaseThisChat){
         this.messageID = messageID;
         this.userID = userID;
         this.timeSendLong = timeSend;
         this.message = message;
         this.firebaseThisMessage = firebaseThisChat.child(messageID);
+        this.hasRed = hasRed;
     }
 
     /*
         sends all info in this class to firebase
      */
     public void send(){
-        Log.wtf("send", "executed");
         firebaseThisMessage.child("user").setValue(this.userID);
         firebaseThisMessage.child("timeSend").setValue(this.timeSend);
         firebaseThisMessage.child("string").setValue(this.message);
+        firebaseThisMessage.child("hasRed").setValue(this.hasRed);
     }
 
     public String getTime(){

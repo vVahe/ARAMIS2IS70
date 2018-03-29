@@ -8,7 +8,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.vvahe.aramis2is70.Chat.Chat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -99,18 +98,6 @@ public class User {
         }
 
         return chat;
-    }
-
-    public void setChatToTop(String thisChatID){
-        ArrayList<String> copyChatIDs = new ArrayList(chatsIDs);
-        chatsIDs.clear();
-        chatsIDs.add(thisChatID);
-        for(String chatID : copyChatIDs){
-            if (!(chatID.equals(thisChatID))) {
-                chatsIDs.add(chatID);
-            }
-        }
-        firebaseThisUser.child("chats").setValue(chatsIDs);
     }
 
     /*

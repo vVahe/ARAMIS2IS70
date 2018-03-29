@@ -1,4 +1,4 @@
-package com.vvahe.aramis2is70.Settings;
+package com.vvahe.aramis2is70;
 
 
 import android.content.Intent;
@@ -7,10 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -18,11 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.vvahe.aramis2is70.Login_Register.LoginActivity;
-import com.vvahe.aramis2is70.R;
-import com.vvahe.aramis2is70.Settings.CourseListActivity;
-import com.vvahe.aramis2is70.Settings.ProfileActivity;
-import com.vvahe.aramis2is70.User;
 
 
 /**

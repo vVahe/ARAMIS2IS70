@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vvahe.aramis2is70.Settings.ProfileActivity">
+    tools:context="com.vvahe.aramis2is70.ProfileActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

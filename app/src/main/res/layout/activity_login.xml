@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context="com.vvahe.aramis2is70.Login_Register.LoginActivity">
+    tools:context="com.vvahe.aramis2is70.LoginActivity">
 
     <Button
         android:id="@+id/btnLogin"

@@ -1,4 +1,4 @@
-package com.vvahe.aramis2is70.Other;
+package com.vvahe.aramis2is70;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
-import com.vvahe.aramis2is70.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by VahePC on 3/17/2018.

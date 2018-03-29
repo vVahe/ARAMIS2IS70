@@ -1,5 +1,6 @@
-package com.vvahe.aramis2is70.Dashboard;
+package com.vvahe.aramis2is70;
 
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -13,10 +14,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -30,9 +36,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.vvahe.aramis2is70.Login_Register.LoginActivity;
-import com.vvahe.aramis2is70.R;
-import com.vvahe.aramis2is70.User;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -115,16 +115,6 @@ public class CourseListActivity extends AppCompatActivity {
         });
 
         itemTouchHelper.attachToRecyclerView(recyclerView);
-       /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String course = courseList.get(position);
-                Toast.makeText(CourseListActivity.this, "Unenrolled for: " + course, Toast.LENGTH_LONG).show();
-                userObj.removeEnrolledCourse(courseList.get(position));
-                getEnrolledCourses(); // update list of enrolled courses
-                Log.i("tag", "usercourses"+ userObj.enrolledInIDs);
-            }
-        });*/
     }
 
     public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{

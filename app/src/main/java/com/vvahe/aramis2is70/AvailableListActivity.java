@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,10 +35,11 @@ public class AvailableListActivity extends AppCompatActivity {
     User userObj = User.getInstance();
     private String uID = userObj.userID; //currently logged in user ID
 
+
     private DatabaseReference firebaseUsers = FirebaseDatabase.getInstance().getReference().child("Users"); //database reference to users
 
     private ListView availableList;
-    private ImageButton backBtn;
+    private ImageButton back;
     private TextView selectedCourse;
     private String selCourse;
 
@@ -53,12 +55,23 @@ public class AvailableListActivity extends AppCompatActivity {
         Log.i("tag1", selCourse);
 
         availableList = findViewById(R.id.availableList);
-        backBtn = findViewById(R.id.backDashboardBtn);
+        back = findViewById(R.id.backDashboardBtn);
         selectedCourse = findViewById(R.id.selectedCourse);
 
         selectedCourse.setText(selCourse);
         getAvailabeUsers(selCourse);
 
+        back();
+
+    }
+
+    public void back(){
+        back.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(AvailableListActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void getAvailabeUsers(final String selCourse) {
@@ -76,24 +89,36 @@ public class AvailableListActivity extends AppCompatActivity {
                 //get userID's of nearby users
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     Log.i("TAG", "ds = " + ds.getKey());
+                    otherUserID = ds.getKey();
+                    Log.i("TAG3", "ds = " + otherUserID + " and " + userObj.userID);
 
                     for (DataSnapshot ds2 : ds.getChildren()) {
                         Log.i("TAG", "ds2 = " + ds2);
-                        otherUserID = ds.getKey().toString();
                         if (ds2.getKey().equals("firstName")) firstName = (String) ds2.getValue();
                         if (ds2.getKey().equals("lastName")) lastName = (String) ds2.getValue();
                         if (ds2.getKey().equals("selectedCourse")) selectedCourse = (String) ds2.getValue();
 
                     }
                     //if user is in radius save userID in list
-                    if (selectedCourse.equals(selCourse) && (otherUserID != uID)) { //&& (userObj.selectedCourse.equals(selectedCourse))
+                    if (selectedCourse.equals(selCourse) && (!otherUserID.equals(uID))) { //&& (userObj.selectedCourse.equals(selectedCourse))
                         String[] attributes = {otherUserID, firstName, lastName};
+                        Log.i("TAG5", "ds = " + otherUserID + " and " + userObj.userID);
                         availableUsers.add(attributes);
                     }
                     Log.i("TAG", "nearbyUsers = " + availableUsers);
                 }
                 AvailabeListAdapter availabeListAdapter = new AvailabeListAdapter();
                 availableList.setAdapter(availabeListAdapter);
+                availableList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Chat chat = userObj.openChat(availableUsers.get(position)[0]);
+                        Intent toChatInstance = new Intent(AvailableListActivity.this, ChatInstanceActivity.class);
+                        toChatInstance.putExtra("chatID", chat.chatID);
+                        startActivity(toChatInstance);
+
+                    }
+                });
                 Log.i("TAG", "setAdapter");
             }
 
@@ -140,7 +165,7 @@ public class AvailableListActivity extends AppCompatActivity {
 
             name.setText(otherUser[1] + otherUser[2]);
 
-            btn.setOnClickListener(new View.OnClickListener() {
+            /*btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Chat chat = userObj.openChat(otherUser[0]);
@@ -148,7 +173,7 @@ public class AvailableListActivity extends AppCompatActivity {
                     toChatInstance.putExtra("chatID", chat.chatID);
                     startActivity(toChatInstance);
                 }
-            });
+            });*/
 
            return view;
         }

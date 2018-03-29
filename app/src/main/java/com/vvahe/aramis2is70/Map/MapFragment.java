@@ -1,4 +1,4 @@
-package com.vvahe.aramis2is70;
+package com.vvahe.aramis2is70.Map;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -28,6 +28,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.vvahe.aramis2is70.Chat.ChatInstanceActivity;
+import com.vvahe.aramis2is70.Chat.Chat;
+import com.vvahe.aramis2is70.R;
+import com.vvahe.aramis2is70.User;
 
 import java.util.ArrayList;
 import java.util.List;

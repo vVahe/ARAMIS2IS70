@@ -1,16 +1,14 @@
-package com.vvahe.aramis2is70;
+package com.vvahe.aramis2is70.Chat;
 
-import com.google.android.gms.vision.text.Line;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.vvahe.aramis2is70.User;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.UUID;
 
 public class Chat {
@@ -45,6 +43,7 @@ public class Chat {
         Message m = new Message(UUID.randomUUID().toString(), mainUser.userID, message, ServerValue.TIMESTAMP, firebaseThisChat.child("messages"));
         m.send();
         messages.add(m);
+        mainUser.setChatToTop(chatID);
         setInOtherUser();
     }
 
@@ -54,6 +53,7 @@ public class Chat {
             String message = "";
             String userID = "";
             Long timeSend = new Long(0);
+            Boolean hasRed = false;
             for(DataSnapshot ds : chat.getChildren()) {
                 if (ds.getKey().equals("string")) {
                     message = ds.getValue(String.class);
@@ -61,13 +61,25 @@ public class Chat {
                     userID = ds.getValue(String.class);
                 } else if (ds.getKey().equals("timeSend")) {
                     timeSend = ds.getValue(Long.class);
+                } else if (ds.getKey().equals("hasRed")){
+                    hasRed = ds.getValue(Boolean.class);
                 } else {
-                    //what else to store for message
+
                 }
             }
-            Message newMessage = new Message(chat.getKey(), userID, message, timeSend, firebaseThisChat.child("messages"));
+            Message newMessage = new Message(chat.getKey(), userID, message, timeSend, hasRed, firebaseThisChat.child("messages"));
             messages.add(newMessage);
         }
+    }
+
+    public Integer getNumberOfNewMessages(){
+        Integer counter = 0;
+        for (Message message : messages){
+            if (!(message.userID.equals(mainUser.userID)) && !(message.hasRed)){
+                counter++;
+            }
+        }
+        return counter;
     }
 
 
@@ -92,13 +104,11 @@ public class Chat {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 otherChatsIDs.clear();
-
+                otherChatsIDs.add(chatID);
                 for(DataSnapshot chat : dataSnapshot.getChildren()){
-                    otherChatsIDs.add(chat.getValue(String.class));
-                }
-
-                if (!(otherChatsIDs.contains(chatID))){
-                    otherChatsIDs.add(chatID);
+                    if (!(chat.getValue(String.class).equals(chatID))) {
+                        otherChatsIDs.add(chat.getValue(String.class));
+                    }
                 }
                 firebaseOtherUser.setValue(otherChatsIDs);
             }

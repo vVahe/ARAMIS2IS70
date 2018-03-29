@@ -1,24 +1,20 @@
-package com.vvahe.aramis2is70;
+package com.vvahe.aramis2is70.Chat;
 
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,18 +25,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.vvahe.aramis2is70.R;
+import com.vvahe.aramis2is70.User;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -126,6 +123,10 @@ public class ChatOverviewFragment extends Fragment {
 
             final View finalView = view;
 
+            final CircleImageView newMessagesGreen  = finalView.findViewById(R.id.numberNewMessagesGreen);
+            final TextView newMessages = finalView.findViewById(R.id.numberNewMessages);
+            final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) newMessages.getLayoutParams();
+
             final TextView userName = finalView.findViewById(R.id.userNameTxt); //user name view
             userName.setText(userObj.usernames.get(userObj.chatsIDs.indexOf(chatID)));
 
@@ -142,6 +143,36 @@ public class ChatOverviewFragment extends Fragment {
 
                     final TextView lastMsg = finalView.findViewById(R.id.lastMessageTxt); //last message view
                     final RelativeLayout chatInstance = finalView.findViewById(R.id.chatInstance);  //chatinstance view
+                    final TextView timeSend = finalView.findViewById(R.id.timeLastSend); //time last message
+
+                    Integer numberOfNewMessages = chat.getNumberOfNewMessages();
+                    if (numberOfNewMessages > 0){
+                        if (numberOfNewMessages <= 9){
+                            newMessages.setText(numberOfNewMessages.toString());
+                            try {
+                                Resources r = getResources();
+                                float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8.5f, r.getDisplayMetrics());
+                                params.setMarginStart(Math.round(px));
+                                newMessages.setLayoutParams(params);
+                            } catch (IllegalStateException e){}
+                        } else if (numberOfNewMessages > 9){
+                            newMessages.setText("9+");
+                            try {
+                                Resources r = getResources();
+                                float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.5f, r.getDisplayMetrics());
+                                params.setMarginStart(Math.round(px));
+                                newMessages.setLayoutParams(params);
+                            } catch (IllegalStateException e){}
+                        }
+                        newMessagesGreen.setVisibility(View.VISIBLE);
+                        newMessages.setVisibility(View.VISIBLE);
+
+                    } else{
+                        newMessages.setVisibility(View.INVISIBLE);
+                        newMessages.setText("0");
+                        newMessagesGreen.setVisibility(View.INVISIBLE);
+                        newMessages.setLayoutParams(params);
+                    }
 
                     firebaseOtherUser.child(otherUserID).addValueEventListener(new ValueEventListener() {
                         @Override
@@ -169,9 +200,12 @@ public class ChatOverviewFragment extends Fragment {
 
                             if (chat.messages.size() == 0) {
                                 lastMsg.setText("");
+                                timeSend.setText("");
                             } else {
                                 Message lastMessageObject = chat.messages.get(chat.messages.size()-1);
                                 String lastMessage = "";
+                                timeSend.setText(lastMessageObject.getTime());
+
                                 if (lastMessageObject.userID == userObj.userID){
                                     lastMessage = userObj.firstName+":  "+lastMessageObject.message;
                                 } else {

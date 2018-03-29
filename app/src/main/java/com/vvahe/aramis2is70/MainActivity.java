@@ -12,20 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
+import com.vvahe.aramis2is70.Chat.ChatOverviewFragment;
+import com.vvahe.aramis2is70.Other.GPS_Service;
+import com.vvahe.aramis2is70.Dashboard.DashboardFragment;
+import com.vvahe.aramis2is70.Login_Register.LoginActivity;
+import com.vvahe.aramis2is70.Map.MapFragment;
+import com.vvahe.aramis2is70.Settings.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
 

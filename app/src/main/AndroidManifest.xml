@@ -22,34 +22,34 @@
         <activity android:name=".MainActivity">
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Login_Register.RegisterActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".Login_Register.LoginActivity" />
+        <activity android:name=".Settings.ProfileActivity" />
 
-        <service android:name=".GPS_Service"/>
+        <service android:name=".Other.GPS_Service"/>
         <!-- API key for google maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD2Ma4IwXawFaPF0rrAdKgUQvyr73hABG4" />
 
         <activity
-            android:name=".CourseListActivity"
+            android:name=".Settings.CourseListActivity"
             android:label="@string/title_activity_course_list"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".searchCourseActivity"
+            android:name=".Settings.searchCourseActivity"
             android:label="@string/title_activity_search_course"
             android:theme="@style/AppTheme"></activity>
         <activity
-            android:name=".ChatInstanceActivity"
+            android:name=".Chat.ChatInstanceActivity"
             android:label="Chat Instance"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".AvailableListActivity"
+            android:name=".Dashboard.AvailableListActivity"
             android:label="Available List"
             android:theme="@style/AppTheme" />
-        <activity android:name=".SplashScreenActivity">
+        <activity android:name=".Other.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

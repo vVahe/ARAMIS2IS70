@@ -1,4 +1,4 @@
-package com.vvahe.aramis2is70;
+package com.vvahe.aramis2is70.Chat;
 
 
 import android.content.Context;
@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -22,8 +21,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,16 +28,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import org.w3c.dom.Text;
+import com.vvahe.aramis2is70.MainActivity;
+import com.vvahe.aramis2is70.R;
+import com.vvahe.aramis2is70.User;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.BreakIterator;
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -129,8 +125,10 @@ public class ChatInstanceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String messageTemp = messageField.getText().toString(); //get message string
-                chatObj.sendMessage(messageTemp); //send message
-                messageField.setText(""); //clear input field
+                if (!(messageTemp.equals(""))) {
+                    chatObj.sendMessage(messageTemp); //send message
+                    messageField.setText(""); //clear input field
+                }
             }
         });
 
@@ -233,6 +231,7 @@ public class ChatInstanceActivity extends AppCompatActivity {
                 TextView time = finalView.findViewById(R.id.timeSend);
                 singleMessage.setText(messageString);
                 time.setText(messageTimeStamp);
+                chatObj.messages.get(position).firebaseThisMessage.child("hasRed").setValue(true);
             }
 
             return finalView;

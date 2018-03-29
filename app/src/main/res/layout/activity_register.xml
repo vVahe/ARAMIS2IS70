@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="20dp"
-    tools:context="com.vvahe.aramis2is70.RegisterActivity">
+    tools:context="com.vvahe.aramis2is70.Login_Register.RegisterActivity">
 
     <EditText
         android:id="@+id/firstNameField"

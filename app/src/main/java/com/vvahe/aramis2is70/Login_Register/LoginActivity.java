@@ -1,12 +1,10 @@
-package com.vvahe.aramis2is70;
+package com.vvahe.aramis2is70.Login_Register;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.vvahe.aramis2is70.MainActivity;
+import com.vvahe.aramis2is70.R;
 
 public class LoginActivity extends AppCompatActivity {
 

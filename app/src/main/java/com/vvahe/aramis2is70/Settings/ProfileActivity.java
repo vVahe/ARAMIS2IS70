@@ -2,8 +2,12 @@ package com.vvahe.aramis2is70.Settings;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -41,7 +45,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private CircleImageView profilePicture;
     private Button changeImagebtn;
-    private Button galleryTestbtn;
     private ImageButton back;
     private EditText firstName;
     private EditText middleName;
@@ -77,7 +80,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         profilePicture = findViewById(R.id.profilePicture);
         changeImagebtn = findViewById(R.id.change_picture_button);
-        galleryTestbtn = findViewById(R.id.buttonGalleryTest);
         back = (ImageButton)findViewById(R.id.backButton);
         firstName = (EditText)findViewById(R.id.profileFieldFirstname) ;
         middleName = (EditText)findViewById (R.id.profileFieldMiddlename);
@@ -137,19 +139,29 @@ public class ProfileActivity extends AppCompatActivity {
         year();
         back();
 
-        changeImagebtn.setOnClickListener(new View.OnClickListener() {
+        final AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setTitle("Choose how to upload a picture");
+        builder1.setItems(R.array.changePicture, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                takePhoto();
-            }
-        });
-        galleryTestbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fromGallery();
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: //Gallery
+                        fromGallery();
+                    break;
+                    case 1: //Camera
+                        takePhoto();
+                    break;
+                }
             }
         });
 
+        changeImagebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog dialog = builder1.create();
+                dialog.show();
+            }
+        });
 
     }
 
@@ -275,6 +287,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

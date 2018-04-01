@@ -21,4 +21,9 @@
         <item>[2ID90]</item>
         <item>[5XY20] Some random course</item>
     </string-array>
+
+    <string-array name="changePicture">
+        <item>Gallery</item>
+        <item>Camera</item>
+    </string-array>
 </resources>

@@ -2,10 +2,7 @@
 <resources>
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <!-- colorAccent used to be #ff4081 (pink), but not used by anyone I guess
-    Rodger replaced it, if it broke smth just say so
-    I needed it for the Switch color -->
-    <color name="colorAccent">#dbdbdb</color>
+    <color name="colorAccent">#0f5cba</color>
     <color name="colorMenu">#a2d5ff</color>
 
     <color name="splashScreen">#47a3ef</color>

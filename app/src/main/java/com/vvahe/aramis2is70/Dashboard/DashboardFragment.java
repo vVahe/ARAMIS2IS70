@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Switch;
@@ -184,7 +185,7 @@ public class DashboardFragment extends Fragment {
             radioBtn.setTag(position);
             final int positionHolder = position;
             final TextView courseNameTxt = view.findViewById(R.id.courseNameTxt);
-            Button toListBtn = view.findViewById(R.id.availableListBtn);
+            ImageButton toListBtn = view.findViewById(R.id.availableListBtn);
 
             if (!(position == courseNames.size())) {
                 Log.wtf("pos", String.valueOf(position));

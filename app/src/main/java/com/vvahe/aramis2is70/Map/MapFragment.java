@@ -2,6 +2,7 @@ package com.vvahe.aramis2is70.Map;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -209,25 +210,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         returns true if distance between users is within radius, otherwise false
      */
     public boolean inRadius(double lat2, double lon2, int radius) {
-            Boolean result = false;
-            Double lat1 = userObj.locationY;
-            Double lon1 = userObj.locationX;
+        Location userLocation = new Location("Self");
+        userLocation.setLatitude(userObj.locationY);
+        userLocation.setLongitude(userObj.locationX);
 
-            //do some quick math
-            Double earthRadius = 6378.137; // Radius of earth in KM
-            Double dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
-            Double dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-            Double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                            Math.sin(dLon/2) * Math.sin(dLon/2);
-            Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            Double d = earthRadius * c;
+        Location otherLocation = new Location("Other");
+        otherLocation.setLatitude(lat2);
+        otherLocation.setLongitude(lon2);
 
-            //TODO: radius needs to be tweaked to only display users within 1000 meters
-            if (d * 1000 < radius) {
-                result = true;
-            }
-        return true;
+        float distance = userLocation.distanceTo(otherLocation); // in meters
+
+        return distance < radius;
     }
 
     private void enableMyLocation() {

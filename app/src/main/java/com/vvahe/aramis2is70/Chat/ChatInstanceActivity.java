@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -82,6 +83,19 @@ public class ChatInstanceActivity extends AppCompatActivity {
         otherUserName.setText(userObj.usernames.get(userObj.chatsIDs.indexOf(chatID)));
         chatObj = new Chat(otherUserID); //Create chat object
         final MessageAdapter[] messageAdapter = new MessageAdapter[1]; //Create messageAdapter
+
+        final int[] lastDif = {50000};
+        messageList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int heightDiff = messageList.getRootView().getHeight() - messageList.getHeight();
+                if (heightDiff > 500 && lastDif[0] < heightDiff){
+                    Log.wtf("height", "changed: "+ heightDiff);
+                    messageList.setSelection(messageList.getCount() - 1);
+                }
+                lastDif[0] = heightDiff;
+            }
+        });
 
         /* Display profile image from other user */
         loadImageFromStorage(otherUserImage, otherUserID);

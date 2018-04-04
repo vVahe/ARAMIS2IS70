@@ -20,6 +20,8 @@ import com.vvahe.aramis2is70.MainActivity;
 import com.vvahe.aramis2is70.R;
 import com.vvahe.aramis2is70.User;
 
+import java.util.Calendar;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText firstNameField;
@@ -83,14 +85,23 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(checkForEmptyInputFields(firstName, lastName, study, year, email, emailRepeat, password, passwordRepeat)) {
             Toast.makeText(RegisterActivity.this, "Please fill in all fields", Toast.LENGTH_LONG).show();
+        } else if (year < 1900) {
+            Toast.makeText(RegisterActivity.this, "Are you sure you are this old?", Toast.LENGTH_LONG).show();
+        } else if (year > Calendar.getInstance().get(Calendar.YEAR)) {
+            Toast.makeText(RegisterActivity.this, "Hello time traveler from the future", Toast.LENGTH_LONG).show();
+        } else if (!email.equals(emailRepeat)) {
+            Toast.makeText(RegisterActivity.this, "Email does not match", Toast.LENGTH_LONG).show();
+        } else if (!password.equals(passwordRepeat)) {
+            Toast.makeText(RegisterActivity.this, "Password does not match", Toast.LENGTH_LONG).show();
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(RegisterActivity.this, "Please provide a valid email", Toast.LENGTH_LONG).show();
         } else {
-
-            /* creates user with given email & password, and check if task was successful*/
+                /* creates user with given email & password, and check if task was successful*/
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
-                    /* if registration is successful add user info to database*/
+                        /* if registration is successful add user info to database*/
                     if (task.isSuccessful()) {
 
                         String uID = mAuth.getCurrentUser().getUid();
@@ -99,9 +110,9 @@ public class RegisterActivity extends AppCompatActivity {
                         user.register(uID, email, firstName, middleName, lastName, study, year);
                         user.context = getApplicationContext();
 
-                        /* if registration was successful we can retrieve the unique user_id */
+                            /* if registration was successful we can retrieve the unique user_id */
 
-                        /* send user to dashboard after registration is complete*/
+                            /* send user to dashboard after registration is complete*/
                         Intent dashboardIntent = new Intent(RegisterActivity.this, MainActivity.class);
                         dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(dashboardIntent);
@@ -110,11 +121,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                         Toast.makeText(RegisterActivity.this, "Something went wrong :/", Toast.LENGTH_LONG).show();
 
-                        /* TO-DO: -------------------
-                         *
-                         * if registration fails we can add some code to notify to the user why,
-                         * for example, match the "Name" filled in by the user to the user names already
-                         * present in the database add give "username taken" warning, same goes for email*/
+                            /* TO-DO: -------------------
+                             *
+                             * if registration fails we can add some code to notify to the user why,
+                             * for example, match the "Name" filled in by the user to the user names already
+                             * present in the database add give "username taken" warning, same goes for email*/
 
                     }
 

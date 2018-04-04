@@ -241,27 +241,30 @@ public class ChatOverviewFragment extends Fragment {
         }
 
         private String saveToInternalStorage(Bitmap bitmapImage, String otherUserID){
-            ContextWrapper cw = new ContextWrapper(getContext());
-            // path to /data/data/yourapp/app_data/imageDir
-            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-            // Create imageDir
-            File mypath=new File(directory,otherUserID+".bmp");
 
-            FileOutputStream fos = null;
             try {
+                ContextWrapper cw = new ContextWrapper(getContext());
+                // path to /data/data/yourapp/app_data/imageDir
+                File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+                // Create imageDir
+                File mypath=new File(directory,otherUserID+".bmp");
+
+                FileOutputStream fos = null;
                 fos = new FileOutputStream(mypath);
                 // Use the compress method on the BitMap object to write image to the OutputStream
                 bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            } catch (Exception e) {
-                //e.printStackTrace();
-            } finally {
+
                 try {
                     fos.close();
                 } catch (IOException e) {
                     //e.printStackTrace();
                 }
+
+                return directory.getAbsolutePath();
+            } catch (Exception e) {
+                //e.printStackTrace();
             }
-            return directory.getAbsolutePath();
+            return "";
         }
 
         private void loadImageFromStorage(Integer position, CircleImageView view, String otherUserID) {

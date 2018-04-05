@@ -71,9 +71,9 @@ public class LoginActivity extends AppCompatActivity {
 
         /** check if user left any fields empty if so give Toast message*/
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-
             Toast.makeText(LoginActivity.this, "Please fill in all fields", Toast.LENGTH_LONG).show();
-
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(LoginActivity.this, "Please provide a valid email", Toast.LENGTH_LONG).show();
         } else { /** attempt sign in*/
 
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

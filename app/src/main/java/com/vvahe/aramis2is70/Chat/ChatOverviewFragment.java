@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -38,6 +40,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -204,7 +207,7 @@ public class ChatOverviewFragment extends Fragment {
                             } else {
                                 Message lastMessageObject = chat.messages.get(chat.messages.size()-1);
                                 String lastMessage = "";
-                                timeSend.setText(lastMessageObject.getTime());
+                                timeSend.setText(lastMessageObject.getDate());
 
                                 if (lastMessageObject.userID == userObj.userID){
                                     lastMessage = userObj.firstName+":  "+lastMessageObject.message;
@@ -229,6 +232,35 @@ public class ChatOverviewFragment extends Fragment {
                             startActivity(toChatIntent);
                         }
                     });
+
+                    chatList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                            //delte this chat
+                            userObj.deleteChat(chatID);
+
+                            firebaseOtherUser.child(otherUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    //delete chat data if other user also has deleted this chat
+                                    ArrayList<String> chatsIDs = new ArrayList<>();
+                                    for(DataSnapshot dsChild : dataSnapshot.child("chats").getChildren()) {
+                                        chatsIDs.add(dsChild.getValue(String.class));
+                                    }
+                                    if (!(chatsIDs.contains(chatID))){
+                                        firebaseChat.child(chatID).setValue(null);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            notifyDataSetChanged();
+                            return true;
+                        }
+                    });
                 }
 
                 @Override
@@ -241,27 +273,30 @@ public class ChatOverviewFragment extends Fragment {
         }
 
         private String saveToInternalStorage(Bitmap bitmapImage, String otherUserID){
-            ContextWrapper cw = new ContextWrapper(getContext());
-            // path to /data/data/yourapp/app_data/imageDir
-            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-            // Create imageDir
-            File mypath=new File(directory,otherUserID+".bmp");
 
-            FileOutputStream fos = null;
             try {
+                ContextWrapper cw = new ContextWrapper(getContext());
+                // path to /data/data/yourapp/app_data/imageDir
+                File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+                // Create imageDir
+                File mypath=new File(directory,otherUserID+".bmp");
+
+                FileOutputStream fos = null;
                 fos = new FileOutputStream(mypath);
                 // Use the compress method on the BitMap object to write image to the OutputStream
                 bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            } catch (Exception e) {
-                //e.printStackTrace();
-            } finally {
+
                 try {
                     fos.close();
                 } catch (IOException e) {
                     //e.printStackTrace();
                 }
+
+                return directory.getAbsolutePath();
+            } catch (Exception e) {
+                //e.printStackTrace();
             }
-            return directory.getAbsolutePath();
+            return "";
         }
 
         private void loadImageFromStorage(Integer position, CircleImageView view, String otherUserID) {

@@ -62,12 +62,27 @@ public class Message {
 
     public String getTime(){
         Date date = new Date(timeSendLong);
-        DateFormat format = new SimpleDateFormat("HH:mm");
+        DateFormat time = new SimpleDateFormat("HH:mm");
+        time.setTimeZone(TimeZone.getTimeZone("Europe/Amsterdam"));
+        return time.format(date);
+    }
 
-        format.setTimeZone(TimeZone.getTimeZone("Europe/Amsterdam"));
-        String formatted = format.format(date);
+    public String getDate(){
+        Date currentDate = new Date();
+        currentDate.setTime(currentDate.getTime());
+        Date date = new Date(timeSendLong);
+        DateFormat time = new SimpleDateFormat("HH:mm");
+        time.setTimeZone(TimeZone.getTimeZone("Europe/Amsterdam"));
+        DateFormat day = new SimpleDateFormat("d-M");
+        time.setTimeZone(TimeZone.getTimeZone("Europe/Amsterdam"));
 
-        return formatted;
+        if (date.getDay() == currentDate.getDay()){
+            return time.format(date);
+        } else if (currentDate.getDay() - date.getDay() == 1){
+            return "yesterday";
+        } else {
+            return day.format(date);
+        }
     }
 
 }

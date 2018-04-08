@@ -9,10 +9,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -58,6 +60,9 @@ public class ChatOverviewFragment extends Fragment {
     private DatabaseReference firebaseChat = FirebaseDatabase.getInstance().getReference().child("chats");
     private DatabaseReference firebaseOtherUser = FirebaseDatabase.getInstance().getReference().child("Users");
 
+    private BottomNavigationView bNavView;
+    private Menu menu;
+
     public ChatOverviewFragment() {
     }
 
@@ -74,6 +79,11 @@ public class ChatOverviewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         chatList = getView().findViewById(R.id.chatList);
+
+        //change new message icon back to normal
+        bNavView = getActivity().findViewById(R.id.mainNav);
+        menu = bNavView.getMenu();
+        menu.findItem(R.id.nav_chat).setIcon(R.drawable.ic_message_black_24dp);
 
         final ChatAdapter chatAdapter = new ChatAdapter();
         chatList.setAdapter(chatAdapter);

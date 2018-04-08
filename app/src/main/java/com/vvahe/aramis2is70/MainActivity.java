@@ -1,5 +1,6 @@
 package com.vvahe.aramis2is70;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -11,12 +12,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.vvahe.aramis2is70.Chat.Chat;
 import com.vvahe.aramis2is70.Chat.ChatOverviewFragment;
 import com.vvahe.aramis2is70.Other.GPS_Service;
 import com.vvahe.aramis2is70.Dashboard.DashboardFragment;
@@ -24,13 +30,17 @@ import com.vvahe.aramis2is70.Login_Register.LoginActivity;
 import com.vvahe.aramis2is70.Map.MapFragment;
 import com.vvahe.aramis2is70.Settings.SettingsFragment;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     public User userObj = User.getInstance();
 
     private BottomNavigationView bNavView;
+    private Menu menu;
     private FrameLayout frameLayout;
     private Button logoutBtn;
+    private MenuItem chatItem;
     private static final String TAG = "MainActivity";
 
     private DashboardFragment dashboardFragment;
@@ -50,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         bNavView = findViewById(R.id.mainNav);
         frameLayout = findViewById(R.id.mainFrame);
-
+        menu = bNavView.getMenu();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -102,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        setListenerChatImage();
     }
 
     /* handles fragement transactions aka switching between fragments*/
@@ -111,6 +123,42 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.mainFrame, fragment);
         fragmentTransaction.commit();
 
+    }
+
+    /* Set chat icon to new message icon if there are new messages */
+    private void setListenerChatImage(){
+        userObj.firebaseThisUser.child("chats").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Chat> chats = new ArrayList<>();
+                for(DataSnapshot dsChild : dataSnapshot.getChildren()) {
+                    final String chatID = dsChild.getValue(String.class);
+                    String otherUserID = chatID.replace(userObj.userID, ""); //get otherUserId (= chatID - userID)
+                    final Chat chat = new Chat(otherUserID);
+
+                    chat.firebaseThisChat.child("messages").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            chat.setDataInMessages(dataSnapshot);
+                            if (chat.getNumberOfNewMessages() > 0){
+                                menu.findItem(R.id.nav_chat).setIcon(R.drawable.ic_message_black_expl);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /* start GPS service for user location */

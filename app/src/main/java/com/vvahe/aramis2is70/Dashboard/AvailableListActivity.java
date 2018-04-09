@@ -1,6 +1,10 @@
 package com.vvahe.aramis2is70.Dashboard;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,19 +17,29 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.vvahe.aramis2is70.Chat.Chat;
 import com.vvahe.aramis2is70.Chat.ChatInstanceActivity;
 import com.vvahe.aramis2is70.MainActivity;
 import com.vvahe.aramis2is70.R;
 import com.vvahe.aramis2is70.User;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by VahePC on 3/27/2018.
@@ -77,7 +91,7 @@ public class AvailableListActivity extends AppCompatActivity {
 
     public void getAvailabeUsers(final String selCourse) {
 
-        firebaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -85,6 +99,7 @@ public class AvailableListActivity extends AppCompatActivity {
                 String firstName = "";
                 String lastName = "";
                 String selectedCourse = "";
+                Boolean available = false;
 
                 availableUsers.clear();
                 //get userID's of nearby users
@@ -98,10 +113,11 @@ public class AvailableListActivity extends AppCompatActivity {
                         if (ds2.getKey().equals("firstName")) firstName = (String) ds2.getValue();
                         if (ds2.getKey().equals("lastName")) lastName = (String) ds2.getValue();
                         if (ds2.getKey().equals("selectedCourse")) selectedCourse = (String) ds2.getValue();
+                        if (ds2.getKey().equals("available")) available = (Boolean) ds2.getValue();
 
                     }
                     //if user is in radius save userID in list
-                    if (selectedCourse.equals(selCourse) && (!otherUserID.equals(uID))) { //&& (userObj.selectedCourse.equals(selectedCourse))
+                    if (selectedCourse.equals(selCourse) && (!otherUserID.equals(uID)) && available) {
                         String[] attributes = {otherUserID, firstName, lastName};
                         Log.i("TAG5", "ds = " + otherUserID + " and " + userObj.userID);
                         availableUsers.add(attributes);
@@ -152,19 +168,23 @@ public class AvailableListActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             Log.i("TAG2", availableUsers.get(position)[1] );
+            String otherUserID = availableUsers.get(position)[0];
 
             view = getLayoutInflater().inflate(R.layout.available_list_item, null);
 
             final View finalView = view;
 
+            final CircleImageView chatThumbnail = finalView.findViewById(R.id.chatThumbnail);
             final TextView name = finalView.findViewById(R.id.ALNameTxt);
             final TextView btn = finalView.findViewById(R.id.sendMessageBtn);
+
+            loadImageFromStorage(position, chatThumbnail, otherUserID);
 
             final String[] otherUser = availableUsers.get(position);
             Log.i("TAG1", availableUsers.get(position)[1] );
 
 
-            name.setText(otherUser[1] + otherUser[2]);
+            name.setText(otherUser[1] + " " + otherUser[2]);
 
             /*btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -178,5 +198,55 @@ public class AvailableListActivity extends AppCompatActivity {
 
            return view;
         }
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage, String otherUserID){
+
+        try {
+            ContextWrapper cw = new ContextWrapper(AvailableListActivity.this);
+            // path to /data/data/yourapp/app_data/imageDir
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            // Create imageDir
+            File mypath=new File(directory,otherUserID+".bmp");
+
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+            try {
+                fos.close();
+            } catch (IOException e) {
+                //e.printStackTrace();
+            }
+
+            return directory.getAbsolutePath();
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return "";
+    }
+
+    private void loadImageFromStorage(Integer position, CircleImageView view, String otherUserID) {
+        try {
+            File f=new File(userObj.pathToProfilePics.get(position), otherUserID+".bmp");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            view.setImageBitmap(b);
+        } catch (FileNotFoundException | IndexOutOfBoundsException e) {
+            getImage(position, view, otherUserID);
+        }
+    }
+
+    private void getImage(final Integer position, final CircleImageView view, final String otherUserID){
+        StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
+        picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                view.setImageBitmap(bmp);
+                String path = saveToInternalStorage(bmp, otherUserID);
+                userObj.pathToProfilePics.add(position, path);
+            }
+        });
     }
 }

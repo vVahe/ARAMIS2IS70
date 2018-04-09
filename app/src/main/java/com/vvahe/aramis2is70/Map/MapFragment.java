@@ -123,6 +123,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .build();                   // Creates a CameraPosition from the builder
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                String[] temp = (String[]) marker.getTag();
+                Toast.makeText(getContext(), "BOE", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
+
         //start new chat once infoWindow is clicked
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -153,6 +162,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 String selectedCourse = "";
                 Double locX = 0.0;
                 Double locY = 0.0;
+                Boolean available = false;
+                Boolean locationShow = false;
                 nearUsers.clear();
                 //get userID's of nearby users
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -167,14 +178,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         if (ds2.getKey().equals("locationX")) locX = (Double) ds2.getValue();
                         if (ds2.getKey().equals("locationY")) locY = (Double) ds2.getValue();
                         if (ds2.getKey().equals("study")) study = (String) ds2.getValue();
-                        if (ds2.getKey().equals("selectedCourse")) study = (String) ds2.getValue();
+                        if (ds2.getKey().equals("selectedCourse")) selectedCourse = (String) ds2.getValue();
+                        if (ds2.getKey().equals("available")) available = (Boolean) ds2.getValue();
+                        if (ds2.getKey().equals("locationShow")) locationShow = (Boolean) ds2.getValue();
+
 
                         //TODO: also get userID en pic
 
 
                     }
+
+
                     //if user is in radius save userID in list
-                    if (inRadius(locX, locY, radiusSetting) && (otherUserID != uID)) { //&& (userObj.selectedCourse.equals(selectedCourse))
+                    if (inRadius(locY, locX, radiusSetting) && (otherUserID != uID) &&
+                            selectedCourse.equals(userObj.selectedCourse) && available && locationShow) { 
                         String[] attributes = {otherUserID, firstName, lastName, locX.toString(), locY.toString(), study, selectedCourse};
                         nearUsers.add(attributes);
                     }
@@ -198,7 +215,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         for (String[] user : nearUsers) {
             Marker marker = mGoogleMap.addMarker(
                     new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(user[3]), Double.parseDouble(user[4])))
+                            .position(new LatLng(Double.parseDouble(user[4]), Double.parseDouble(user[3])))
                             .title(user[1])
                             .snippet(user[5] + " | " + user[6])
             );
@@ -218,7 +235,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         otherLocation.setLatitude(lat2);
         otherLocation.setLongitude(lon2);
 
+        Log.i("tagY", userLocation.getLatitude() + "and" + otherLocation.getLatitude());
+        Log.i("tagX", userLocation.getLongitude() + "and" + otherLocation.getLongitude());
+
+
         float distance = userLocation.distanceTo(otherLocation); // in meters
+
+        Log.i("tag", distance + "");
 
         return distance < radius;
     }

@@ -1,7 +1,11 @@
 package com.vvahe.aramis2is70.Map;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,11 +33,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.vvahe.aramis2is70.Chat.ChatInstanceActivity;
 import com.vvahe.aramis2is70.Chat.Chat;
 import com.vvahe.aramis2is70.R;
@@ -36,6 +48,8 @@ import com.vvahe.aramis2is70.User;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -127,7 +141,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 String[] temp = (String[]) marker.getTag();
-                Toast.makeText(getContext(), "BOE", Toast.LENGTH_LONG).show();
+                UserDialog userDialog = new UserDialog();
+                userDialog.showDialog(getActivity(), temp);
                 return false;
             }
         });
@@ -143,6 +158,69 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 startActivity(toChatInstance);
             }
         });
+    }
+
+    /**
+     * Dialog window to be shown when marker is clicked
+     */
+
+    public class UserDialog {
+
+        public void showDialog(Activity activity, final String[] userInfo) {
+
+            final Dialog dialog = new Dialog(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.user_dialog);
+
+            TextView userName = (TextView) dialog.findViewById(R.id.userName);
+            CircleImageView userPic = (CircleImageView) dialog.findViewById(R.id.userPic);
+
+            userName.setText(userInfo[1] + " " + userInfo[2]);
+            getImage(userPic, userInfo[0]);
+
+            ListView listView = (ListView) dialog.findViewById(R.id.userInfoList);
+            String[] userInfoList = {userInfo[5]};
+            ArrayAdapter<String> userAdapter = new ArrayAdapter<String>(getContext(),
+                    android.R.layout.simple_list_item_1, userInfoList);
+            listView.setAdapter(userAdapter);
+
+            Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+            Button btnChat = (Button) dialog.findViewById(R.id.btnChat);
+
+            btnChat.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    //Perform Action
+                    Chat chat = userObj.openChat(userInfo[0]);
+                    Intent toChatInstance = new Intent(getContext(), ChatInstanceActivity.class);
+                    toChatInstance.putExtra("chatID", chat.chatID);
+                    startActivity(toChatInstance);
+                }
+            });
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+        }
+    }
+
+    public void getImage(final CircleImageView userPicView, String otherUserID) {
+        StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
+        picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                userPicView.setImageBitmap(bmp);
+            }
+        });
+
     }
 
     /*
@@ -190,8 +268,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
                     //if user is in radius save userID in list
-                    if (inRadius(locY, locX, radiusSetting) && (otherUserID != uID) &&
-                            selectedCourse.equals(userObj.selectedCourse) && available && locationShow) { 
+                    if (inRadius(locY, locX, radiusSetting) && (!otherUserID.equals(uID)) &&
+                            selectedCourse.equals(userObj.selectedCourse) && available && locationShow) {
                         String[] attributes = {otherUserID, firstName, lastName, locX.toString(), locY.toString(), study, selectedCourse};
                         nearUsers.add(attributes);
                     }

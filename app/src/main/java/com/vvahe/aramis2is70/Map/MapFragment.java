@@ -46,6 +46,8 @@ import com.vvahe.aramis2is70.Chat.Chat;
 import com.vvahe.aramis2is70.R;
 import com.vvahe.aramis2is70.User;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +72,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mGoogleMap; //google map Object
     private MapView mMapView;
     private UiSettings mUiSettings;
+    private TextView selectedCourse;
 
     private final static int MY_PERMISSIONS = 101; //permission code
 
@@ -92,6 +95,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_map, container, false);
+        selectedCourse = mView.findViewById(R.id.selectedCourse);
+        selectedCourse.setText(userObj.selectedCourse);
         return mView;
 
     }
@@ -175,15 +180,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             TextView userName = (TextView) dialog.findViewById(R.id.userName);
             CircleImageView userPic = (CircleImageView) dialog.findViewById(R.id.userPic);
+            TextView userLocationInfo = (TextView) dialog.findViewById(R.id.userLocationInfo);
+            TextView userStudyInfo = (TextView) dialog.findViewById(R.id.userStudyInfo);
 
             userName.setText(userInfo[1] + " " + userInfo[2]);
             getImage(userPic, userInfo[0]);
 
-            ListView listView = (ListView) dialog.findViewById(R.id.userInfoList);
-            String[] userInfoList = {userInfo[5]};
-            ArrayAdapter<String> userAdapter = new ArrayAdapter<String>(getContext(),
-                    android.R.layout.simple_list_item_1, userInfoList);
-            listView.setAdapter(userAdapter);
+            userLocationInfo.setText("Location: " + userInfo[7]);
+            userStudyInfo.setText("Study: " + userInfo[5]);
+
 
             Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
             Button btnChat = (Button) dialog.findViewById(R.id.btnChat);
@@ -238,6 +243,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 String firstName = "";
                 String lastName = "";
                 String selectedCourse = "";
+                String locationInfo = "";
                 Double locX = 0.0;
                 Double locY = 0.0;
                 Boolean available = false;
@@ -259,6 +265,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         if (ds2.getKey().equals("selectedCourse")) selectedCourse = (String) ds2.getValue();
                         if (ds2.getKey().equals("available")) available = (Boolean) ds2.getValue();
                         if (ds2.getKey().equals("locationShow")) locationShow = (Boolean) ds2.getValue();
+                        if (ds2.getKey().equals("locationInfo")) locationInfo = (String) ds2.getValue();
 
 
                         //TODO: also get userID en pic
@@ -270,7 +277,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     //if user is in radius save userID in list
                     if (inRadius(locY, locX, radiusSetting) && (!otherUserID.equals(uID)) &&
                             selectedCourse.equals(userObj.selectedCourse) && available && locationShow) {
-                        String[] attributes = {otherUserID, firstName, lastName, locX.toString(), locY.toString(), study, selectedCourse};
+                        String[] attributes = {otherUserID, firstName, lastName, locX.toString(), locY.toString(), study, selectedCourse, locationInfo};
                         nearUsers.add(attributes);
                     }
                     Log.i("TAG", "nearbyUsers = " + nearUsers);

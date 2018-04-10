@@ -23,6 +23,7 @@ public class User {
     public String middleName = "";                                          //middlename from user
     public String lastName = "";                                            //lastname from user
     public String study = "";                                               //study from user
+    public String locationInfo = "";
     public Integer year = 9999;                                             //studyyear from user
     public Double locationX = 51.4472632;                                   //X location from user
     public Double locationY = 5.4845778;                                    //Y location from user
@@ -136,6 +137,11 @@ public class User {
     public void setLastName(String newLastName){
         lastName = newLastName;
         firebaseThisUser.child("lastName").setValue(newLastName);
+    }
+
+    public void setLocationInfo(String newLocationInfo) {
+        locationInfo = newLocationInfo;
+        firebaseThisUser.child("locationInfo").setValue(newLocationInfo);
     }
 
     public void setYear(Integer newYear){
@@ -263,6 +269,7 @@ public class User {
         firebaseThisUser.child("enrolledIn").setValue(this.enrolledInIDs);
         firebaseThisUser.child("selectedCourse").setValue(this.selectedCourse);
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
+        firebaseThisUser.child("locationInfo").setValue(this.locationInfo);
     }
 
     /*
@@ -280,7 +287,9 @@ public class User {
                 middleName = ds.getValue(String.class);
             } else if (ds.getKey().equals("lastName")){
                 lastName = ds.getValue(String.class);
-            } else if (ds.getKey().equals("study")){
+            } else if (ds.getKey().equals("locationInfo")){
+                locationInfo = ds.getValue(String.class);
+            }else if (ds.getKey().equals("study")){
                 study = ds.getValue(String.class);
             } else if (ds.getKey().equals("year")){
                 year = ds.getValue(Integer.class);
@@ -344,6 +353,7 @@ public class User {
         middleName = "";
         lastName = "";
         study = "";
+        locationInfo = "";
         year = 9999;
         locationX = 51.4472632;
         locationY = 5.4845778;

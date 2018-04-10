@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -65,6 +68,7 @@ public class DashboardFragment extends Fragment {
     private Switch availableSwitch;
     private Switch locationSwitch;
     String selectedCourse = "";
+    private EditText locationInfo;
 
     ArrayList<String> courseNames = new ArrayList<>();
 
@@ -92,6 +96,7 @@ public class DashboardFragment extends Fragment {
 
         availableSwitch = getView().findViewById(R.id.availableSwitch);
         locationSwitch = getView().findViewById(R.id.locationSwitch);
+        locationInfo = getView().findViewById(R.id.locationInfo);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -122,6 +127,10 @@ public class DashboardFragment extends Fragment {
                                 courseNames.add(dsChild.getValue(String.class));
                             }
 
+                        } else if (ds.getKey().equals("locationInfo")) {
+                            Integer cursor = locationInfo.getSelectionStart();
+                            locationInfo.setText(ds.getValue(String.class));
+                            locationInfo.setSelection(cursor);
                         }
                     }
                     CourseAdapter courseAdapter = new CourseAdapter();
@@ -157,6 +166,7 @@ public class DashboardFragment extends Fragment {
         });
 
         loadImageFromStorage(userObj.pathToProfilePic);
+        locationInfo();
     }
 
     class CourseAdapter extends BaseAdapter {
@@ -292,6 +302,20 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    public void locationInfo(){
+        locationInfo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                userObj.setLocationInfo(s.toString());
+            }
+        });
+    }
 
 }
 

@@ -113,7 +113,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setListenerChatImage();
+
+        try{
+            setListenerChatImage();
+        } catch(NullPointerException e){
+
+        }
+
+
+
     }
 
     /* handles fragement transactions aka switching between fragments*/

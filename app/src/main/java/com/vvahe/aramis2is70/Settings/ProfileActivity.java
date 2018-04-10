@@ -15,18 +15,27 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -34,6 +43,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.vvahe.aramis2is70.*;
+import com.vvahe.aramis2is70.Chat.Chat;
+import com.vvahe.aramis2is70.Chat.ChatInstanceActivity;
 import com.vvahe.aramis2is70.R;
 
 import java.io.ByteArrayOutputStream;
@@ -45,12 +56,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private CircleImageView profilePicture;
     private Button changeImagebtn;
+    private Button btnEmail;
+    private Button btnPassword;
     private ImageButton back;
     private EditText firstName;
     private EditText middleName;
     private EditText lastName;
     private EditText study;
-    private EditText email;
+    //private EditText email;
     private EditText year;
     private User userObj = User.getInstance();
 
@@ -84,7 +97,9 @@ public class ProfileActivity extends AppCompatActivity {
         firstName = (EditText)findViewById(R.id.profileFieldFirstname) ;
         middleName = (EditText)findViewById (R.id.profileFieldMiddlename);
         lastName = (EditText)findViewById (R.id.profileFieldLastname);
-        email = (EditText)findViewById (R.id.profileFieldEmail);
+        btnEmail = (Button)findViewById(R.id.btnEmail);
+        btnPassword = (Button)findViewById(R.id.btnPassword);
+        //email = (EditText)findViewById (R.id.profileFieldEmail);
         study = (EditText)findViewById (R.id.profileFieldStudy);
         year = (EditText)findViewById (R.id.profileFieldYear);
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -112,9 +127,9 @@ public class ProfileActivity extends AppCompatActivity {
                         study.setText(ds.getValue(String.class));
                         study.setSelection(cursor);
                     } else if (ds.getKey().equals("email")){
-                        Integer cursor = email.getSelectionStart();
-                        email.setText(ds.getValue(String.class));
-                        email.setSelection(cursor);
+                        //Integer cursor = email.getSelectionStart();
+                        //email.setText(ds.getValue(String.class));
+                        //email.setSelection(cursor);
                     } else if (ds.getKey().equals("year")){
                         Integer cursor = year.getSelectionStart();
                         year.setText(ds.getValue(Integer.class).toString());
@@ -135,9 +150,25 @@ public class ProfileActivity extends AppCompatActivity {
         middleName();
         lastName();
         study();
-        email();
+        //email();
         year();
         back();
+
+        btnEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emailDialog dialog = new emailDialog();
+                dialog.showDialog(ProfileActivity.this);
+            }
+        });
+
+        btnPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                passwordDialog dialog = new passwordDialog();
+                dialog.showDialog(ProfileActivity.this);
+            }
+        });
 
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Choose how to upload a picture");
@@ -264,7 +295,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void email(){
+   /* public void email(){
         email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -277,6 +308,189 @@ public class ProfileActivity extends AppCompatActivity {
                 userObj.setEmail(s.toString());
             }
         });
+    }*/
+
+    public class emailDialog {
+        String password = "";
+        String newEmail = "";
+
+        public void showDialog(Activity activity) {
+
+            final Dialog dialog = new Dialog(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.email_dialog);
+
+
+
+            EditText passwordField = (EditText) dialog.findViewById(R.id.passwordField);
+            EditText newEmailField = (EditText) dialog.findViewById(R.id.emailField);
+
+            passwordField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+                    password = s.toString();
+                }
+            });
+
+            newEmailField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+                    newEmail = s.toString();
+                }
+            });
+
+
+            Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+            Button btnChangeEmail = (Button) dialog.findViewById(R.id.btnChangeEmail);
+
+            btnChangeEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mProgressDialog.setMessage("Changing E-mail");
+                    mProgressDialog.show();
+                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    final String email = user.getEmail();
+                    AuthCredential credential = EmailAuthProvider.getCredential(email,password);
+
+                    user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                user.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Toast.makeText(getApplicationContext(),"E-mail successfully changed", Toast.LENGTH_LONG).show();
+                                            userObj.setEmail(newEmail);
+                                            dialog.dismiss();
+                                            mProgressDialog.dismiss();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+        }
+    }
+
+    public class passwordDialog {
+        String currentPassword = "";
+        String newPassword = "";
+
+        public void showDialog(Activity activity) {
+
+            final Dialog dialog = new Dialog(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.password_dialog);
+
+
+
+            EditText oldPasswordField = (EditText) dialog.findViewById(R.id.currentPasswordField);
+            EditText newPassField = (EditText) dialog.findViewById(R.id.newPasswordField);
+
+            oldPasswordField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+                    currentPassword = s.toString();
+                }
+            });
+
+            newPassField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+                    newPassword = s.toString();
+                }
+            });
+
+
+            Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+            Button btnChangePassword = (Button) dialog.findViewById(R.id.btnChangePassword);
+
+            btnChangePassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mProgressDialog.setMessage("Changing Password");
+                    mProgressDialog.show();
+                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    final String email = user.getEmail();
+                    AuthCredential credential = EmailAuthProvider.getCredential(email,currentPassword);
+
+                    user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Toast.makeText(getApplicationContext(),"Password successfully changed", Toast.LENGTH_LONG).show();
+                                            dialog.dismiss();
+                                            mProgressDialog.dismiss();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+        }
     }
 
     public void back(){

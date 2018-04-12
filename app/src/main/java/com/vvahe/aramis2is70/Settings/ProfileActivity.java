@@ -29,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -48,6 +49,7 @@ import com.vvahe.aramis2is70.Chat.ChatInstanceActivity;
 import com.vvahe.aramis2is70.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -138,8 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
                         year.setSelection(cursor);
                     }
                 }*/
-                picStorage = mStorage.child(userObj.userID).child("Profile Picture");
-                setPicture();
+
             }
 
             @Override
@@ -147,6 +148,9 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+
+        picStorage = mStorage.child(userObj.userID).child("Profile Picture");
+        setPicture();
 
         firstName();
         middleName();
@@ -215,7 +219,7 @@ public class ProfileActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    profilePicture.setImageBitmap(bmp);
+                    Glide.with(ProfileActivity.this).load(bmp).into(profilePicture);
                 }
             });
         }
@@ -296,20 +300,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-   /* public void email(){
-        email.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                userObj.setEmail(s.toString());
-            }
-        });
-    }*/
 
     public class emailDialog {
         String password = "";
@@ -530,7 +520,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Bundle extras = data.getExtras();
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
                     byte[] dataBAOS = baos.toByteArray();
 
                     // upload to firebase
@@ -541,8 +531,10 @@ public class ProfileActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Toast.makeText(ProfileActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
                             mProgressDialog.dismiss();
+                            setPicture();
                         }
                     });
+
                 }
                 break;
             case GALLERY_INTENT:
@@ -550,15 +542,36 @@ public class ProfileActivity extends AppCompatActivity {
                     mProgressDialog.setMessage("Uploading ...");
                     mProgressDialog.show();
 
-                    Uri galleyUri = data.getData();
-                    StorageReference filepath = mStorage.child(userObj.userID).child("Profile Picture");
+                    try{
+                        Uri galleyUri = data.getData();
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), galleyUri);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+                        byte[] dataBAOS = baos.toByteArray();
+
+                        // upload to firebase
+                        StorageReference filepath = mStorage.child(userObj.userID).child("Profile Picture");
+                        UploadTask uploadTask = filepath.putBytes(dataBAOS);
+                        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Toast.makeText(ProfileActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
+                                mProgressDialog.dismiss();
+                                setPicture();
+                            }
+                        });
+                    } catch(IOException e){
+                        Toast.makeText(this, "Couldn't convert Image", Toast.LENGTH_SHORT).show();
+                    }
+
+                    /*StorageReference filepath = mStorage.child(userObj.userID).child("Profile Picture");
                     filepath.putFile(galleyUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Toast.makeText(ProfileActivity.this, "Upload done", Toast.LENGTH_LONG).show();
                             mProgressDialog.dismiss();
                         }
-                    });
+                    });*/
                 }
         }
     }

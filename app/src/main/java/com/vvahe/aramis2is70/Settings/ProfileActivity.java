@@ -106,10 +106,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         mProgressDialog = new ProgressDialog(this);
 
+        firstName.setText(userObj.firstName);
+        middleName.setText(userObj.middleName);
+        lastName.setText(userObj.lastName);
+        study.setText(userObj.study);
+        year.setText(userObj.year.toString());
+
         userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                /*for(DataSnapshot ds : dataSnapshot.getChildren()){
                     if (ds.getKey().equals("firstName")){
                         Integer cursor = firstName.getSelectionStart();
                         firstName.setText(ds.getValue(String.class));
@@ -126,16 +132,12 @@ public class ProfileActivity extends AppCompatActivity {
                         Integer cursor = study.getSelectionStart();
                         study.setText(ds.getValue(String.class));
                         study.setSelection(cursor);
-                    } else if (ds.getKey().equals("email")){
-                        //Integer cursor = email.getSelectionStart();
-                        //email.setText(ds.getValue(String.class));
-                        //email.setSelection(cursor);
                     } else if (ds.getKey().equals("year")){
                         Integer cursor = year.getSelectionStart();
                         year.setText(ds.getValue(Integer.class).toString());
                         year.setSelection(cursor);
                     }
-                }
+                }*/
                 picStorage = mStorage.child(userObj.userID).child("Profile Picture");
                 setPicture();
             }
@@ -150,7 +152,6 @@ public class ProfileActivity extends AppCompatActivity {
         middleName();
         lastName();
         study();
-        //email();
         year();
         back();
 

@@ -107,7 +107,7 @@ public class DashboardFragment extends Fragment {
             userObj.reset();
         } else { //get current user and get the user object using userID
             Log.wtf("executed", "onviewCreated() executed");
-            userObj.firebaseThisUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
@@ -127,14 +127,25 @@ public class DashboardFragment extends Fragment {
                                 courseNames.add(dsChild.getValue(String.class));
                             }
 
-                        } else if (ds.getKey().equals("locationInfo")) {
-                            //Integer cursor = locationInfo.getSelectionStart();
-                            locationInfo.setText(ds.getValue(String.class));
-                            //locationInfo.setSelection(cursor);
                         }
                     }
                     CourseAdapter courseAdapter = new CourseAdapter();
                     courseList.setAdapter(courseAdapter);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            userObj.firebaseThisUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        if(ds.getKey().equals("locationInfo"))
+                        locationInfo.setText(ds.getValue(String.class));
+                    }
                 }
 
                 @Override

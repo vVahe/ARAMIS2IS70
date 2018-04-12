@@ -143,8 +143,8 @@ public class DashboardFragment extends Fragment {
             userObj.firebaseThisUser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds : dataSnapshot.getChildren()){
-                        if (ds.getKey().equals("locationInfo")){
+                    for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (ds.getKey().equals("locationInfo")) {
                             locationInfo.setText(ds.getValue(String.class));
                         }
                     }

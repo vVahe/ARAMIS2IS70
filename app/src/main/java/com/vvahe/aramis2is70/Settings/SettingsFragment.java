@@ -36,7 +36,7 @@ public class SettingsFragment extends Fragment {
     private static Button logout;
     private static SeekBar radius;
     private static TextView radiusText;
-    private static Switch notifications;
+    //private static Switch notifications;
 
     private User userObj = User.getInstance();
 
@@ -61,7 +61,7 @@ public class SettingsFragment extends Fragment {
         logout = (Button)view.findViewById(R.id.settings_btnLogout);
         radius = (SeekBar)view.findViewById(R.id.searchradius_seekBar);
         radiusText = (TextView)view.findViewById(R.id.seekbar_text);
-        notifications = (Switch)view.findViewById(R.id.notification_switch);
+        //notifications = (Switch)view.findViewById(R.id.notification_switch);
 
         //get all current data and display
         userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
@@ -72,7 +72,7 @@ public class SettingsFragment extends Fragment {
                         radius.setProgress(ds.getValue(Integer.class));
                         radiusText.setText(ds.getValue(Integer.class)+" meter");
                     } else if (ds.getKey().equals("chatNotifications")){
-                        notifications.setChecked(ds.getValue(boolean.class));
+                        //notifications.setChecked(ds.getValue(boolean.class));
                     }
                 }
             }
@@ -89,23 +89,23 @@ public class SettingsFragment extends Fragment {
         courseSettings();
         logout();
         radius();
-        notifications();
+        //notifications();
         return view;
     }
 
-    public void notifications(){
-        notifications.setOnClickListener(new CompoundButton.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (notifications.isChecked()) {
-                    userObj.setChatNotifications(true);
-                } else {
-                    userObj.setChatNotifications(false);
-                }
-            }
-        });
-    }
+//    public void notifications(){
+//        notifications.setOnClickListener(new CompoundButton.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                if (notifications.isChecked()) {
+//                    userObj.setChatNotifications(true);
+//                } else {
+//                    userObj.setChatNotifications(false);
+//                }
+//            }
+//        });
+//    }
 
     public void logout(){
         logout.setOnClickListener(new View.OnClickListener(){

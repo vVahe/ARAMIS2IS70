@@ -101,7 +101,9 @@ public class searchCourseActivity extends AppCompatActivity {
                 final List<String> courseList = new ArrayList();
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    courseList.add(ds.getValue(String.class));
+                    if (!(userObj.enrolledInIDs.contains(ds.getValue(String.class)))){
+                        courseList.add(ds.getValue(String.class));
+                    } 
                 }
 
                 adapter =new ArrayAdapter<String>(

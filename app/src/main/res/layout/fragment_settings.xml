@@ -107,38 +107,6 @@
 
         <View style="@style/Divider" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-
-            <TextView
-                android:id="@+id/notification_settings_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-                android:text="Chat notification"
-                android:textColor="#DE000000"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/notification_settings_text_extra"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/notification_settings_text"
-                android:layout_marginLeft="10dp"
-                android:text="Enable/Disable chat notifications"
-                android:textSize="15sp" />
-
-            <Switch
-                android:id="@+id/notification_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" />
-        </RelativeLayout>
-
         <View style="@style/Divider" />
 
         <RelativeLayout
@@ -187,33 +155,6 @@
         <View style="@style/Divider" />
 
         <View style="@style/Divider" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_margin="10dp">
-
-            <TextView
-                android:id="@+id/help_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="Help"
-                android:textColor="#DE000000"
-                android:textSize="20sp" />
-
-            <ImageButton
-                android:id="@+id/profileSettingsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@null"
-                android:src="@drawable/ic_action_select" />
-
-        </RelativeLayout>
 
     </LinearLayout>
 </FrameLayout>

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.vvahe.aramis2is70.User;
 
@@ -51,6 +52,8 @@ public class GPS_Service extends Service{
             get user location and puts in database
          */
         listener = new LocationListener() {
+
+
             @Override
             public void onLocationChanged(Location location) {
                 User userObject = User.getInstance();
@@ -79,7 +82,7 @@ public class GPS_Service extends Service{
                 startActivity(i);
             }
         };
-
+        Log.i("tag", "listener" + listener);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
         /*

@@ -104,6 +104,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        radiusSetting = userObj.radiusSetting;
 
         mMapView = mView.findViewById(R.id.map);
         if (mMapView != null) {

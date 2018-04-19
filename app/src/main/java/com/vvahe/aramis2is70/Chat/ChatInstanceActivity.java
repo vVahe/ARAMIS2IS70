@@ -245,7 +245,7 @@ public class ChatInstanceActivity extends AppCompatActivity {
                 TextView time = finalView.findViewById(R.id.timeSend);
                 singleMessage.setText(messageString);
                 time.setText(messageTimeStamp);
-                chatObj.messages.get(position).firebaseThisMessage.child("hasRed").setValue(true);
+                chatObj.messages.get(position).firebaseThisMessage.child("hasRead").setValue(true);
             }
 
             return finalView;

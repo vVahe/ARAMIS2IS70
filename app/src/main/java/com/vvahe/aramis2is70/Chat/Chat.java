@@ -53,7 +53,7 @@ public class Chat {
             String message = "";
             String userID = "";
             Long timeSend = new Long(0);
-            Boolean hasRed = false;
+            Boolean hasRead = false;
             for(DataSnapshot ds : chat.getChildren()) {
                 if (ds.getKey().equals("string")) {
                     message = ds.getValue(String.class);
@@ -61,13 +61,13 @@ public class Chat {
                     userID = ds.getValue(String.class);
                 } else if (ds.getKey().equals("timeSend")) {
                     timeSend = ds.getValue(Long.class);
-                } else if (ds.getKey().equals("hasRed")){
-                    hasRed = ds.getValue(Boolean.class);
+                } else if (ds.getKey().equals("hasRead")){
+                    hasRead = ds.getValue(Boolean.class);
                 } else {
 
                 }
             }
-            Message newMessage = new Message(chat.getKey(), userID, message, timeSend, hasRed, firebaseThisChat.child("messages"));
+            Message newMessage = new Message(chat.getKey(), userID, message, timeSend, hasRead, firebaseThisChat.child("messages"));
             messages.add(newMessage);
         }
     }
@@ -75,7 +75,7 @@ public class Chat {
     public Integer getNumberOfNewMessages(){
         Integer counter = 0;
         for (Message message : messages){
-            if (!(message.userID.equals(mainUser.userID)) && !(message.hasRed)){
+            if (!(message.userID.equals(mainUser.userID)) && !(message.hasRead)){
                 counter++;
             }
         }

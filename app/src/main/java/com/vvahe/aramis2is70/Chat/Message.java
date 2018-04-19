@@ -22,7 +22,7 @@ public class Message {
     public Map<String, String> timeSend;       //time this message was send
     public Long timeSendLong = new Long(0);
     public String message;      //contents of this message
-    public Boolean hasRed;
+    public Boolean hasRead;
 
     public DatabaseReference firebaseThisMessage;
 
@@ -35,19 +35,19 @@ public class Message {
         this.timeSend = timeSend;
         this.message = message;
         this.firebaseThisMessage = firebaseThisChat.child(messageID);
-        this.hasRed = false;
+        this.hasRead = false;
     }
 
     /*
         creates new message object
      */
-    public Message(String messageID, String userID, String message, Long timeSend, Boolean hasRed, DatabaseReference firebaseThisChat){
+    public Message(String messageID, String userID, String message, Long timeSend, Boolean hasRead, DatabaseReference firebaseThisChat){
         this.messageID = messageID;
         this.userID = userID;
         this.timeSendLong = timeSend;
         this.message = message;
         this.firebaseThisMessage = firebaseThisChat.child(messageID);
-        this.hasRed = hasRed;
+        this.hasRead = hasRead;
     }
 
     /*
@@ -57,7 +57,7 @@ public class Message {
         firebaseThisMessage.child("user").setValue(this.userID);
         firebaseThisMessage.child("timeSend").setValue(this.timeSend);
         firebaseThisMessage.child("string").setValue(this.message);
-        firebaseThisMessage.child("hasRed").setValue(this.hasRed);
+        firebaseThisMessage.child("hasRead").setValue(this.hasRead);
     }
 
     public String getTime(){

@@ -103,7 +103,7 @@ public class searchCourseActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     if (!(userObj.enrolledInIDs.contains(ds.getValue(String.class)))){
                         courseList.add(ds.getValue(String.class));
-                    } 
+                    }
                 }
 
                 adapter =new ArrayAdapter<String>(

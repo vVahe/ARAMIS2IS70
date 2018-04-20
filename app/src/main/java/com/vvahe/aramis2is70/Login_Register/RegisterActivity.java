@@ -83,6 +83,9 @@ public class RegisterActivity extends AppCompatActivity {
         final String password = passwordField.getText().toString().trim();
         final String passwordRepeat = passwordRepeatField.getText().toString().trim();
 
+        /*
+        check if fields are valid
+         */
         if(checkForEmptyInputFields(firstName, lastName, study, year, email, emailRepeat, password, passwordRepeat)) {
             Toast.makeText(RegisterActivity.this, "Please fill in all fields", Toast.LENGTH_LONG).show();
         } else if (year < 1900) {
@@ -136,6 +139,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    checks if all nessesary fields are filled in
+     */
     public boolean checkForEmptyInputFields(String firstName, String lastName, String study,
                                             Integer year, String email, String emailRepeat,
                                             String password, String passwordRepeat) {

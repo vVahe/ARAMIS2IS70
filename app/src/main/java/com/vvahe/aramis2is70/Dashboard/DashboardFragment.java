@@ -99,6 +99,9 @@ public class DashboardFragment extends Fragment {
         locationSwitch = getView().findViewById(R.id.locationSwitch);
         locationInfo = getView().findViewById(R.id.locationInfo);
 
+        /*
+        gets all data from firebase
+         */
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) { //not logged in send to login page
@@ -140,6 +143,9 @@ public class DashboardFragment extends Fragment {
                 }
             });
 
+            /*
+            only get locationInfo once, since this does not need to be updated from firebase
+             */
             userObj.firebaseThisUser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -182,6 +188,9 @@ public class DashboardFragment extends Fragment {
         locationInfo();
     }
 
+    /*
+    adapter for courseList
+     */
     class CourseAdapter extends BaseAdapter {
 
         @Override
@@ -202,6 +211,9 @@ public class DashboardFragment extends Fragment {
         @Override
         public View getView(int position, View view, ViewGroup parent) {
 
+            /*
+            set view for listItems
+             */
             view = getLayoutInflater().inflate(R.layout.dashboard_course_item, null);
 
             RadioButton radioBtn = view.findViewById(R.id.radioButton);
@@ -231,6 +243,9 @@ public class DashboardFragment extends Fragment {
 
                 final int positionTemp = position;
 
+                /*
+                handle click listener to send intent to availableListActivity
+                 */
                 toListBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -246,6 +261,9 @@ public class DashboardFragment extends Fragment {
                     radioBtn.setChecked(false);
                 }
 
+                /*
+                set click listener for radiobuttons to select a course as active
+                 */
                 radioBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -262,6 +280,9 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    /*
+    set picture in imageview
+     */
     public  void setPicture() {
         try {
             picStorage = mStorage.child(userObj.userID).child("Profile Picture");
@@ -281,6 +302,9 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    /*
+    save image to internalStorage
+     */
     private String saveToInternalStorage(Bitmap bitmapImage){
         ContextWrapper cw = new ContextWrapper(getContext());
         // path to /data/data/yourapp/app_data/imageDir
@@ -305,6 +329,9 @@ public class DashboardFragment extends Fragment {
         return directory.getAbsolutePath();
     }
 
+    /*
+    load image from internal storage
+     */
     private void loadImageFromStorage(String path) {
         try {
             File f=new File(path, userObj.userID+".bmp");
@@ -315,6 +342,9 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    /*
+    handle the editText changes for locationInfo
+     */
     public void locationInfo(){
         locationInfo.addTextChangedListener(new TextWatcher() {
             @Override

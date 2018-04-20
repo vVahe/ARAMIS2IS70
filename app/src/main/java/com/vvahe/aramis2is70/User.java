@@ -124,6 +124,9 @@ public class User {
         firebaseThisUser.child("chats").setValue(this.chatsIDs);
     }
 
+    /*
+    all methods to change corresponding data in firebase
+     */
     public void setFirstName(String newFirstName){
         firstName = newFirstName;
         firebaseThisUser.child("firstName").setValue(newFirstName);
@@ -169,10 +172,6 @@ public class User {
         firebaseThisUser.child("available").setValue(value);
     }
 
-    public void setChatNotifications(Boolean value){
-        chatNotifications = value;
-        firebaseThisUser.child("chatNotifications").setValue(value);
-    }
 
     /*
         adds a course, in this class and in database
@@ -224,6 +223,10 @@ public class User {
         selectedCourse = "";
         firebaseThisUser.child("selectedCourse").setValue(selectedCourse);
     }
+
+    /*
+    end of firebase set methods
+     */
 
 
     /*

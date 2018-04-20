@@ -65,6 +65,10 @@ public class searchCourseActivity extends AppCompatActivity {
         search();
     }
 
+
+    /*
+    searchView code
+     */
     public void search(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -90,7 +94,7 @@ public class searchCourseActivity extends AppCompatActivity {
     }
 
     /*
-       gets all userID's of users within radius
+      add all courses not yet enrolled for to listview
     */
     private void dataHandler() {
 
@@ -111,6 +115,9 @@ public class searchCourseActivity extends AppCompatActivity {
 
                 listView.setAdapter(adapter);
 
+                /*
+                add course to enrolled if clicked on
+                 */
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

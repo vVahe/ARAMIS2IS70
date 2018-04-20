@@ -47,6 +47,9 @@ public class Chat {
         setInOtherUser();
     }
 
+    /*
+    sets data from firebase in the message object
+     */
     public void setDataInMessages(DataSnapshot dataSnapshot){
         messages.clear();
         for(DataSnapshot chat : dataSnapshot.getChildren()){
@@ -72,6 +75,9 @@ public class Chat {
         }
     }
 
+    /*
+    gets amount of messages
+     */
     public Integer getNumberOfNewMessages(){
         Integer counter = 0;
         for (Message message : messages){

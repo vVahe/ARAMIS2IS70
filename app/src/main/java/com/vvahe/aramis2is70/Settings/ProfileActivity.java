@@ -108,46 +108,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         mProgressDialog = new ProgressDialog(this);
 
+        /*
+        set text to edittext fields to current value
+         */
         firstName.setText(userObj.firstName);
         middleName.setText(userObj.middleName);
         lastName.setText(userObj.lastName);
         study.setText(userObj.study);
         year.setText(userObj.year.toString());
 
-        userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                /*for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    if (ds.getKey().equals("firstName")){
-                        Integer cursor = firstName.getSelectionStart();
-                        firstName.setText(ds.getValue(String.class));
-                        firstName.setSelection(cursor);
-                    } else if (ds.getKey().equals("middleName")){
-                        Integer cursor = middleName.getSelectionStart();
-                        middleName.setText(ds.getValue(String.class));
-                        middleName.setSelection(cursor);
-                    } else if (ds.getKey().equals("lastName")){
-                        Integer cursor = lastName.getSelectionStart();
-                        lastName.setText(ds.getValue(String.class));
-                        lastName.setSelection(cursor);
-                    } else if (ds.getKey().equals("study")){
-                        Integer cursor = study.getSelectionStart();
-                        study.setText(ds.getValue(String.class));
-                        study.setSelection(cursor);
-                    } else if (ds.getKey().equals("year")){
-                        Integer cursor = year.getSelectionStart();
-                        year.setText(ds.getValue(Integer.class).toString());
-                        year.setSelection(cursor);
-                    }
-                }*/
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         picStorage = mStorage.child(userObj.userID).child("Profile Picture");
         setPicture();
@@ -213,6 +182,9 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    /*
+    set image in ImageView
+     */
     public  void setPicture() {
         if(picStorage != null){
             picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -225,6 +197,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    All editText fields
+     */
     public void firstName(){
         firstName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -299,8 +274,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+    /*
+    end of editText fields
+     */
 
 
+    /*
+    popup dialog for changing e-mail
+     */
     public class emailDialog {
         String password = "";
         String newEmail = "";
@@ -317,6 +298,9 @@ public class ProfileActivity extends AppCompatActivity {
             EditText passwordField = (EditText) dialog.findViewById(R.id.passwordField);
             EditText newEmailField = (EditText) dialog.findViewById(R.id.emailField);
 
+            /*
+            editText to get current password
+             */
             passwordField.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -332,6 +316,9 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
 
+            /*
+            editText to get new E-mail
+             */
             newEmailField.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -351,6 +338,9 @@ public class ProfileActivity extends AppCompatActivity {
             Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
             Button btnChangeEmail = (Button) dialog.findViewById(R.id.btnChangeEmail);
 
+            /*
+            change e-mail in firebase database and authentication
+             */
             btnChangeEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -393,6 +383,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    popup dialog to change password
+     */
     public class passwordDialog {
         String currentPassword = "";
         String newPassword = "";
@@ -409,6 +402,9 @@ public class ProfileActivity extends AppCompatActivity {
             EditText oldPasswordField = (EditText) dialog.findViewById(R.id.currentPasswordField);
             EditText newPassField = (EditText) dialog.findViewById(R.id.newPasswordField);
 
+            /*
+            editText to get old password
+             */
             oldPasswordField.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -424,6 +420,9 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
 
+            /*
+            editText to get new Password
+             */
             newPassField.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -443,6 +442,9 @@ public class ProfileActivity extends AppCompatActivity {
             Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
             Button btnChangePassword = (Button) dialog.findViewById(R.id.btnChangePassword);
 
+            /*
+            change password in firebase authentication
+             */
             btnChangePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -494,11 +496,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    /*
+    intent to camera
+     */
     public void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, TAKE_PICTURE);
     }
 
+    /*
+    intent to gallery
+     */
     public void fromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
 
@@ -507,10 +515,16 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(intent, GALLERY_INTENT);
     }
 
+    /*
+    handle picture taken
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            /*
+            handle picture taken with camera
+             */
             case TAKE_PICTURE:
                 if (resultCode == Activity.RESULT_OK) {
                     mProgressDialog.setMessage("Uploading ...");
@@ -537,6 +551,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                 }
                 break;
+                /*
+                handle picure from gallery
+                 */
             case GALLERY_INTENT:
                 if(resultCode == Activity.RESULT_OK) {
                     mProgressDialog.setMessage("Uploading ...");
@@ -544,6 +561,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                     try{
                         Uri galleyUri = data.getData();
+                        /*
+                        resize picture to take up less storage
+                         */
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), galleyUri);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
@@ -564,14 +584,6 @@ public class ProfileActivity extends AppCompatActivity {
                         Toast.makeText(this, "Couldn't convert Image", Toast.LENGTH_SHORT).show();
                     }
 
-                    /*StorageReference filepath = mStorage.child(userObj.userID).child("Profile Picture");
-                    filepath.putFile(galleyUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(ProfileActivity.this, "Upload done", Toast.LENGTH_LONG).show();
-                            mProgressDialog.dismiss();
-                        }
-                    });*/
                 }
         }
     }

@@ -135,14 +135,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         enableMyLocation();
 
+        // sets cameraPosition to TU/e
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(51.4484, 5.4902))      // Sets the center of the map to location user
+                .target(new LatLng(51.4484, 5.4902))      // Sets the center of the map to TU/e location
                 .zoom(15)                   // Sets the zoom
                 .bearing(0)                // Sets the orientation of the camera to east
                 .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                 .build();                   // Creates a CameraPosition from the builder
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+        /*
+        click listener for markers, opens information popup
+         */
         mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -217,6 +221,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /*
+    get image from firebase storage
+     */
     public void getImage(final CircleImageView userPicView, String otherUserID) {
         StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
         picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -275,7 +282,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     }
 
 
-                    //if user is in radius save userID in list
+                    //if user has all requirements, add to list
                     if (inRadius(locY, locX, radiusSetting) && (!otherUserID.equals(uID)) &&
                             selectedCourse.equals(userObj.selectedCourse) && available && locationShow) {
                         String[] attributes = {otherUserID, firstName, lastName, locX.toString(), locY.toString(), study, selectedCourse, locationInfo};
@@ -332,6 +339,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return distance < radius;
     }
 
+    /*
+    handle GPS permission
+     */
     private void enableMyLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),

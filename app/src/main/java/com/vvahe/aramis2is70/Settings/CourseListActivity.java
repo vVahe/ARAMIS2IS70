@@ -58,7 +58,7 @@ public class CourseListActivity extends AppCompatActivity {
     }
 
     /**
-     * 
+     * back button to go back to mainActivity
      */
     public void back(){
         back.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +69,9 @@ public class CourseListActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    button to send intent to searchCourseActivity
+     */
     public void addCourse(){
         addCourse.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -78,6 +81,9 @@ public class CourseListActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    gets all courses user is enrolled in
+     */
     public void getEnrolledCourses(){
 
        final List<String> courseList = userObj.enrolledInIDs;
@@ -88,12 +94,18 @@ public class CourseListActivity extends AppCompatActivity {
        recyclerView.setAdapter(mAdapter);
 
 
+       /*
+       adds swipe listener to courses
+        */
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
             }
 
+            /*
+            delete course from enrolled courses on swipe
+             */
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
@@ -108,6 +120,9 @@ public class CourseListActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    /*
+    adapter for enrolled course recyclerView
+     */
     public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{
 
         private List<String> courseList;

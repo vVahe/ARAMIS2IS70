@@ -80,6 +80,9 @@ public class AvailableListActivity extends AppCompatActivity {
 
     }
 
+    /*
+    button action to go back to previous activity
+     */
     public void back(){
         back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -89,6 +92,9 @@ public class AvailableListActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    gets all of the available users for the currently selected course from firebase
+     */
     public void getAvailabeUsers(final String selCourse) {
 
         firebaseUsers.addValueEventListener(new ValueEventListener() {
@@ -124,6 +130,9 @@ public class AvailableListActivity extends AppCompatActivity {
                     }
                     Log.i("TAG", "nearbyUsers = " + availableUsers);
                 }
+                /*
+                set adapter to add all available users to listview
+                 */
                 AvailabeListAdapter availabeListAdapter = new AvailabeListAdapter();
                 availableList.setAdapter(availabeListAdapter);
                 availableList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -147,6 +156,9 @@ public class AvailableListActivity extends AppCompatActivity {
 
     }
 
+    /*
+    adapter for available list view
+     */
     private class AvailabeListAdapter extends BaseAdapter {
 
 
@@ -169,6 +181,9 @@ public class AvailableListActivity extends AppCompatActivity {
         public View getView(int position, View view, ViewGroup parent) {
             Log.i("TAG2", availableUsers.get(position)[1] );
             String otherUserID = availableUsers.get(position)[0];
+            /*
+            set view for listItems
+             */
 
             view = getLayoutInflater().inflate(R.layout.available_list_item, null);
 
@@ -186,20 +201,13 @@ public class AvailableListActivity extends AppCompatActivity {
 
             name.setText(otherUser[1] + " " + otherUser[2]);
 
-            /*btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Chat chat = userObj.openChat(otherUser[0]);
-                    Intent toChatInstance = new Intent(v.getContext(), ChatInstanceActivity.class);
-                    toChatInstance.putExtra("chatID", chat.chatID);
-                    startActivity(toChatInstance);
-                }
-            });*/
-
            return view;
         }
     }
 
+    /*
+    save images to internal storage
+     */
     private String saveToInternalStorage(Bitmap bitmapImage, String otherUserID){
 
         try {
@@ -227,6 +235,9 @@ public class AvailableListActivity extends AppCompatActivity {
         return "";
     }
 
+    /*
+    load images from internal storage if they are saved there
+     */
     private void loadImageFromStorage(Integer position, CircleImageView view, String otherUserID) {
         try {
             File f=new File(userObj.pathToProfilePics.get(position), otherUserID+".bmp");
@@ -237,6 +248,9 @@ public class AvailableListActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    gets images from firebase storage
+     */
     private void getImage(final Integer position, final CircleImageView view, final String otherUserID){
         StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
         picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {

@@ -47,15 +47,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ChatInstanceActivity extends AppCompatActivity {
 
-    private User userObj = User.getInstance();
-    private Chat chatObj;
-    private String chatID;
-    private String otherUserID;
+    private User userObj = User.getInstance();  // logged in user
+    private Chat chatObj;                       // chatObj
+    private String chatID;                      //chatID
+    private String otherUserID;                 //Id of user you are chatting with
 
     private DatabaseReference firebaseOtherUser = FirebaseDatabase.getInstance().getReference().child("Users");
     private DatabaseReference firebaseChat = FirebaseDatabase.getInstance().getReference().child("chats");
     private DatabaseReference chatRef; //reference to a single chat
 
+    /*
+    declare all fields
+     */
     private EditText messageField;
     private TextView otherUserName;
     private Button sendMessageBtn;
@@ -69,6 +72,9 @@ public class ChatInstanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_instance);
 
+        /*
+        instantiate all fields
+         */
         otherUserName = findViewById(R.id.otherUserName);
         sendMessageBtn = findViewById(R.id.sendMessageBtn);
         messageField = findViewById(R.id.messageField);
@@ -77,6 +83,9 @@ public class ChatInstanceActivity extends AppCompatActivity {
         messageList.setDivider(null);
         otherUserImage = findViewById(R.id.otherUserImage);
 
+        /*
+        set all data needed
+         */
         chatID = getIntent().getExtras().getString("chatID"); //get chat ID
         chatRef = firebaseChat.child(chatID); //database reference to this chat
         otherUserID = chatID.replace(userObj.userID, ""); //get otherUserId (= chatID - userID)
@@ -157,6 +166,9 @@ public class ChatInstanceActivity extends AppCompatActivity {
 
     }
 
+    /*
+    saves images to InternalStorage
+     */
     private String saveToInternalStorage(Bitmap bitmapImage, String otherUserID){
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/yourapp/app_data/imageDir
@@ -181,6 +193,9 @@ public class ChatInstanceActivity extends AppCompatActivity {
         return directory.getAbsolutePath();
     }
 
+    /*
+    If image is already in storage, loads it from there
+     */
     private void loadImageFromStorage(CircleImageView view, String otherUserID) {
         try {
             File f=new File(userObj.pathToProfilePics.get(userObj.chatsIDs.indexOf(chatID)), otherUserID+".bmp");
@@ -191,6 +206,9 @@ public class ChatInstanceActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    gets image from firebase storage
+     */
     private void getImage(final CircleImageView view, final String otherUserID) {
         StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
         picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -204,6 +222,9 @@ public class ChatInstanceActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    adapter for messageList
+     */
     private class MessageAdapter extends BaseAdapter {
 
         @Override

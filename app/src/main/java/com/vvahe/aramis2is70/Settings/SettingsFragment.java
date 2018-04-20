@@ -36,7 +36,6 @@ public class SettingsFragment extends Fragment {
     private static Button logout;
     private static SeekBar radius;
     private static TextView radiusText;
-    //private static Switch notifications;
 
     private User userObj = User.getInstance();
 
@@ -61,7 +60,7 @@ public class SettingsFragment extends Fragment {
         logout = (Button)view.findViewById(R.id.settings_btnLogout);
         radius = (SeekBar)view.findViewById(R.id.searchradius_seekBar);
         radiusText = (TextView)view.findViewById(R.id.seekbar_text);
-        //notifications = (Switch)view.findViewById(R.id.notification_switch);
+
 
         //get all current data and display
         userObj.firebaseThisUser.addValueEventListener(new ValueEventListener() {
@@ -71,8 +70,6 @@ public class SettingsFragment extends Fragment {
                     if (ds.getKey().equals("radiusSetting")){
                         radius.setProgress(ds.getValue(Integer.class));
                         radiusText.setText(ds.getValue(Integer.class)+" meter");
-                    } else if (ds.getKey().equals("chatNotifications")){
-                        //notifications.setChecked(ds.getValue(boolean.class));
                     }
                 }
             }
@@ -89,24 +86,13 @@ public class SettingsFragment extends Fragment {
         courseSettings();
         logout();
         radius();
-        //notifications();
         return view;
     }
 
-//    public void notifications(){
-//        notifications.setOnClickListener(new CompoundButton.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                if (notifications.isChecked()) {
-//                    userObj.setChatNotifications(true);
-//                } else {
-//                    userObj.setChatNotifications(false);
-//                }
-//            }
-//        });
-//    }
 
+    /*
+    logout current user
+     */
     public void logout(){
         logout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -121,6 +107,9 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    /*
+    set radius based on seekbar value
+     */
     public void radius(){
         radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 
@@ -144,6 +133,9 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    /*
+    intent to courseListActivity
+     */
     public void courseSettings(){
         courses.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -152,6 +144,8 @@ public class SettingsFragment extends Fragment {
             }
         });
     }
+
+    // intent to ProfileActivity
     public void profileSettings(){
         profile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -161,6 +155,9 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    /*
+    seekbar listener
+     */
     public void seekBar(){  // attaches textview with progress to the thumb of the seekBar
         textView.setText(Integer.toString(seekBar.getProgress()));
 

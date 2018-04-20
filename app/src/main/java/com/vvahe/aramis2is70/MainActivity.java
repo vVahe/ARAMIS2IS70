@@ -184,18 +184,6 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//
-//        if (currentUser == null) { //not logged in send to login page
-//
-//            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-//            loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(loginIntent);
-//
-//        } else { //get current user and get the user object using userID
-//
-//            userObj.getData(currentUser.getUid());
-//        }
     }
 
     /* user location permission stuff */

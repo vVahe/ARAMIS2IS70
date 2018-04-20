@@ -60,6 +60,9 @@ public class Message {
         firebaseThisMessage.child("hasRead").setValue(this.hasRead);
     }
 
+    /*
+    get the current time
+     */
     public String getTime(){
         Date date = new Date(timeSendLong);
         DateFormat time = new SimpleDateFormat("HH:mm");
@@ -67,6 +70,9 @@ public class Message {
         return time.format(date);
     }
 
+    /*
+    get current date
+     */
     public String getDate(){
         Date currentDate = new Date();
         currentDate.setTime(currentDate.getTime());
@@ -76,6 +82,9 @@ public class Message {
         DateFormat day = new SimpleDateFormat("d-M");
         time.setTimeZone(TimeZone.getTimeZone("Europe/Amsterdam"));
 
+        /*
+        set the representation of the date, e.g previous day will be shown as yesterday
+         */
         if (date.getDay() == currentDate.getDay()){
             return time.format(date);
         } else if (currentDate.getDay() - date.getDay() == 1){

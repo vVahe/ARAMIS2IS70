@@ -103,6 +103,9 @@ public class ChatOverviewFragment extends Fragment {
 
     }
 
+    /*
+    adapter for chat
+     */
     class ChatAdapter extends BaseAdapter {
         String[] idArray = new String[getCount()];
 
@@ -124,6 +127,9 @@ public class ChatOverviewFragment extends Fragment {
         @Override
         public View getView(final int position, View view, ViewGroup parent) {
 
+            /*
+            set view and elements for listItems
+             */
             view = getLayoutInflater().inflate(R.layout.chatoverview_chat_item, null);
 
             final String chatID = userObj.chatsIDs.get(position);
@@ -148,6 +154,9 @@ public class ChatOverviewFragment extends Fragment {
             final CircleImageView picture = finalView.findViewById(R.id.chatThumbnail); //picture view
             loadImageFromStorage(position, picture, otherUserID);
 
+            /*
+            handle data from firebase
+             */
             firebaseChat.child(userObj.chatsIDs.get(position)).child("messages").orderByChild("timeSend").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -309,6 +318,9 @@ public class ChatOverviewFragment extends Fragment {
             return "";
         }
 
+        /*
+        Load image from storage if it is stored there
+         */
         private void loadImageFromStorage(Integer position, CircleImageView view, String otherUserID) {
             try {
                 File f=new File(userObj.pathToProfilePics.get(position), otherUserID+".bmp");
@@ -319,6 +331,9 @@ public class ChatOverviewFragment extends Fragment {
             }
         }
 
+        /*
+        gets image from firebase storage
+         */
         private void getImage(final Integer position, final CircleImageView view, final String otherUserID){
             StorageReference picStorage = FirebaseStorage.getInstance().getReference().child(otherUserID).child("Profile Picture");
             picStorage.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
